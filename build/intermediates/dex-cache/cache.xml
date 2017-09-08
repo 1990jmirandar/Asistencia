@@ -3,21 +3,138 @@
 
     <item
         is-multidex="true"
-        jar="/root/AndroidStudioProjects/Asistencia/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\f8e4cf53886098f713165c23c6ae57030f4e72c9\output\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="7c5ac452b1729701b1d75001a807e890c6296e5f">
-        <dex dex="/root/AndroidStudioProjects/Asistencia/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_80e0256017665894ef53ac998ca88b7fc23de838/classes.dex" />
+        sha1="c4f45092eee6cdf1a5dbd597b2b6819be652ce2e">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e99064252273e5d0f9f846c6b1a57ad56d49ff96\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/root/AndroidStudioProjects/Asistencia/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\0601812417feaae3c06562853dc9907c14c864fa\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="952944218ecedea1554a513dec0c14d570642843">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_4895652e8f43658a10370ecb7993f6dbd0670e3a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\c9a4c5052f0e923db8f3c004fe78f30dcc60a157\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="88246166d5afb106f532f6e6deae683c66b42c89">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_739db1db75343e642c7f94f4420f51f4078f1cf3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\d935c064ff3bae03ddefda324027350c3c724241\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="6a022bf00ccd0948a8180c505e8e458bbddd43a6">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d391f2bb67e754c8dfd077b2f655f2cddfebb4ea\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\57d9d6949fd4e30eebae0f9d66a43c7f6a8bd4a9\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="cddcd0fb93bc70e27325f2f715b2710332004ebb">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e8bca85ebd86673e1bd2170592abb6c211a3d8c6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="9f793e74727cc4e8d17bab5528cca2083da5db9f">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_43a22bd200aaa5459db1d2c27ae2cd6595f77fcc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\26.0.0-alpha1\support-annotations-26.0.0-alpha1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="023ee503b631f69511e335a061ea008f8da60f40">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-26.0.0-alpha1_502c1c73caa1caba751fe25fe830572d8fa7d283\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\af6488a79fa5c837243288581d00271b4630d1b0\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="9935891f23923f39d002087085d9696568a9f657">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_711589c32ef9fe218a288aea18d7ebfb0aa3c38b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\476be2f7de1c87d3794aab05fa2f188b78c38c20\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="8df0e365e40beb151bc42dee20817721a6cab7b0">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e4ddcd658764fd4e089a4d3c3e02113ae0f7be7a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
         sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="/root/AndroidStudioProjects/Asistencia/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_f90846aae058979d42223ac4f5c91b127b0b00bf/classes.dex" />
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_199c285e558a6ef48fc76a366a57cd6c86bb8d0b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\666046ae1c6de79af2d993e2aa9f9417fe4245b2\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="47471eb19df288158b00b8d9cfa41bce7373f5cc">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_f30465282e5155d2f593e65934c5dc5f3f2d671d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\a2943c431958564f5297f5f7c3f6f4f47717642c\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="fcd01fd11233459f546c437ec927e9b61bf7caf1">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_4aa5ac1851942e3372ed4e08f0598375bef9a7bd\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\d580c6a30bd9493535609539922097a4ca908a13\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="18d31838aa4fcc768a8a0516e22cc13b94655d89">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_3c30b817f9d1be06fb99f0f87117cfbdcd180591\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\bd916b61e248ffa13ebc6f4445736761527671e1\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="2e92aa0163544a804a0b34f169ca61801770839a">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_4c5eecfd2d8d8be0dd261712ed7a0ac7bd6fcf3a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\jmariduena.CNERGYTEK\.android\build-cache\98c59174803d82205aa93443a10dcd6740cc2847\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\jmariduena.CNERGYTEK\Documents\Asistencia\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_63c0272f73680317e1cc19e6551ad1e3e5d1ef8e\classes.dex" />
     </item>
 
 </items>
