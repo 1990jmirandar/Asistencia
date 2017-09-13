@@ -3,6 +3,24 @@
 
     <item
         is-multidex="false"
+        jar="/root/.gradle/caches/modules-2/files-2.1/com.loopj.android/android-async-http/1.4.9/386a4339ffe52d5d63e80f9bed8d2b1d1a418249/android-async-http-1.4.9.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="386a4339ffe52d5d63e80f9bed8d2b1d1a418249">
+        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/android-async-http-1.4.9_6ccc83e6c34ef8c4978ba1841ca074cdcee2621c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/root/.gradle/caches/modules-2/files-2.1/cz.msebera.android/httpclient/4.3.6/526a9f794eab830eae4f23a62c572878b3f491ab/httpclient-4.3.6.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="526a9f794eab830eae4f23a62c572878b3f491ab">
+        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/httpclient-4.3.6_dd88f8ffcf8cc2783fd36210a45fa54f6afbebeb.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/root/.android/build-cache/4af1b8d7545f931354008946bcde318684280d45/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
