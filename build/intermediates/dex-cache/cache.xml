@@ -3,57 +3,192 @@
 
     <item
         is-multidex="false"
-        jar="/root/.android/build-cache/4af1b8d7545f931354008946bcde318684280d45/output/jars/classes.jar"
+        jar="/home/avera/.android/build-cache/2e4ccb7d2f9f51e132b8ee19da420973b7fbbef0/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="26.0.1"
-        sha1="07e07903922250dabf50c7d131d6fa069a050305">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_dea406b3c5973143de79b460c8de807553343c0f.jar" />
+        sha1="18d31838aa4fcc768a8a0516e22cc13b94655d89">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_d607a9200dc30c02777decec38f38a254a27e52a.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/root/.android/build-cache/6810f8f4df8066c44229ed5c71191e4def5ec964/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="fcae52a60bc07924d370b4d376116cd8f8581f54">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_3b58511b8ba0fa21ca68d2f990f3352d87e85879.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.android/build-cache/ba811dfcc294354492b4e16b254a014f82c762dd/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="70ffe00aaf049893f59d1dad57bd82992faa38ef">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_babb146a9b152ac99d7b453f395f937938271499.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.android/build-cache/289c0e6915d194b8e3af4c231f8a9d32a3dd16fc/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="41f47bbcd281fdb1e42e220220ab3bfa1da591e0">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_15a09bbb2197c560016936a57b015a03e7d6d2ed.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.android/build-cache/0c9d77fcf8af7148d03074721d4ca0b24c24d1f4/output/jars/classes.jar"
+        jar="/home/avera/.android/build-cache/6b9d11c7b83be35f16e05f18e5be22f2d0d18718/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="26.0.1"
         sha1="2430e711762a749feb00b3d64858ca4768251b9d">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_7bfcc7e12983a7a1b78089e03e9b0b91c9d69017.jar" />
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_563d7e0670bd59ece463d218b374d63ef54b4792.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/root/.android/build-cache/eafd59ee6f2f148ad86989d9481a160291a632c7/output/jars/classes.jar"
+        jar="/home/avera/Android/Sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.2/constraint-layout-solver-1.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/constraint-layout-solver-1.0.2_861b33ef817f00b3f77d260c46e6e7c440e59f6d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/07a4fe167714407d92a7c7ea439664602c090d6d/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="26.0.1"
         sha1="364364bf77b4a71afc5930fc3ae57b3f0eea637c">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_8ab514e2f98d216c08c332c03c0a27a2ae46044c.jar" />
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_5b60e08f363630277f165dadb466df737460e529.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/58409b1a871dc5467de397407de3d361c52c17dc/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="88246166d5afb106f532f6e6deae683c66b42c89">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_2d35c413ff7a47f5e49dda83e9038a8b2d807b3b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/3fd24015abe8af51416887561d4b2077abdb4e7b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="2e92aa0163544a804a0b34f169ca61801770839a">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_469708373817f7073ac8507489f929d7c226c3c6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/1442d2f17f250238107510db2ca620e01f9cc193/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_4ab6525bda2091eb0714a2d502880737d018aaeb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/0bd11f66afd880da0c1340630647fe34f115986a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="6a022bf00ccd0948a8180c505e8e458bbddd43a6">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_e1094c27177e3ded2bfa51446f183a8c98b20785.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="023ee503b631f69511e335a061ea008f8da60f40">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/support-annotations-26.0.0-alpha1_531a66f81f8bb4fddd6ca5c8cf8d5c71da2a688a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/233d2e723604b6c414d4ee0ed6c0766bc4da4536/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_2389e2ed4c70c38222564ec68440d891b7fb53e5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/d33b85b95e2377c3d1ffb1b4aca018aed8e18a18/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="9935891f23923f39d002087085d9696568a9f657">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_4253eb6bd40642fd70f763dbf0b126aa3fa2c225.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/64ea8f6bb047c168c7ef84dfb34b8a9964012194/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="fcae52a60bc07924d370b4d376116cd8f8581f54">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_6fafdde9a492b53ba68614975ca6f05f69b70971.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/a9838b4e2f87bf00c387c16bcaff827b5d3b600f/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="70ffe00aaf049893f59d1dad57bd82992faa38ef">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_4ad5c8fc9c0ebdeef93955fe545e2135ebe449b8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/832f3f32aabd70c54989f4bf8d248ee884477c64/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="cddcd0fb93bc70e27325f2f715b2710332004ebb">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_b8072857c9377e6afdf998d3c5a5083530b99a19.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/152c559878a9b6a9cc5c00cc5cca5d6516b54ddc/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="952944218ecedea1554a513dec0c14d570642843">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_1c422411a2560b08783a1409e0c16d5500ab3b3c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/8e7e7fa8e0ec585493e42a3a3f445bf761389c2f/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="8df0e365e40beb151bc42dee20817721a6cab7b0">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_d8f6edcdc6d2ce273f56df3166a739edb47bd1be.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/c7aa418ee25cddc29089189578d1a85bca46cb32/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="c4f45092eee6cdf1a5dbd597b2b6819be652ce2e">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_60d5147bf6517fbd9e6e6ae4fad8c0c862c7125b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/7f34f0a43abdcc0cf5c401fb0242312969ca5d47/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="07e07903922250dabf50c7d131d6fa069a050305">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_c75e162a8994f0e0cbdc99d75e9f166aa3970647.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/7f08e6dd856fbe592f44b450c11cfe0f0ab0db2c/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="fcd01fd11233459f546c437ec927e9b61bf7caf1">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_b860f114e28226d59e83d2b99cbc91462601216f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/a04d81f78c855183812dabd515d031d62c9ce4d9/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="41f47bbcd281fdb1e42e220220ab3bfa1da591e0">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_45c6227a219358462035bbdbcd523b1f3d4a15fe.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/avera/.android/build-cache/3cce2098cf4d314f59aba1ea83a9409c80227403/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="47471eb19df288158b00b8d9cfa41bce7373f5cc">
+        <dex dex="/home/avera/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_6e6a0f1e23387f206d290ae120a524e8452fc132.jar" />
     </item>
 
 </items>
