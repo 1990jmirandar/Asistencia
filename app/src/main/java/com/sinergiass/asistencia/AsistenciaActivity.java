@@ -14,7 +14,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 
-public class ActivityOperador extends  AppCompatActivity {
+public class AsistenciaActivity extends  AppCompatActivity {
 
     private Button ubicarme;
     private double[] datosCara = {5.32,6.84,3.21};
@@ -37,7 +37,7 @@ public class ActivityOperador extends  AppCompatActivity {
 
         ubicarme.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0){
-                Intent intent = new Intent(ActivityOperador.this,MapsActivity.class);
+                Intent intent = new Intent(AsistenciaActivity.this,MapsActivity.class);
                 startActivity(intent);
             }
 
