@@ -4,6 +4,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.sinergiass.asistencia.util.HttpUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,17 +17,27 @@ import cz.msebera.android.httpclient.Header;
 
 public class FaceDetectorWS {
 
-    public final String URL_SEND_FACE="https://api.kairos.com/enroll";
 
-    public void enviaImagen(String imagen, String idOperador){
+    public final String URL_SEND_FACE="operadores.json";
+
+    public void enviaImagen(String imagen, String idOperador) {
         RequestParams rp = new RequestParams();
-        rp.add("image",imagen); rp.add("subject_id", idOperador); rp.add("gallery_name", "operadores");
 
-        HttpUtils.post(URL_SEND_FACE, rp, new JsonHttpResponseHandler() {
+
+        HttpUtils.get(URL_SEND_FACE, rp, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     JSONObject serverResp = new JSONObject(response.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                try {
+                    JSONArray serverResp = new JSONArray(response.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -55,5 +66,6 @@ public class FaceDetectorWS {
     }
 
 
+    }
 
-}
+
