@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.sinergiass.asistencia.model.Asistencia;
 
 /**
  * Created by avera on 13/09/17.
@@ -28,11 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Bienvenido");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         operador = (Button)findViewById(R.id.operador);
         admin = (Button)findViewById(R.id.admin);
@@ -42,9 +38,24 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(v.getContext(), LoginAdminActivity.class);
+                Intent intent = new Intent(LoginActivity.this, LoginAdminActivity.class);
                 startActivity(intent);
             }
         });
+
+        operador.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                startActivityForResult(intent, 0);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Intent intent = new Intent(LoginActivity.this, AsistenciaActivity.class);
+        startActivity(intent);
     }
 }
