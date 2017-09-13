@@ -1,14 +1,38 @@
 package com.sinergiass.asistencia.model;
 
-/**
- * Created by Julio Alfredo on 11/9/2017.
- */
+import com.orm.SugarRecord;
 
-public class Admin {
-    String usuario = "admin";
-    String password = "1234";
+
+public class Admin extends SugarRecord {
+
+    private int idAdmin;
+    private String usuario ;
+    private String password ;
 
     public Admin(){}
 
+    public int getIdAdmin() {
+        return idAdmin;
+    }
 
+    public void setIdAdmin(int idAdmin) {
+        this.idAdmin = idAdmin;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
+

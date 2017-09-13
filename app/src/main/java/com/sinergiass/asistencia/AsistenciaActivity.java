@@ -129,7 +129,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
                     asistencia.setEntrada(rbtEntrada.isChecked() ? true : false);
                     asistencia.setFecha(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                     asistencia.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                    asistencia.setIdOperador(operador.getIdOperador());
+                    asistencia.setOperador(operador);
                     asistencia.save();
                     Toast.makeText(AsistenciaActivity.this, "Registro guardado: " + asistencia.getId(), Toast.LENGTH_LONG).show();
                     onBackPressed();

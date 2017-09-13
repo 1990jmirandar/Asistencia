@@ -10,33 +10,29 @@ import java.util.Date;
 
 public class Asistencia extends SugarRecord {
 
-    private int idOperador;
     private String latitud;
     private String longitud;
     private String fecha;
     private String hora;
     private boolean isEntrada;
 
+    //Relation
+    private Operador operador;
+
     public Asistencia() {
 
     }
 
-    public Asistencia(int idOperador, String latitud, String longitud, String fecha, String hora, boolean isEntrada) {
-        this.idOperador = idOperador;
+    public Asistencia(String latitud, String longitud, String fecha, String hora, boolean isEntrada, Operador operador) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.fecha = fecha;
         this.hora = hora;
         this.isEntrada = isEntrada;
+        this.operador = operador;
     }
 
-    public int getIdOperador() {
-        return idOperador;
-    }
 
-    public void setIdOperador(int idOperador) {
-        this.idOperador = idOperador;
-    }
 
     public String getLatitud() {
         return latitud;
@@ -76,5 +72,13 @@ public class Asistencia extends SugarRecord {
 
     public void setEntrada(boolean entrada) {
         isEntrada = entrada;
+    }
+
+    public Operador getOperador() {
+        return operador;
+    }
+
+    public void setOperador(Operador operador) {
+        this.operador = operador;
     }
 }
