@@ -32,7 +32,7 @@ import java.util.List;
 public class AsistenciaActivity extends  AppCompatActivity {
 
     private Button ubicarme;
-    private double[] datosCara = {5.32,6.84,3.21};
+    private String datosCara = "5.32,6.84,3.21";
     private Operador operador = new Operador("0950676395","Julio Alfredo","Larrea Sanchez","0992108894",datosCara,1);
     private TextView nombre,apellido,cedula;
     private RadioButton rbtEntrada,rbtSalida;

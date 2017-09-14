@@ -3,75 +3,21 @@
 
     <item
         is-multidex="false"
-        jar="/root/.gradle/caches/modules-2/files-2.1/com.loopj.android/android-async-http/1.4.9/386a4339ffe52d5d63e80f9bed8d2b1d1a418249/android-async-http-1.4.9.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="386a4339ffe52d5d63e80f9bed8d2b1d1a418249">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/android-async-http-1.4.9_6ccc83e6c34ef8c4978ba1841ca074cdcee2621c.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.gradle/caches/modules-2/files-2.1/cz.msebera.android/httpclient/4.3.6/526a9f794eab830eae4f23a62c572878b3f491ab/httpclient-4.3.6.jar"
+        jar="C:\Users\Julio Alfredo\.gradle\caches\modules-2\files-2.1\cz.msebera.android\httpclient\4.3.6\526a9f794eab830eae4f23a62c572878b3f491ab\httpclient-4.3.6.jar"
         jumboMode="false"
         optimize="true"
         revision="26.0.1"
         sha1="526a9f794eab830eae4f23a62c572878b3f491ab">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/httpclient-4.3.6_dd88f8ffcf8cc2783fd36210a45fa54f6afbebeb.jar" />
+        <dex dex="C:\Users\Julio Alfredo\Documents\Asistencia\app\build\intermediates\pre-dexed\debug\httpclient-4.3.6_a540fdf70938cd05f1d952acc5bad2fbbbf732a3.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/root/.android/build-cache/4af1b8d7545f931354008946bcde318684280d45/output/jars/classes.jar"
+        jar="C:\Users\Julio Alfredo\.gradle\caches\modules-2\files-2.1\com.loopj.android\android-async-http\1.4.9\386a4339ffe52d5d63e80f9bed8d2b1d1a418249\android-async-http-1.4.9.jar"
         jumboMode="false"
         optimize="true"
         revision="26.0.1"
-        sha1="07e07903922250dabf50c7d131d6fa069a050305">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_dea406b3c5973143de79b460c8de807553343c0f.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.android/build-cache/6810f8f4df8066c44229ed5c71191e4def5ec964/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="fcae52a60bc07924d370b4d376116cd8f8581f54">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_3b58511b8ba0fa21ca68d2f990f3352d87e85879.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.android/build-cache/ba811dfcc294354492b4e16b254a014f82c762dd/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="70ffe00aaf049893f59d1dad57bd82992faa38ef">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_babb146a9b152ac99d7b453f395f937938271499.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.android/build-cache/289c0e6915d194b8e3af4c231f8a9d32a3dd16fc/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="41f47bbcd281fdb1e42e220220ab3bfa1da591e0">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_15a09bbb2197c560016936a57b015a03e7d6d2ed.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.android/build-cache/0c9d77fcf8af7148d03074721d4ca0b24c24d1f4/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="2430e711762a749feb00b3d64858ca4768251b9d">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_7bfcc7e12983a7a1b78089e03e9b0b91c9d69017.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/root/.android/build-cache/eafd59ee6f2f148ad86989d9481a160291a632c7/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="364364bf77b4a71afc5930fc3ae57b3f0eea637c">
-        <dex dex="/home/javier/AndroidStudioProjects/Asistencia/app/build/intermediates/pre-dexed/debug/classes_8ab514e2f98d216c08c332c03c0a27a2ae46044c.jar" />
+        sha1="386a4339ffe52d5d63e80f9bed8d2b1d1a418249">
+        <dex dex="C:\Users\Julio Alfredo\Documents\Asistencia\app\build\intermediates\pre-dexed\debug\android-async-http-1.4.9_78df05d295e149d8c997f3a6570d211062980958.jar" />
     </item>
 
 </items>

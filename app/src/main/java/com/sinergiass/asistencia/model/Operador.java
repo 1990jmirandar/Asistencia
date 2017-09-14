@@ -1,5 +1,6 @@
 package com.sinergiass.asistencia.model;
 
+import com.orm.SugarRecord;
 import com.sinergiass.asistencia.model.Asistencia;
 
 import java.util.ArrayList;
@@ -8,19 +9,19 @@ import java.util.ArrayList;
  * Created by Julio Alfredo on 11/9/2017.
  */
 
-public class Operador {
+public class Operador extends SugarRecord{
 
     private int idOperador;
     private String cedula;
     private String nombre;
     private String apellido;
     private String telefono;
-    private double[] datosCara;
-    private ArrayList<Asistencia> asistencia;
+    private String datosCara;
 
 
 
-    public Operador(String cedula, String nombre, String apellido, String telefono, double[] datosCara, int idOperador){
+
+    public Operador(String cedula, String nombre, String apellido, String telefono, String datosCara, int idOperador){
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -62,20 +63,12 @@ public class Operador {
         this.telefono = telefono;
     }
 
-    public double[] getDatosCara() {
+    public String getDatosCara() {
         return datosCara;
     }
 
-    public void setDatosCara(double[] datosCara) {
+    public void setDatosCara(String datosCara) {
         this.datosCara = datosCara;
-    }
-
-    public ArrayList<Asistencia> getAsistencia() {
-        return asistencia;
-    }
-
-    public void setAsistencia(ArrayList<Asistencia> asistencia) {
-        this.asistencia = asistencia;
     }
 
     public int getIdOperador() {
