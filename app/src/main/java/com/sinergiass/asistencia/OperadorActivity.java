@@ -37,7 +37,7 @@ public class OperadorActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] imagenByte = baos.toByteArray();
             String encodedImage = Base64.encodeToString(imagenByte, Base64.DEFAULT);
 

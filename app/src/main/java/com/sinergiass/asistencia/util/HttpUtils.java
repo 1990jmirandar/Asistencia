@@ -9,21 +9,18 @@ import com.loopj.android.http.RequestParams;
  */
 
 public class HttpUtils {
-    private static final String BASE_URL = "http://api.twitter.com/1/";
+    private static final String BASE_URL = "http://192.168.0.138:8000/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
 
-    public HttpUtils(){
-        client.addHeader("app_id","b6defbd4");
-        client.addHeader("app_key","af0debb964389d41a65610b4dcea2aca");
-    }
-
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.get(getAbsoluteUrl(url), params, responseHandler);
+        client.get("http://192.168.0.138:8000/"+url, params, responseHandler);
     }
 
     public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.addHeader("app_id","b6defbd4");
+        client.addHeader("app_key","af0debb964389d41a65610b4dcea2aca");
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
