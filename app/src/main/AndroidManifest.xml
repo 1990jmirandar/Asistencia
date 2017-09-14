@@ -61,7 +61,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".LoginAdminActivity"></activity>
+        <activity android:name=".OperadorActivity"></activity>
         <activity
             android:name=".LoginActivity"
             android:label="Login">
