@@ -1,15 +1,25 @@
 package com.sinergiass.asistencia.model;
 
+import com.google.gson.annotations.Expose;
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
 
-public class Admin extends SugarRecord {
 
-    private int idAdmin;
-    private String usuario ;
+public class Admin extends SugarRecord implements Serializable {
+
+    @Expose
+    private String username ;
+    @Expose
     private String password ;
+    private int idAdmin;
 
     public Admin(){}
+
+    public Admin(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public int getIdAdmin() {
         return idAdmin;
@@ -20,11 +30,11 @@ public class Admin extends SugarRecord {
     }
 
     public String getUsuario() {
-        return usuario;
+        return username;
     }
 
     public void setUsuario(String usuario) {
-        this.usuario = usuario;
+        this.username = usuario;
     }
 
     public String getPassword() {

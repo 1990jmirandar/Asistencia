@@ -1,33 +1,42 @@
 package com.sinergiass.asistencia.model;
 
+import com.google.gson.annotations.Expose;
 import com.orm.SugarRecord;
 import com.sinergiass.asistencia.model.Asistencia;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Julio Alfredo on 11/9/2017.
  */
 
-public class Operador extends SugarRecord{
+public class Operador extends SugarRecord implements Serializable{
 
+    @Expose
     private int idOperador;
-    private String cedula;
+    @Expose
     private String nombre;
+    @Expose
     private String apellido;
+    @Expose
+    private String cedula;
+    @Expose
     private String telefono;
-    private String datosCara;
+    @Expose
+    private String faceData;
 
+    public Operador() {
+    }
 
-
-
-    public Operador(String cedula, String nombre, String apellido, String telefono, String datosCara, int idOperador){
-        this.cedula = cedula;
+    public Operador(int idOperador, String nombre, String apellido, String cedula, String telefono, String faceData){
+        this.idOperador = idOperador;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.cedula = cedula;
         this.telefono = telefono;
-        this.datosCara = datosCara;
-        this.idOperador = idOperador;
+        this.faceData = faceData;
+
 
     }
 
@@ -64,11 +73,11 @@ public class Operador extends SugarRecord{
     }
 
     public String getDatosCara() {
-        return datosCara;
+        return faceData;
     }
 
     public void setDatosCara(String datosCara) {
-        this.datosCara = datosCara;
+        this.faceData = datosCara;
     }
 
     public int getIdOperador() {

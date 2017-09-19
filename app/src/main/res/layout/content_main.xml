@@ -31,12 +31,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/listaOperador"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+             <!--/>-->
         <ListView
-            android:id="@+id/listaOperador"
+            android:id="@+id/listaOperador1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
 
-             />
+        </ListView>
 
     </LinearLayout>
 

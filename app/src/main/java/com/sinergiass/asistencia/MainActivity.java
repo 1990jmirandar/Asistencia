@@ -7,32 +7,30 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.sinergiass.asistencia.adapter.BandaAdapter;
-import com.sinergiass.asistencia.model.Asistencia;
+import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.model.Banda;
 import com.sinergiass.asistencia.model.Operador;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-
-import android.widget.Button;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ListView lista;
+    private RecyclerView lista1;
+    List<Operador> listaOp;
+    private RestManager mManager;
     private ArrayList<Operador> listaOperadores =  new ArrayList<Operador>();
     private Operador operador;
 
@@ -42,39 +40,26 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //llenado lista de operadores desde la base
-        //List<Operador> operadores = Operador.find(Operador.class , "id_Operador = ?", new String[]{""+operador.getIdOperador()});
 
-        for(int x = 0; x<12; x++){
-            operador = new Operador("0950676395","Julio Alfredo","Larrea Sanchez","0992108894","2.38,5.12,6",x+1);
-            listaOperadores.add(operador);
-        }
+        //Adquiriendo los datos de un json a una lista
+        listaOp = Operador.listAll(Operador.class);
+        Log.d("el numero es",""+listaOp.size());
+        //Llenando la listView
+        Banda bandas[] = new Banda[listaOp.size()];
 
-
-
-
-
-        Banda bandas[] = new Banda[listaOperadores.size()];
-
-        for(int x=0;x<listaOperadores.size();x++) {
-            operador = listaOperadores.get(x);
+        for(int x=0;x<listaOp.size();x++) {
+            operador = listaOp.get(x);
             bandas[x] = new Banda(operador.getNombre(),operador.getApellido(),operador.getCedula());
-
         }
-
-
-
 
         BandaAdapter adapter = new BandaAdapter(this,R.layout.listview_item_row,bandas);
-
-        lista = (ListView)findViewById(R.id.listaOperador);
-
-
-
+        lista = (ListView)findViewById(R.id.listaOperador1);
         lista.setAdapter(adapter);
+        //
 
 
 
@@ -88,6 +73,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
      }
+
+
 
     @Override
     public void onBackPressed() {
