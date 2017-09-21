@@ -62,8 +62,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v){
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                startActivityForResult(intent, 0);
+                Intent intent = new Intent(LoginActivity.this, FaceRecognitionActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -131,11 +131,5 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Intent intent = new Intent(LoginActivity.this, AsistenciaActivity.class);
-        startActivity(intent);
     }
 }
