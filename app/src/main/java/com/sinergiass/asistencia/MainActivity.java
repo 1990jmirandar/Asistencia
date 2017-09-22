@@ -49,14 +49,14 @@ public class MainActivity extends AppCompatActivity
         listaOp = Operador.listAll(Operador.class);
         Log.d("el numero es",""+listaOp.size());
         //Llenando la listView
-        Banda bandas[] = new Banda[listaOp.size()];
+        /*Banda bandas[] = new Banda[listaOp.size()];
 
         for(int x=0;x<listaOp.size();x++) {
             operador = listaOp.get(x);
             bandas[x] = new Banda(operador.getNombre(),operador.getApellido(),operador.getCedula());
-        }
+        }*/
 
-        BandaAdapter adapter = new BandaAdapter(this,R.layout.listview_item_row,bandas);
+        BandaAdapter adapter = new BandaAdapter(this,R.layout.listview_item_row,listaOp);
         lista = (ListView)findViewById(R.id.listaOperador1);
         lista.setAdapter(adapter);
         //
