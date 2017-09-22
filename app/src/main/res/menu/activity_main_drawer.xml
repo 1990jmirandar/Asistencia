@@ -7,10 +7,6 @@
             android:icon="@drawable/add"
             android:title="Ingresar nuevo operador" />
         <item
-            android:id="@+id/nav_asistencia"
-            android:icon="@drawable/gps"
-            android:title="Registrar operador" />
-        <item
             android:id="@+id/nav_reporte"
             android:icon="@drawable/report"
             android:title="Reportes de asistencia" />
@@ -20,7 +16,7 @@
     <item android:title="Conectar">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_sync"
                 android:icon="@drawable/sync"
                 android:title="Sincronizar" />
 

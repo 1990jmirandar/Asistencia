@@ -1,6 +1,7 @@
 package com.sinergiass.asistencia.model;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.sinergiass.asistencia.model.Asistencia;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 public class Operador extends SugarRecord implements Serializable{
 
+    //@SerializedName("id")
     @Expose
     private int idOperador;
     @Expose
@@ -25,6 +27,7 @@ public class Operador extends SugarRecord implements Serializable{
     private String telefono;
     @Expose
     private String faceData;
+    private int estado = 1;
 
     public Operador() {
     }
@@ -38,6 +41,14 @@ public class Operador extends SugarRecord implements Serializable{
         this.faceData = faceData;
 
 
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
 
     public String getCedula() {

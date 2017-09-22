@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -34,6 +35,7 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
         mes=calendar.get(Calendar.MONTH);
         anio=calendar.get(Calendar.YEAR);
         idOperador = getIntent().getExtras().getLong("idOperador");
+        Log.d("Operador con id",""+idOperador);
         operador = Operador.findById(Operador.class,idOperador);
         txtFechaReporte= (EditText) findViewById(R.id.txtFechaReporte);
         txtHoraEntrada=(TextView) findViewById(R.id.txtHoraEntrada);
@@ -94,10 +96,11 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
 
     public void callMapActivity(View v){
         if (v.getTag()==null) return;
-        Intent intent = new Intent(this,MapsActivity.class);
+        Intent intent = new Intent(ReporteAsistenciaActivity.this,MapsActivity.class);
         Bundle extras = new Bundle();
         extras.putDouble("longitud",Double.parseDouble(((Asistencia)v.getTag()).getLongitud()));
         extras.putDouble("latitud",Double.parseDouble(((Asistencia)v.getTag()).getLatitud()));
+        intent.putExtras(extras);
         startActivity(intent);
     }
 }

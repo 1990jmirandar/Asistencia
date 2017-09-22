@@ -54,6 +54,7 @@ public class OperadorActivity extends AppCompatActivity {
                 operador.setCedula(cedula.getText().toString());
                 operador.setTelefono(telefono.getText().toString());
                 operador.setFaceData(null);
+                operador.setEstado(0);
                 operador.save();
                 startActivity(intent);
                 Toast.makeText(OperadorActivity.this, "Guardado Exitoso!", Toast.LENGTH_LONG).show();

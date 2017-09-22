@@ -1,28 +1,39 @@
 package com.sinergiass.asistencia.model;
 
+import com.google.gson.annotations.Expose;
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import cz.msebera.android.httpclient.entity.SerializableEntity;
 
 /**
  * Created by Julio Alfredo on 11/9/2017.
  */
 
-public class Asistencia extends SugarRecord {
+public class Asistencia extends SugarRecord implements Serializable {
 
-    private int idOperador;
+    @Expose
+    private int operador;
+    @Expose
     private String latitud;
+    @Expose
     private String longitud;
+    @Expose
     private String fecha;
+    @Expose
     private String hora;
+    @Expose
     private boolean isEntrada;
+    private int estado = 1;
 
     public Asistencia() {
 
     }
 
     public Asistencia(int idOperador, String latitud, String longitud, String fecha, String hora, boolean isEntrada) {
-        this.idOperador = idOperador;
+        this.operador = idOperador;
         this.latitud = latitud;
         this.longitud = longitud;
         this.fecha = fecha;
@@ -30,12 +41,20 @@ public class Asistencia extends SugarRecord {
         this.isEntrada = isEntrada;
     }
 
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+
     public int getIdOperador() {
-        return idOperador;
+        return operador;
     }
 
     public void setIdOperador(int idOperador) {
-        this.idOperador = idOperador;
+        this.operador = idOperador;
     }
 
     public String getLatitud() {

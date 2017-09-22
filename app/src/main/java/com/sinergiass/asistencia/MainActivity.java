@@ -48,14 +48,9 @@ public class MainActivity extends AppCompatActivity
         //Adquiriendo los datos de un json a una lista
         listaOp = Operador.listAll(Operador.class);
         Log.d("el numero es",""+listaOp.size());
+
+
         //Llenando la listView
-        /*Banda bandas[] = new Banda[listaOp.size()];
-
-        for(int x=0;x<listaOp.size();x++) {
-            operador = listaOp.get(x);
-            bandas[x] = new Banda(operador.getNombre(),operador.getApellido(),operador.getCedula());
-        }*/
-
         BandaAdapter adapter = new BandaAdapter(this,R.layout.listview_item_row,listaOp);
         lista = (ListView)findViewById(R.id.listaOperador1);
         lista.setAdapter(adapter);
@@ -117,13 +112,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_operador) {
             Intent intent = new Intent(this, OperadorActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_asistencia) {
-            Intent intent = new Intent(this, AsistenciaActivity.class);
-            startActivity(intent);
-
         } else if (id == R.id.nav_reporte) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_sync) {
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

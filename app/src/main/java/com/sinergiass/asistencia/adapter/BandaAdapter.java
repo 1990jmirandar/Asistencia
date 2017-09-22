@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
         }
 
         final Operador operador = listaOperador.get(position);
+        //Log.d("idOperador",""+operador.getIdOperador());
         holder.text1.setText(operador.getNombre());
         holder.text2.setText(operador.getApellido());
         holder.text3.setText(operador.getCedula());
@@ -70,7 +72,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
             public void onClick(View view) {
                 Intent intent = new Intent(context, ReporteAsistenciaActivity.class);
                 Bundle extras = new Bundle();
-                extras.putLong("idOperador",operador.getId());
+                extras.putLong("idOperador",operador.getIdOperador());
                 intent.putExtras(extras);
                 context.startActivity(intent);
             }
@@ -80,7 +82,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
             public void onClick(View view) {
                 Intent intent = new Intent(context, AsistenciaActivity.class);
                 Bundle extras = new Bundle();
-                extras.putLong("idOperador",operador.getId());
+                extras.putLong("idOperador",operador.getIdOperador());
                 context.startActivity(intent);
             }
         });
