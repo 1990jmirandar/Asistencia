@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     for(int i=0; i<listaOp.size();i++){
                         final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
                                 listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
-                                listaOp.get(i).getDatosCara());
+                                null);
                         Log.d("el operador "+i + ":",""+operador1.getNombre());
                         operador1.save();
                     }

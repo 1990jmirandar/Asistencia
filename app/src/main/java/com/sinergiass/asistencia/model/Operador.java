@@ -24,12 +24,12 @@ public class Operador extends SugarRecord implements Serializable{
     @Expose
     private String telefono;
     @Expose
-    private String faceData;
+    private Byte[] faceData;
 
     public Operador() {
     }
 
-    public Operador(int idOperador, String nombre, String apellido, String cedula, String telefono, String faceData){
+    public Operador(int idOperador, String nombre, String apellido, String cedula, String telefono, Byte[] faceData){
         this.idOperador = idOperador;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -72,12 +72,12 @@ public class Operador extends SugarRecord implements Serializable{
         this.telefono = telefono;
     }
 
-    public String getDatosCara() {
+    public Byte[] getFaceData() {
         return faceData;
     }
 
-    public void setDatosCara(String datosCara) {
-        this.faceData = datosCara;
+    public void setFaceData(Byte[] faceData) {
+        this.faceData = faceData;
     }
 
     public int getIdOperador() {

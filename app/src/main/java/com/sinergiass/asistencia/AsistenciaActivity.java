@@ -42,7 +42,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
     private Button ubicarme;
     private String datosCara = "5.32,6.84,3.21";
-    private Operador operador = new Operador(1,"Julio Alfredo","Larrea Sanchez","0950676395","0992108894",datosCara);
+    private Operador operador = new Operador(1,"Julio Alfredo","Larrea Sanchez","0950676395","0992108894",null);
     private TextView nombre,apellido,cedula;
     private RadioButton rbtEntrada,rbtSalida;
     private FusedLocationProviderClient mFusedLocationClient;
