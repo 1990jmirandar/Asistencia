@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -44,6 +45,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -72,6 +75,10 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 
     private List<Operador> mOperadores;
 
+
+    private static String mPhotoName = "";
+    private String mEncoding;
+
     protected void exportDbExtStorage(){
         try {
             File sd = Environment.getExternalStorageDirectory();
@@ -95,6 +102,28 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
         }
     }
 
+    public void writeToFile(String data, String filename)
+    {
+        File path = Environment.getExternalStorageDirectory();
+        File file = new File(path, "photo_" + filename+ ".txt");
+
+        try
+        {
+            file.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(file);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.write(data);
+
+            myOutWriter.close();
+
+            fOut.flush();
+            fOut.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,11 +135,8 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         useEigenfaces = true;
 
-
-
-//        tinydb = new TinyDB(this); // Used to store ArrayLists in the shared preferences
         /* Estos valores vienen de la configuración por defecto de la librería. Allí pueden ser
-         * cambiados por el usuario, pero en este caso los quemaremos para simplificar. */
+           cambiados por el usuario, pero en este caso los quemaremos para simplificar. */
         faceThreshold = 0.30f;
         distanceThreshold = 0.20f;
         maximumImages = 50;
@@ -120,7 +146,6 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
         mOpenCvCameraView.setCameraIndex(prefs.getInt("mCameraIndex", CameraBridgeViewBase.CAMERA_ID_FRONT));
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
-        // OpenCv Cargado
 
         findViewById(R.id.take_picture_button).setOnClickListener(new View.OnClickListener() {
             NativeMethods.MeasureDistTask mMeasureDistTask;
@@ -152,6 +177,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                 Log.i(TAG, "Vector height: " + image.height() + " Width: " + image.width() + " total: " + image.total());
                 /* --- END ---*/
 
+                /* Pruebas para entender el funcionamiento de OpenCV Mat */
                 // PRUEBA - Instancia(EXITO!!!!)
 //                Log.i(TAG, "IMAGENORIGINAL");
 //                Log.i(TAG, image.toString());
@@ -225,8 +251,42 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 //                }
 
                 // Calculate normalized Euclidean distance
-                mMeasureDistTask = new NativeMethods.MeasureDistTask(useEigenfaces, measureDistTaskCallback);
-                mMeasureDistTask.execute(image);
+
+
+
+                /* Pruebas de encoding... */
+//                Log.i(TAG, "IMAGENORIGINAL");
+//                Log.i(TAG, image.toString());
+//                Log.i(TAG, image.dump());
+
+//                byte[] data = new byte[(int)(image.total()*image.channels())];
+//                image.get(0, 0, data);
+//                mEncoding = Base64.encodeToString(data, Base64.DEFAULT);
+//
+//                Log.i(TAG, "Byte Array encoded to String: ");
+//                Log.i(TAG, mEncoding);
+
+                /* Obtener fotos para construir la base */
+                // showEnterLabelDialog();
+
+
+
+                /* Decoding ... */
+//                byte[] faceData = Base64.decode(encoding, Base64.DEFAULT);
+//
+//                Mat imageTest = new Mat(faceData.length, 1, CvType.CV_8UC1);
+//                imageTest.put(0, 0, faceData);
+//
+//                Log.i(TAG, "IMAGENCOPIADA");
+//                Log.i(TAG, imageTest.toString());
+//                Log.i(TAG, imageTest.dump());
+
+
+
+                /* END */
+
+                //mMeasureDistTask = new NativeMethods.MeasureDistTask(useEigenfaces, measureDistTaskCallback);
+                //mMeasureDistTask.execute(image);
 
                 // El operador no deberia poder ingresar nuevas caras.
                 // showLabelsDialog();
@@ -251,10 +311,12 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                 String minDistString = String.format(Locale.US, "%.4f", minDist);
                 String faceDistString = String.format(Locale.US, "%.4f", faceDist);
 
+                // Rostro reconocido
                 if (faceDist < faceThreshold && minDist < distanceThreshold){ // 1. Near face space and near a face class
-                    showToast("Detectado: " + mOperadores.get(minIndex).getNombre(), Toast.LENGTH_SHORT);
+                    showToast("Operador Reconocido", Toast.LENGTH_SHORT);
+                    //showToast("Detectado: " + mOperadores.get(minIndex).getNombre(), Toast.LENGTH_SHORT);
                     Bundle nextBundle = new Bundle();
-                    nextBundle.putInt("idOperador", minIndex);
+                    nextBundle.putInt("idOperador", minIndex); // Index is 0-based - Add 1 for DB queries
                     nextBundle.putString("nombreOperador", mOperadores.get(minIndex).getNombre());
 
                     Intent intent = new Intent(FaceRecognitionActivity.this, Asistencia.class);
@@ -262,19 +324,26 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                     startActivity(intent);
 
                 }
-
                 else if (faceDist < faceThreshold) // 2. Near face space but not near a known face class
                     showToast("Unknown face. Face distance: " + faceDistString + ". Closest Distance: " + minDistString, Toast.LENGTH_LONG);
                 else if (minDist < distanceThreshold) // 3. Distant from face space and near a face class
-                    showToast("False recognition. Face distance: " + faceDistString + ". Closest Distance: " + minDistString, Toast.LENGTH_LONG);
+                    showToast("No se reconoce", Toast.LENGTH_LONG);
+                    //showToast("False recognition. Face distance: " + faceDistString + ". Closest Distance: " + minDistString, Toast.LENGTH_LONG);
                 else // 4. Distant from face space and not near a known face class.
-                    showToast("Image is not a face. Face distance: " + faceDistString + ". Closest Distance: " + minDistString, Toast.LENGTH_LONG);
-            } else {
-                Log.w(TAG, "Array is null");
-                if (useEigenfaces || uniqueLabels == null || uniqueLabels.length > 1)
-                    showToast("Keep training...", Toast.LENGTH_SHORT);
-                else
-                    showToast("Fisherfaces needs two different faces", Toast.LENGTH_SHORT);
+                    showToast("No se reconoce", Toast.LENGTH_LONG);
+                    //showToast("Image is not a face. Face distance: " + faceDistString + ". Closest Distance: " + minDistString, Toast.LENGTH_LONG);
+            }
+            // TODO - Decidir si eliminar esto.
+             else {
+                /* TEMPORAL : PARA PERMITIR EL PASO A LA SIGUIENTE VISTA */
+                Intent intent = new Intent(FaceRecognitionActivity.this, AsistenciaActivity.class);
+                startActivity(intent);
+
+//                Log.w(TAG, "Array is null");
+//                if (useEigenfaces || uniqueLabels == null || uniqueLabels.length > 1)
+//                    showToast("Keep training...", Toast.LENGTH_SHORT);
+//                else
+//                    showToast("Fisherfaces needs two different faces", Toast.LENGTH_SHORT);
             }
         }
     };
@@ -453,7 +522,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                images.remove(images.size() - 1); // Remove last image
+//                images.remove(images.size() - 1); // Remove last image
             }
         });
         builder.setCancelable(false); // User has to input a name
@@ -471,7 +540,10 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                         if (!string.isEmpty()) { // Make sure the input is valid
                             // If input is valid, dismiss the dialog and add the label to the array
                             dialog.dismiss();
-                            addLabel(string);
+//                            addLabel(string);
+                            mPhotoName = string;
+                            writeToFile(mEncoding, mPhotoName);
+                            showToast("Capturada Foto de " + mPhotoName, Toast.LENGTH_LONG);
                         }
                     }
                 });
@@ -570,15 +642,16 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                     Log.i(TAG, "OpenCV loaded successfully");
                     mOpenCvCameraView.enableView();
 
-                    // Read images and labels from shared preferences
-//                    images = tinydb.getListMat("images");
-//                    imagesLabels = tinydb.getListString("imagesLabels");
-
                     images = new ArrayList<>();
-                    mOperadores = Operador.listAll(Operador.class);   // Cargar los operadores de la base local
+
+                    /* Cargar los operadores de la base local
+                       TODO - No funcionara hasta que se modifique bien la estructura de la base */
+                    // mOperadores = Operador.listAll(Operador.class);
+
+                    // Hasta eso
 
                     /* --- Obtener las fotos de cada operador, para hacer el reconocimiento de la foto que toma la actividad --- */
-                    if (mOperadores.size() != 0){    // Si existen registros
+                    if (mOperadores != null && mOperadores.size() != 0){    // Si existen registros
                         for (Operador operador : mOperadores){
                             Log.i(TAG, operador.getNombre());
 
