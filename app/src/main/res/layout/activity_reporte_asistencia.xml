@@ -1,9 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.sinergiass.asistencia.ReporteAsistenciaActivity">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <EditText
+            android:id="@+id/txtFechaReporte"
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="Fecha de reporte"
+            android:gravity="center"
+            android:inputType="date"
+            android:drawableStart="@mipmap/ic_calendario"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Hora de Ingreso"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Hora de Salida"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/txtHoraEntrada"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="No existe informacion"/>
+        <TextView
+            android:id="@+id/txtHoraSalida"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="No existe informacion"/>
+    </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btnEntrada"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="verMapaEntrada"
+            android:text="Ver Mapa"/>
+        <Button
+            android:id="@+id/btnSalida"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="verMapaSalida"
+            android:text="Ver Mapa"/>
+    </LinearLayout>
+</LinearLayout>

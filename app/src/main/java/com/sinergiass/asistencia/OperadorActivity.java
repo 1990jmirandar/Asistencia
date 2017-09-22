@@ -53,7 +53,7 @@ public class OperadorActivity extends AppCompatActivity {
                 operador.setApellido(apellidos.getText().toString());
                 operador.setCedula(cedula.getText().toString());
                 operador.setTelefono(telefono.getText().toString());
-                operador.setDatosCara(encodedImage);
+                operador.setFaceData(null);
                 operador.save();
                 startActivity(intent);
                 Toast.makeText(OperadorActivity.this, "Guardado Exitoso!", Toast.LENGTH_LONG).show();

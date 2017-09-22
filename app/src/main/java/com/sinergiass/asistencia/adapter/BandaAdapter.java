@@ -71,6 +71,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
                 Intent intent = new Intent(context, ReporteAsistenciaActivity.class);
                 Bundle extras = new Bundle();
                 extras.putLong("idOperador",operador.getId());
+                intent.putExtras(extras);
                 context.startActivity(intent);
             }
         });
