@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,7 +23,12 @@ import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.util.DatabaseHelper;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,6 +47,31 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private LinearLayout layout,layoutP;
 
+    private static final boolean IMPORT_ASSETS_DB = true; // true para cargar la DB desde assets, false para cargar desde el Servidor
+
+    protected void exportDbExtStorage(){
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+
+            if (sd.canWrite()) {
+                String currentDBPath = "/data/data/" + getPackageName() + "/databases/FR_example.db";
+                String backupDBPath = "output.db";
+                File currentDB = new File(currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +84,14 @@ public class LoginActivity extends AppCompatActivity {
 
         mManager = new RestManager();
 
+        /* */
+        if (IMPORT_ASSETS_DB){
+            // CARGAR LA DB ubicada en assets/databases
+            DatabaseHelper dbHelper = new DatabaseHelper(LoginActivity.this);
+            dbHelper.getWritableDatabase();
+        }else{
         new DownloadDataTask().execute();
+        }
 
 
         admin.setOnClickListener(new View.OnClickListener(){
@@ -69,8 +107,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v){
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                startActivityForResult(intent, 0);
+                Intent intent = new Intent(LoginActivity.this, FaceRecognitionActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -138,9 +176,9 @@ public class LoginActivity extends AppCompatActivity {
                     List<Operador> listaOp = response.body();
                     //Log.d("El numero de la lista", ""+ listaOp.size());
                     for(int i=0; i<listaOp.size();i++){
-                        final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
+                        final Operador operador1 = new Operador(listaOp.get(i).getId(),listaOp.get(i).getNombre(),
                                 listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
-                                null);
+                                listaOp.get(i).getEncodedFaceData());
                         Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
                         operador1.save();
                     }

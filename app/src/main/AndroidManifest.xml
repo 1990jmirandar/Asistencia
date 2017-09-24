@@ -13,6 +13,25 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!-- PERMISOS PARA EL RECONOCIMIENTO FACIAL -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.front.autofocus"
+        android:required="false" />s
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name="com.orm.SugarApp"
         android:allowBackup="true"
@@ -21,13 +40,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Asistencia"
-        tools:replace="android:icon">
+        tools:replace="android:icon"
+        android:largeHeap="true">
         <meta-data
             android:name="DATABASE"
             android:value="asistencia.db" />
         <meta-data
             android:name="VERSION"
-            android:value="9" />
+            android:value="1" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -69,8 +89,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginAdminActivity" />
+        <activity android:name=".LoginAdminActivity"></activity>
         <activity android:name=".ReporteAsistenciaActivity"></activity>
+        <activity android:name=".FaceRecognitionActivity"></activity>
     </application>
 
 </manifest>
