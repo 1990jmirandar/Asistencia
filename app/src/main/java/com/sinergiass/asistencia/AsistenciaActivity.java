@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.orm.SugarRecord;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
 
@@ -41,7 +42,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
 
     private Button ubicarme;
-    private Operador operador = new Operador(1,"Julio Alfredo","Larrea Sanchez","0950676395","0992108894",null);
+    private Operador operador; /*= new Operador(1,"Julio Alfredo","Larrea Sanchez","0950676395","0992108894",null);*/
     private TextView nombre,apellido,cedula;
     private RadioButton rbtEntrada,rbtSalida;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -60,6 +61,8 @@ public class AsistenciaActivity extends  AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Bundle extras = getIntent().getExtras();
+        operador = SugarRecord.findById(Operador.class, extras.getLong("idOperador"));
 
         ubicarme = (Button)findViewById(R.id.ubicacion);
         nombre = (TextView)findViewById(R.id.nombres);

@@ -35,10 +35,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by avera on 13/09/17.
- */
-
 public class LoginActivity extends AppCompatActivity {
 
     private Button operador;
@@ -48,29 +44,6 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout layout,layoutP;
 
     private static final boolean IMPORT_ASSETS_DB = true; // true para cargar la DB desde assets, false para cargar desde el Servidor
-
-    protected void exportDbExtStorage(){
-        try {
-            File sd = Environment.getExternalStorageDirectory();
-
-            if (sd.canWrite()) {
-                String currentDBPath = "/data/data/" + getPackageName() + "/databases/FR_example.db";
-                String backupDBPath = "output.db";
-                File currentDB = new File(currentDBPath);
-                File backupDB = new File(sd, backupDBPath);
-
-                if (currentDB.exists()) {
-                    FileChannel src = new FileInputStream(currentDB).getChannel();
-                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                }
-            }
-        } catch (Exception e) {
-
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +57,18 @@ public class LoginActivity extends AppCompatActivity {
 
         mManager = new RestManager();
 
-        /* */
-        if (IMPORT_ASSETS_DB){
-            // CARGAR LA DB ubicada en assets/databases
-            DatabaseHelper dbHelper = new DatabaseHelper(LoginActivity.this);
-            dbHelper.getWritableDatabase();
-        }else{
+//        /* IMPORT_ASSETS_DB = True para cargar la DB desde assets, false para cargar desde el Servidor */
+//        if (IMPORT_ASSETS_DB){
+//            // CARGAR LA DB ubicada en assets/databases
+//            DatabaseHelper dbHelper = new DatabaseHelper(LoginActivity.this);
+//            dbHelper.getWritableDatabase();
+//
+//            // Permitir la visibilidad sin ir al progress bar.
+//            layoutP.setVisibility(View.GONE);
+//            layout.setVisibility(View.VISIBLE);
+//        }else{
         new DownloadDataTask().execute();
-        }
+//        }
 
 
         admin.setOnClickListener(new View.OnClickListener(){
@@ -118,9 +95,16 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            cargarAdmins();
-            cargarAsistencias();
-            cargarOperadores();
+            if (IMPORT_ASSETS_DB) {
+                // CARGAR LA DB ubicada en assets/databases
+                DatabaseHelper dbHelper = new DatabaseHelper(LoginActivity.this);
+                dbHelper.getWritableDatabase();
+            }
+            else {
+                cargarAdmins();
+                cargarAsistencias();
+                cargarOperadores();
+            }
             return null;
         }
 
@@ -179,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                         final Operador operador1 = new Operador(listaOp.get(i).getId(),listaOp.get(i).getNombre(),
                                 listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
                                 listaOp.get(i).getEncodedFaceData());
-                        Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
+                        Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getId());
                         operador1.save();
                     }
 

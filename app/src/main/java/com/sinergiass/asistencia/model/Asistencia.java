@@ -15,7 +15,7 @@ import cz.msebera.android.httpclient.entity.SerializableEntity;
 public class Asistencia extends SugarRecord implements Serializable {
 
     @Expose
-    private int operador;
+    private long operador;
     @Expose
     private String latitud;
     @Expose
@@ -32,7 +32,7 @@ public class Asistencia extends SugarRecord implements Serializable {
 
     }
 
-    public Asistencia(int idOperador, String latitud, String longitud, String fecha, String hora, boolean isEntrada) {
+    public Asistencia(long idOperador, String latitud, String longitud, String fecha, String hora, boolean isEntrada) {
         this.operador = idOperador;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -49,11 +49,11 @@ public class Asistencia extends SugarRecord implements Serializable {
         this.estado = estado;
     }
 
-    public int getIdOperador() {
+    public long getIdOperador() {
         return operador;
     }
 
-    public void setIdOperador(int idOperador) {
+    public void setIdOperador(long idOperador) {
         this.operador = idOperador;
     }
 

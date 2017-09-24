@@ -63,7 +63,7 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
     }
 
     public void consultaAsistencia(){
-        String[] values = new String[]{String.valueOf(operador.getIdOperador()),txtFechaReporte.getText().toString()};
+        String[] values = new String[]{String.valueOf(operador.getId()),txtFechaReporte.getText().toString()};
         List<Asistencia> listaAsistencia = Asistencia.find(Asistencia.class, "id_operador = ? and fecha=?", values);
         if (listaAsistencia.isEmpty()){
             txtHoraEntrada.setText("No existe informacion");

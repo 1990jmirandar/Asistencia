@@ -65,20 +65,18 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
     private Mat mRgba, mGray;
     private Toast mToast;
     private boolean useEigenfaces;
-    // private SeekBarArrows mThresholdFace, mThresholdDistance, mMaximumImages;
     private float faceThreshold, distanceThreshold;
     private int maximumImages;
     private SharedPreferences prefs;
-//    private TinyDB tinydb;
-    // private Toolbar mToolbar;
     private NativeMethods.TrainFacesTask mTrainFacesTask;
 
     private List<Operador> mOperadores;
 
-
     private static String mPhotoName = "";
     private String mEncoding;
 
+    /* Metodo usado para sacar la base local del celular afuera del directorio protegido
+       para de esta manera traerla al pc y poder examinarla o modificarla */
     protected void exportDbExtStorage(){
         try {
             File sd = Environment.getExternalStorageDirectory();
@@ -102,28 +100,6 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
         }
     }
 
-    public void writeToFile(String data, String filename)
-    {
-        File path = Environment.getExternalStorageDirectory();
-        File file = new File(path, "photo_" + filename+ ".txt");
-
-        try
-        {
-            file.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(file);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.write(data);
-
-            myOutWriter.close();
-
-            fOut.flush();
-            fOut.close();
-        }
-        catch (IOException e)
-        {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,85 +153,6 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                 Log.i(TAG, "Vector height: " + image.height() + " Width: " + image.width() + " total: " + image.total());
                 /* --- END ---*/
 
-                // exportDbExtStorage();
-
-                /* Pruebas para entender el funcionamiento de OpenCV Mat */
-                // PRUEBA - Instancia(EXITO!!!!)
-//                Log.i(TAG, "IMAGENORIGINAL");
-//                Log.i(TAG, image.toString());
-//                Log.i(TAG, image.dump());
-//
-//                byte[] imageByteArray = new byte[(int)(image.total()*image.channels())];
-//                image.get(0, 0, imageByteArray);
-//
-//                Mat imageTest = new Mat(imageByteArray.length, 1, CvType.CV_8UC1);
-//                imageTest.put(0, 0, imageByteArray);
-//
-//                Log.i(TAG, "IMAGENCOPIADA");
-//                Log.i(TAG, imageTest.toString());
-//                Log.i(TAG, imageTest.dump());
-                // END PRUEBA
-
-                // PRUEBA 2 - Archivos(EXITO!!!!)
-//                Log.i(TAG, "IMAGENORIGINAL");
-//                Log.i(TAG, image.toString());
-//                Log.i(TAG, image.dump());
-//
-//                MyUtils.saveImageMat(getApplicationContext() ,image, "saveTest");
-//                Mat imageTest = MyUtils.load(getApplicationContext(), "saveTest");
-//
-//                Log.i(TAG, "IMAGENCOPIADA");
-//                Log.i(TAG, imageTest.toString());
-//                Log.i(TAG, imageTest.dump());
-                // END PRUEBA
-
-                // PRUEBA 3 - BASE DE DATOS
-
-//                Log.i(TAG, "IMAGENORIGINAL");
-//                Log.i(TAG, image.toString());
-//                Log.i(TAG, image.dump());
-//
-//                Operador operador = new Operador();
-//                operador.nombre = "Nick";
-//
-//                byte[] imageByteArray = new byte[(int)(image.total()*image.channels())];
-//                image.get(0, 0, imageByteArray);
-//
-//                operador.faceData = imageByteArray;
-//                operador.save();
-//
-//
-//
-//                byte[] operadorFaceData = operador.faceData;
-//
-//                Mat imageTest = new Mat(operadorFaceData.length, 1, CvType.CV_8UC1);
-//                imageTest.put(0, 0, operadorFaceData);
-//
-//                Log.i(TAG, "IMAGENCOPIADA");
-//                Log.i(TAG, imageTest.toString());
-//                Log.i(TAG, imageTest.dump());
-
-                // END PRUEBA
-
-                // Copiar la base a almacenamiento sin proteccion root para moverla al PC
-//                exportDbExtStorage();
-
-                // PRUEBA importando la base
-//                importDbExtStorage();
-
-//                Log.i(TAG, "IMAGENCOPIADA");
-//                Log.i(TAG, imageTest.toString());
-//                Log.i(TAG, imageTest.dump());
-
-//                if (images.size() > maximumImages) {
-//                    images.remove(0); // Remove first image
-//                    Log.i(TAG, "The number of images is limited to: " + images.size());
-//                }
-
-                // Calculate normalized Euclidean distance
-
-
-
                 /* Pruebas de encoding... */
 //                Log.i(TAG, "IMAGENORIGINAL");
 //                Log.i(TAG, image.toString());
@@ -270,21 +167,9 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 
                 /* Obtener fotos para construir la base */
                 // showEnterLabelDialog();
-
-
-
-                /* Decoding ... */
-//                byte[] faceData = Base64.decode(encoding, Base64.DEFAULT);
-//
-//                Mat imageTest = new Mat(faceData.length, 1, CvType.CV_8UC1);
-//                imageTest.put(0, 0, faceData);
-//
-//                Log.i(TAG, "IMAGENCOPIADA");
-//                Log.i(TAG, imageTest.toString());
-//                Log.i(TAG, imageTest.dump());
-
                 /* END */
 
+                // Calculate normalized Euclidean distance
                 mMeasureDistTask = new NativeMethods.MeasureDistTask(useEigenfaces, measureDistTaskCallback);
                 mMeasureDistTask.execute(image);
 
@@ -319,12 +204,8 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                     Log.i(TAG, "Detectado en imagesLabels: " + imagesLabels.get(minIndex));
                     Log.i(TAG, "Detectado en mOperadores: " + mOperadores.get(minIndex).getNombre());
 
-                    Bundle nextBundle = new Bundle();
-                    nextBundle.putInt("idOperador", minIndex + 1); // Index is 0-based - Add 1 for DB queries
-                    nextBundle.putString("nombreOperador", mOperadores.get(minIndex).getNombre());
-
                     Intent intent = new Intent(FaceRecognitionActivity.this, AsistenciaActivity.class);
-                    intent.putExtras(nextBundle);
+                    intent.putExtra("idOperador", (long) (minIndex + 1)); // Index es 0-based. Sumar 1 para el id en la DB
                     startActivity(intent);
 
                 }
@@ -547,7 +428,6 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                             dialog.dismiss();
 //                            addLabel(string);
                             mPhotoName = string;
-                            writeToFile(mEncoding, mPhotoName);
                             showToast("Capturada Foto de " + mPhotoName, Toast.LENGTH_LONG);
                         }
                     }
