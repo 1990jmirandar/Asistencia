@@ -40,7 +40,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Asistencia"
-        tools:replace="android:icon">
+        tools:replace="android:icon"
+        android:largeHeap="true">
         <meta-data
             android:name="DATABASE"
             android:value="asistencia.db" />

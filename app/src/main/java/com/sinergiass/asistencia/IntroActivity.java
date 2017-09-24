@@ -60,9 +60,9 @@ public class IntroActivity extends AppCompatActivity {
                     List<Operador> listaOp = response.body();
                     Log.d("El numero de la lista", ""+ listaOp.size());
                     for(int i=0; i<listaOp.size();i++){
-                        final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
+                        final Operador operador1 = new Operador(listaOp.get(i).getId(),listaOp.get(i).getNombre(),
                                 listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
-                                listaOp.get(i).getDatosCara());
+                                listaOp.get(i).getEncodedFaceData());
                         operador1.save();
                     }
                 }else{

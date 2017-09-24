@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class Asistencia extends SugarRecord {
 
-    private int idOperador;
+    private long idOperador;
     private String latitud;
     private String longitud;
     private String fecha;
@@ -21,7 +21,7 @@ public class Asistencia extends SugarRecord {
 
     }
 
-    public Asistencia(int idOperador, String latitud, String longitud, String fecha, String hora, boolean isEntrada) {
+    public Asistencia(long idOperador, String latitud, String longitud, String fecha, String hora, boolean isEntrada) {
         this.idOperador = idOperador;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -30,11 +30,11 @@ public class Asistencia extends SugarRecord {
         this.isEntrada = isEntrada;
     }
 
-    public int getIdOperador() {
+    public long getIdOperador() {
         return idOperador;
     }
 
-    public void setIdOperador(int idOperador) {
+    public void setIdOperador(long idOperador) {
         this.idOperador = idOperador;
     }
 

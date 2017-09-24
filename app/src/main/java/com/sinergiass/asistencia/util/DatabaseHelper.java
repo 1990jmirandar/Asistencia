@@ -1,4 +1,4 @@
-package com.example.myfacerecognitiontest;
+package com.sinergiass.asistencia.util;
 
 
 import android.content.Context;

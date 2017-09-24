@@ -84,8 +84,8 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
             File sd = Environment.getExternalStorageDirectory();
 
             if (sd.canWrite()) {
-                String currentDBPath = "/data/data/" + getPackageName() + "/databases/FR_example.db";
-                String backupDBPath = "output.db";
+                String currentDBPath = "/data/data/" + getPackageName() + "/databases/asistencia.db";
+                String backupDBPath = "asistencia_db.sqlite";
                 File currentDB = new File(currentDBPath);
                 File backupDB = new File(sd, backupDBPath);
 
@@ -137,8 +137,8 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 
         /* Estos valores vienen de la configuración por defecto de la librería. Allí pueden ser
            cambiados por el usuario, pero en este caso los quemaremos para simplificar. */
-        faceThreshold = 0.30f;
-        distanceThreshold = 0.20f;
+        faceThreshold = 0.15f;
+        distanceThreshold = 0.15f;
         maximumImages = 50;
         /* ------------- */
 
@@ -176,6 +176,8 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                 Mat image = mGray.reshape(0, (int) mGray.total()); // Create column vector
                 Log.i(TAG, "Vector height: " + image.height() + " Width: " + image.width() + " total: " + image.total());
                 /* --- END ---*/
+
+                // exportDbExtStorage();
 
                 /* Pruebas para entender el funcionamiento de OpenCV Mat */
                 // PRUEBA - Instancia(EXITO!!!!)
@@ -281,15 +283,13 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 //                Log.i(TAG, imageTest.toString());
 //                Log.i(TAG, imageTest.dump());
 
-
-
                 /* END */
 
-                //mMeasureDistTask = new NativeMethods.MeasureDistTask(useEigenfaces, measureDistTaskCallback);
-                //mMeasureDistTask.execute(image);
+                mMeasureDistTask = new NativeMethods.MeasureDistTask(useEigenfaces, measureDistTaskCallback);
+                mMeasureDistTask.execute(image);
 
-                // El operador no deberia poder ingresar nuevas caras.
-                // showLabelsDialog();
+                //El operador no deberia poder ingresar nuevas caras.
+//                 showLabelsDialog();
             }
         });
     }
@@ -313,13 +313,17 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 
                 // Rostro reconocido
                 if (faceDist < faceThreshold && minDist < distanceThreshold){ // 1. Near face space and near a face class
-                    showToast("Operador Reconocido", Toast.LENGTH_SHORT);
-                    //showToast("Detectado: " + mOperadores.get(minIndex).getNombre(), Toast.LENGTH_SHORT);
+                    showToast("Operador Reconocido: " + imagesLabels.get(minIndex), Toast.LENGTH_SHORT);
+//                    showToast("Operador Reconocido: " + mOperadores.get(minIndex).getNombre(), Toast.LENGTH_SHORT);
+
+                    Log.i(TAG, "Detectado en imagesLabels: " + imagesLabels.get(minIndex));
+                    Log.i(TAG, "Detectado en mOperadores: " + mOperadores.get(minIndex).getNombre());
+
                     Bundle nextBundle = new Bundle();
-                    nextBundle.putInt("idOperador", minIndex); // Index is 0-based - Add 1 for DB queries
+                    nextBundle.putInt("idOperador", minIndex + 1); // Index is 0-based - Add 1 for DB queries
                     nextBundle.putString("nombreOperador", mOperadores.get(minIndex).getNombre());
 
-                    Intent intent = new Intent(FaceRecognitionActivity.this, Asistencia.class);
+                    Intent intent = new Intent(FaceRecognitionActivity.this, AsistenciaActivity.class);
                     intent.putExtras(nextBundle);
                     startActivity(intent);
 
@@ -334,16 +338,16 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                     //showToast("Image is not a face. Face distance: " + faceDistString + ". Closest Distance: " + minDistString, Toast.LENGTH_LONG);
             }
             // TODO - Decidir si eliminar esto.
-             else {
+            else {
                 /* TEMPORAL : PARA PERMITIR EL PASO A LA SIGUIENTE VISTA */
-                Intent intent = new Intent(FaceRecognitionActivity.this, AsistenciaActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(FaceRecognitionActivity.this, AsistenciaActivity.class);
+//                startActivity(intent);
 
-//                Log.w(TAG, "Array is null");
-//                if (useEigenfaces || uniqueLabels == null || uniqueLabels.length > 1)
-//                    showToast("Keep training...", Toast.LENGTH_SHORT);
-//                else
-//                    showToast("Fisherfaces needs two different faces", Toast.LENGTH_SHORT);
+                Log.w(TAG, "Array is null");
+                if (useEigenfaces || uniqueLabels == null || uniqueLabels.length > 1)
+                    showToast("Keep training...", Toast.LENGTH_SHORT);
+                else
+                    showToast("Fisherfaces needs two different faces", Toast.LENGTH_SHORT);
             }
         }
     };
@@ -532,6 +536,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(final DialogInterface dialog) {
+
                 Button mButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
                 mButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -576,47 +581,41 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
         Log.i(TAG, "Images height: " + imagesMatrix.height() + " Width: " + imagesMatrix.width() + " total: " + imagesMatrix.total());
 
         // Train the face recognition algorithms in an asynchronous task, so we do not skip any frames
-
-        // SOLO USAREMOS EIGENFACES
-
-        // if (useEigenfaces) {
+         if (useEigenfaces) {
             Log.i(TAG, "Training Eigenfaces");
             showToast("Training Eigenfaces" , Toast.LENGTH_SHORT);
 
             mTrainFacesTask = new NativeMethods.TrainFacesTask(imagesMatrix, trainFacesTaskCallback);
-        //}
+        }
+        else {
+            Log.i(TAG, "Training Fisherfaces");
 
-        /* NO USAREMOS FISHERFACES */
-//        else {
-//            Log.i(TAG, "Training Fisherfaces");
-//            showToast("Training " + getResources().getString(R.string.fisherfaces), Toast.LENGTH_SHORT);
-//
-//            Set<String> uniqueLabelsSet = new HashSet<>(imagesLabels); // Get all unique labels
-//            uniqueLabels = uniqueLabelsSet.toArray(new String[uniqueLabelsSet.size()]); // Convert to String array, so we can read the values from the indices
-//
-//            int[] classesNumbers = new int[uniqueLabels.length];
-//            for (int i = 0; i < classesNumbers.length; i++)
-//                classesNumbers[i] = i + 1; // Create incrementing list for each unique label starting at 1
-//
-//            int[] classes = new int[imagesLabels.size()];
-//            for (int i = 0; i < imagesLabels.size(); i++) {
-//                String label = imagesLabels.get(i);
-//                for (int j = 0; j < uniqueLabels.length; j++) {
-//                    if (label.equals(uniqueLabels[j])) {
-//                        classes[i] = classesNumbers[j]; // Insert corresponding number
-//                        break;
-//                    }
-//                }
-//            }
-//
-//            /*for (int i = 0; i < imagesLabels.size(); i++)
-//                Log.i(TAG, "Classes: " + imagesLabels.get(i) + " = " + classes[i]);*/
-//
-//            Mat vectorClasses = new Mat(classes.length, 1, CvType.CV_32S); // CV_32S == int
-//            vectorClasses.put(0, 0, classes); // Copy int array into a vector
-//
-//            mTrainFacesTask = new NativeMethods.TrainFacesTask(imagesMatrix, vectorClasses, trainFacesTaskCallback);
-//        }
+            Set<String> uniqueLabelsSet = new HashSet<>(imagesLabels); // Get all unique labels
+            uniqueLabels = uniqueLabelsSet.toArray(new String[uniqueLabelsSet.size()]); // Convert to String array, so we can read the values from the indices
+
+            int[] classesNumbers = new int[uniqueLabels.length];
+            for (int i = 0; i < classesNumbers.length; i++)
+                classesNumbers[i] = i + 1; // Create incrementing list for each unique label starting at 1
+
+            int[] classes = new int[imagesLabels.size()];
+            for (int i = 0; i < imagesLabels.size(); i++) {
+                String label = imagesLabels.get(i);
+                for (int j = 0; j < uniqueLabels.length; j++) {
+                    if (label.equals(uniqueLabels[j])) {
+                        classes[i] = classesNumbers[j]; // Insert corresponding number
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < imagesLabels.size(); i++)
+                Log.i(TAG, "Classes: " + imagesLabels.get(i) + " = " + classes[i]);
+
+            Mat vectorClasses = new Mat(classes.length, 1, CvType.CV_32S); // CV_32S == int
+            vectorClasses.put(0, 0, classes); // Copy int array into a vector
+
+            mTrainFacesTask = new NativeMethods.TrainFacesTask(imagesMatrix, vectorClasses, trainFacesTaskCallback);
+        }
 
         mTrainFacesTask.execute();
 
@@ -643,27 +642,25 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                     mOpenCvCameraView.enableView();
 
                     images = new ArrayList<>();
+                    imagesLabels = new ArrayList<>();
 
                     /* Cargar los operadores de la base local
                        TODO - No funcionara hasta que se modifique bien la estructura de la base */
-                    // mOperadores = Operador.listAll(Operador.class);
+                    mOperadores = Operador.listAll(Operador.class);
+
+                    Log.d(TAG, "" + mOperadores.size());
 
                     // Hasta eso
 
                     /* --- Obtener las fotos de cada operador, para hacer el reconocimiento de la foto que toma la actividad --- */
                     if (mOperadores != null && mOperadores.size() != 0){    // Si existen registros
                         for (Operador operador : mOperadores){
-                            Log.i(TAG, operador.getNombre());
+                            Log.i(TAG, "Cargado: " + operador.getNombre());
+//                            Log.i(TAG, operador.getEncodedFaceData());
 
-                            byte[] data = operador.getDatosCara(); // Obtener el ByteArray que representa la foto de la cara
-
-                            Mat faceMat = new Mat(data.length, 1, CvType.CV_8UC1);  // Inicializar Mat con el tamano adecuado
-                            // CvType.CV_8UC1 : 8 bits - Unsigned - One Channel
-
-                            faceMat.put(0, 0, data);    // Llenar el Mat con los valores del ByteArray
-
-                            images.add(faceMat);        // Agregar esta cara a images. El indice debe corresponder al id del operador -1
+                            images.add(operador.getFaceMat());        // Agregar esta cara a images. El indice debe corresponder al id del operador -1
                             // Tambien corresponde al indice de la Lista operadores
+                            imagesLabels.add(operador.getNombre());
                         }
                     }
                     /* --- END --- */

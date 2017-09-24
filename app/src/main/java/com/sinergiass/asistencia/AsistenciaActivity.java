@@ -120,7 +120,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.nav_save) {
-            List<Asistencia> asistencia = Asistencia.find(Asistencia.class , "id_Operador = ? and fecha = ?", new String[]{""+operador.getIdOperador(),new SimpleDateFormat("yyyy-MM-dd").format(new Date())});
+            List<Asistencia> asistencia = Asistencia.find(Asistencia.class , "id_Operador = ? and fecha = ?", new String[]{""+operador.getId(),new SimpleDateFormat("yyyy-MM-dd").format(new Date())});
             if (asistencia.size()==2){
                 Toast.makeText(this,"No se puede agregar mas asistencias el dia de hoy", Toast.LENGTH_LONG).show();
                 return true;
@@ -143,7 +143,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
                     asistencia.setEntrada(rbtEntrada.isChecked() ? true : false);
                     asistencia.setFecha(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                     asistencia.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                    asistencia.setIdOperador(operador.getIdOperador());
+                    asistencia.setIdOperador(operador.getId());
                     asistencia.save();
                     Toast.makeText(AsistenciaActivity.this, "Registro guardado: " + asistencia.getId(), Toast.LENGTH_LONG).show();
                     onBackPressed();
@@ -158,7 +158,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
     public void validaCampos(){
 
-        List<Asistencia> asistencia = Asistencia.find(Asistencia.class , "id_Operador = ? and fecha = ?", new String[]{""+operador.getIdOperador(),new SimpleDateFormat("yyyy-MM-dd").format(new Date())});
+        List<Asistencia> asistencia = Asistencia.find(Asistencia.class , "id_Operador = ? and fecha = ?", new String[]{""+operador.getId(),new SimpleDateFormat("yyyy-MM-dd").format(new Date())});
         if (!asistencia.isEmpty()){
             if (asistencia.size()==2){
                 rbtEntrada.setEnabled(false);
