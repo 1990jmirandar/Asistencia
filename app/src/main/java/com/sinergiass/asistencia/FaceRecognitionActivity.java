@@ -136,7 +136,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                 }
                 if (mTrainFacesTask != null && mTrainFacesTask.getStatus() != AsyncTask.Status.FINISHED) {
                     Log.i(TAG, "mTrainFacesTask is still running");
-                    showToast("Still training...", Toast.LENGTH_SHORT);
+                    showToast("Espere un momento... ", Toast.LENGTH_SHORT);
                     return;
                 }
 
@@ -463,7 +463,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
         // Train the face recognition algorithms in an asynchronous task, so we do not skip any frames
          if (useEigenfaces) {
             Log.i(TAG, "Training Eigenfaces");
-            showToast("Training Eigenfaces" , Toast.LENGTH_SHORT);
+            showToast("Espere un momento..." , Toast.LENGTH_SHORT);
 
             mTrainFacesTask = new NativeMethods.TrainFacesTask(imagesMatrix, trainFacesTaskCallback);
         }
@@ -506,9 +506,10 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
         @Override
         public void onTrainFacesComplete(boolean result) {
             if (result)
-                showToast("Training complete", Toast.LENGTH_SHORT);
+                showToast("Listo", Toast.LENGTH_SHORT);
             else
-                showToast("Training failed", Toast.LENGTH_LONG);
+//                showToast("Training failed", Toast.LENGTH_LONG);
+                showToast("Ocurrio un problema con el reconocimiento", Toast.LENGTH_LONG);
         }
     };
 

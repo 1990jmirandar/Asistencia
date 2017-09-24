@@ -57,19 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mManager = new RestManager();
 
-//        /* IMPORT_ASSETS_DB = True para cargar la DB desde assets, false para cargar desde el Servidor */
-//        if (IMPORT_ASSETS_DB){
-//            // CARGAR LA DB ubicada en assets/databases
-//            DatabaseHelper dbHelper = new DatabaseHelper(LoginActivity.this);
-//            dbHelper.getWritableDatabase();
-//
-//            // Permitir la visibilidad sin ir al progress bar.
-//            layoutP.setVisibility(View.GONE);
-//            layout.setVisibility(View.VISIBLE);
-//        }else{
         new DownloadDataTask().execute();
-//        }
-
 
         admin.setOnClickListener(new View.OnClickListener(){
 

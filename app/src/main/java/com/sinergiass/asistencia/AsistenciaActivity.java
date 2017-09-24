@@ -39,8 +39,6 @@ import java.util.List;
 
 public class AsistenciaActivity extends  AppCompatActivity {
 
-
-
     private Button ubicarme;
     private Operador operador; /*= new Operador(1,"Julio Alfredo","Larrea Sanchez","0950676395","0992108894",null);*/
     private TextView nombre,apellido,cedula;
@@ -101,8 +99,6 @@ public class AsistenciaActivity extends  AppCompatActivity {
         });
 
         validaCampos();
-
-
 
     }
 
