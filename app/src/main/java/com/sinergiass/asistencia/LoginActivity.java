@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private LinearLayout layout,layoutP;
 
-    private static final boolean IMPORT_ASSETS_DB = true; // true para cargar la DB desde assets, false para cargar desde el Servidor
+    private static final boolean IMPORT_ASSETS_DB = false; // true para cargar la DB desde assets, false para cargar desde el Servidor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,10 +148,10 @@ public class LoginActivity extends AppCompatActivity {
                     List<Operador> listaOp = response.body();
                     //Log.d("El numero de la lista", ""+ listaOp.size());
                     for(int i=0; i<listaOp.size();i++){
-                        final Operador operador1 = new Operador(listaOp.get(i).getId(),listaOp.get(i).getNombre(),
+                        final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
                                 listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
                                 listaOp.get(i).getEncodedFaceData());
-                        Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getId());
+                        Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
                         operador1.save();
                     }
 

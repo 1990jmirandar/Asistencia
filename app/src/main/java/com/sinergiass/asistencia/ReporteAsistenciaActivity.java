@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.orm.SugarRecord;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
 
@@ -19,7 +20,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ReporteAsistenciaActivity extends AppCompatActivity {
-    Long idOperador;
+    int idOperador;
     Operador operador;
     EditText txtFechaReporte;
     TextView txtHoraEntrada, txtHoraSalida;
@@ -34,9 +35,9 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
         dia=calendar.get(Calendar.DAY_OF_MONTH);
         mes=calendar.get(Calendar.MONTH);
         anio=calendar.get(Calendar.YEAR);
-        idOperador = getIntent().getExtras().getLong("idOperador");
+        idOperador = getIntent().getExtras().getInt("idOperador");
         Log.d("Operador con id",""+idOperador);
-        operador = Operador.findById(Operador.class,idOperador);
+        operador = Operador.find(Operador.class, "id_Operador = ?", "" + idOperador).get(0);
         txtFechaReporte= (EditText) findViewById(R.id.txtFechaReporte);
         txtHoraEntrada=(TextView) findViewById(R.id.txtHoraEntrada);
         txtHoraSalida=(TextView) findViewById(R.id.txtHoraSalida);
@@ -55,7 +56,9 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
-                txtFechaReporte.setText(year + "-" + monthOfYear + "-" + dayOfMonth );
+                // TODO - Usar un mejor formateo de fecha.
+                // En la base se guarda YYYY-MM-DD
+                txtFechaReporte.setText(year + "-0" + (monthOfYear + 1) + "-0" + dayOfMonth );
                 consultaAsistencia();
             }};
         DatePickerDialog dpDialog=new DatePickerDialog(this, listener, anio, mes, dia);
@@ -63,8 +66,11 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
     }
 
     public void consultaAsistencia(){
-        String[] values = new String[]{String.valueOf(operador.getId()),txtFechaReporte.getText().toString()};
-        List<Asistencia> listaAsistencia = Asistencia.find(Asistencia.class, "id_operador = ? and fecha=?", values);
+        String[] values = new String[]{String.valueOf(operador.getIdOperador()),txtFechaReporte.getText().toString()};
+        Log.i("TAG-TAG", values[0]);
+        Log.i("TAG-TAG", values[1]);
+
+        List<Asistencia> listaAsistencia = Asistencia.find(Asistencia.class, "id_Operador = ? and fecha=?", values);
         if (listaAsistencia.isEmpty()){
             txtHoraEntrada.setText("No existe informacion");
             btnEntrada.setTag(null);

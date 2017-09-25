@@ -205,7 +205,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                     Log.i(TAG, "Detectado en mOperadores: " + mOperadores.get(minIndex).getNombre());
 
                     Intent intent = new Intent(FaceRecognitionActivity.this, AsistenciaActivity.class);
-                    intent.putExtra("idOperador", (long) (minIndex + 1)); // Index es 0-based. Sumar 1 para el id en la DB
+                    intent.putExtra("idOperador", mOperadores.get(minIndex).getIdOperador()); // Index es 0-based. Sumar 1 para el id en la DB
                     startActivity(intent);
 
                 }

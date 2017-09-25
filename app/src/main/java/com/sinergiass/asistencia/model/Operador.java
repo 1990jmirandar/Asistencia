@@ -21,6 +21,8 @@ public class Operador extends SugarRecord implements Serializable{
 
     // idOperador: El atributo id se hereda de SugarRecord, no es necesario redefinir un idOperador aqui.
     @Expose
+    private int idOperador;
+    @Expose
     private String nombre;
     @Expose
     private String apellido;
@@ -35,8 +37,8 @@ public class Operador extends SugarRecord implements Serializable{
     public Operador() {
     }
 
-    public Operador(long idOperador, String nombre, String apellido, String cedula, String telefono, String encodedFaceData){
-        setId(idOperador);
+    public Operador(int idOperador, String nombre, String apellido, String cedula, String telefono, String encodedFaceData){
+        this.idOperador = idOperador;
         this.nombre = nombre;
         this.apellido = apellido;
         this.cedula = cedula;
@@ -90,14 +92,12 @@ public class Operador extends SugarRecord implements Serializable{
         this.encodedFaceData = encodedFaceData;
     }
 
-    /* getId() y setId() se heredan de SugarRecord - No es necesario definirlos */
-
-//    public int getIdOperador() {
-//        return idOperador;
-//    }
-//    public void setIdOperador(int idOperador) {
-//        this.idOperador = idOperador;
-//    }
+    public int getIdOperador() {
+        return idOperador;
+    }
+    public void setIdOperador(int idOperador) {
+        this.idOperador = idOperador;
+    }
 
 
     /**

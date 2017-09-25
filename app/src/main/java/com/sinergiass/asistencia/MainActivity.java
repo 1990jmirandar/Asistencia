@@ -114,6 +114,17 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_reporte) {
 
+            /* TODO - Conectar al servicio web: BASE_URL/enviar_reporte/
+
+                Enviar via POST un json con este formato:
+                {
+                    "fechaInicio" : "YYYY-MM-DD",
+                    "fechaFin" : "YYYY-MM-DD",
+                    "destinatarios" : ["correo1@example.com", "correo2@example.com", ...]
+                }
+
+            */
+
         } else if (id == R.id.nav_sync) {
 
         }

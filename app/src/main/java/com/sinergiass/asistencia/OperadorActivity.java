@@ -55,7 +55,9 @@ public class OperadorActivity extends AppCompatActivity {
                 operador.setTelefono(telefono.getText().toString());
                 operador.setEncodedFaceData(null);
                 operador.setEstado(0);
+                operador.setIdOperador(-1);     // TODO - Posible solucion para la sincronizacion con el webservice
                 operador.save();
+
                 startActivity(intent);
                 Toast.makeText(OperadorActivity.this, "Guardado Exitoso!", Toast.LENGTH_LONG).show();
             }

@@ -64,7 +64,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
 
         final Operador operador = listaOperador.get(position);
 
-        Log.d("idOperador",""+operador.getId());
+        Log.d("idOperador",""+operador.getIdOperador());
 
         holder.text1.setText(operador.getNombre());
         holder.text2.setText(operador.getApellido());
@@ -74,7 +74,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
             public void onClick(View view) {
                 Intent intent = new Intent(context, ReporteAsistenciaActivity.class);
                 Bundle extras = new Bundle();
-                extras.putLong("idOperador",operador.getId());
+                extras.putInt("idOperador",operador.getIdOperador());
                 intent.putExtras(extras);
                 context.startActivity(intent);
             }
@@ -84,7 +84,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
             public void onClick(View view) {
                 Intent intent = new Intent(context, AsistenciaActivity.class);
                 Bundle extras = new Bundle();
-                extras.putLong("idOperador",operador.getId());
+                extras.putInt("idOperador",operador.getIdOperador());
                 intent.putExtras(extras);
                 context.startActivity(intent);
             }
