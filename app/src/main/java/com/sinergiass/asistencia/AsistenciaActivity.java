@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.orm.SugarRecord;
+import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
 
@@ -33,17 +35,23 @@ import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class AsistenciaActivity extends  AppCompatActivity {
 
     private Button ubicarme;
-    private Operador operador; /*= new Operador(1,"Julio Alfredo","Larrea Sanchez","0950676395","0992108894",null);*/
+    private Operador operador;
     private TextView nombre,apellido,cedula;
     private RadioButton rbtEntrada,rbtSalida;
     private FusedLocationProviderClient mFusedLocationClient;
+    private RestManager mRestManager;
+    private Asistencia asistencia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
         toolbar.setTitle("Registro de Asistencia");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mRestManager = new RestManager();
 
         Bundle extras = getIntent().getExtras();
         operador = Operador.find(Operador.class, "id_Operador = ?", "" + extras.getInt("idOperador")).get(0);
@@ -135,16 +144,27 @@ public class AsistenciaActivity extends  AppCompatActivity {
             @Override
             public void onSuccess(final Location location) {
                 if (location != null) {
-                    final Asistencia asistencia = new Asistencia();
+                    asistencia = new Asistencia();
                     asistencia.setLatitud(""+location.getLatitude());
                     asistencia.setLongitud(""+location.getLongitude());
                     asistencia.setEntrada(rbtEntrada.isChecked() ? true : false);
                     asistencia.setFecha(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                     asistencia.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
                     asistencia.setIdOperador(operador.getIdOperador());
-                    asistencia.save();
-                    Toast.makeText(AsistenciaActivity.this, "Registro guardado: " + asistencia.getIdOperador(), Toast.LENGTH_LONG).show();
-                    onBackPressed();
+
+                    HashMap<String, String> parameters = new HashMap<>();
+                    parameters.put("idOperador", ""+asistencia.getIdOperador());
+                    parameters.put("latitud", ""+asistencia.getLatitud());
+                    parameters.put("longitud", ""+asistencia.getLongitud());
+                    parameters.put("fecha", ""+asistencia.getFecha());
+                    parameters.put("hora", ""+asistencia.getHora());
+                    parameters.put("isEntrada", ""+asistencia.isEntrada());
+
+                    enviarAsis(parameters);
+
+
+                    //asistencia.save();
+
                 } else {
                     Toast.makeText(AsistenciaActivity.this, "GPS DESACTIVADO: No se puede obtener la informacion actual de la localizacion geografica, active el gps y vuelva a intentar", Toast.LENGTH_LONG).show();
                     return;
@@ -181,6 +201,33 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
 
     }
+
+    private void enviarAsis( HashMap<String, String> parameters) {
+        Call<Asistencia> listCall = mRestManager.getOperadorService().guardarAsis(parameters);
+        listCall.enqueue(new Callback<Asistencia>() {
+            @Override
+            public void onResponse(Call<Asistencia> call, Response<Asistencia> response) {
+
+                if (response.isSuccess()) {
+                    asistencia.setEstado(1);
+                    asistencia.save();
+                    Toast.makeText(AsistenciaActivity.this, "Registro guardado: " + asistencia.getIdOperador(), Toast.LENGTH_LONG).show();
+                    onBackPressed();
+
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Asistencia> call, Throwable t) {
+                asistencia.setEstado(0);
+                asistencia.save();
+
+            }
+
+        });
+    }
+
     public void checkPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED

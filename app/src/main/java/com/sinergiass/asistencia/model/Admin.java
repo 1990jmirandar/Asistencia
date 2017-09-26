@@ -12,7 +12,7 @@ public class Admin extends SugarRecord implements Serializable {
     private String username ;
     @Expose
     private String password ;
-    private int idAdmin;
+
 
     public Admin(){}
 
@@ -21,13 +21,7 @@ public class Admin extends SugarRecord implements Serializable {
         this.password = password;
     }
 
-    public int getIdAdmin() {
-        return idAdmin;
-    }
 
-    public void setIdAdmin(int idAdmin) {
-        this.idAdmin = idAdmin;
-    }
 
     public String getUsuario() {
         return username;

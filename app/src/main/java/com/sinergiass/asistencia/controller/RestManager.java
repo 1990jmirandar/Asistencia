@@ -29,4 +29,19 @@ public class RestManager {
 
     }
 
+    public OperadorService postOperadorService(){
+
+        if(mOperadorService ==null){
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.HTTP.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+
+            mOperadorService = retrofit.create(OperadorService.class);
+        }
+
+        return mOperadorService;
+
+    }
+
 }

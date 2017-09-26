@@ -32,6 +32,7 @@ public class Operador extends SugarRecord implements Serializable{
     private String telefono;
     @Expose
     private String encodedFaceData;
+
     private int estado = 1;
 
     public Operador() {
