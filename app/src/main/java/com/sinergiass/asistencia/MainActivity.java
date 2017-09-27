@@ -114,6 +114,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_reporte) {
 
+            Intent intent = new Intent(this, ReporteGeneralActivity.class);
+            startActivity(intent);
             /* TODO - Conectar al servicio web: BASE_URL/enviar_reporte/
 
                 Enviar via POST un json con este formato:
@@ -124,7 +126,6 @@ public class MainActivity extends AppCompatActivity
                 }
 
             */
-
         } else if (id == R.id.nav_sync) {
 
         }

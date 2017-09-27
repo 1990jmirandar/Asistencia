@@ -3,12 +3,14 @@ package com.sinergiass.asistencia.model.callback;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.model.Reporte;
 
 import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -36,6 +38,10 @@ public interface OperadorService {
     @FormUrlEncoded
     @POST("asistencias/")
     Call<Asistencia> guardarAsis(@FieldMap HashMap<String, String> parameters);
+
+    @FormUrlEncoded
+    @POST("enviar_reporte/")
+    Call<Reporte> enviarReporte(@Field("fechaInicio") String fechaInicio, @Field("fechaFin") String fechaFin, @Field("destinatarios") String[] destinatarios);
 
 
 

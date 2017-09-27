@@ -91,6 +91,7 @@
         </activity>
         <activity android:name=".LoginAdminActivity"></activity>
         <activity android:name=".ReporteAsistenciaActivity"></activity>
+        <activity android:name=".ReporteGeneralActivity"></activity>
         <activity android:name=".FaceRecognitionActivity"></activity>
     </application>
 
