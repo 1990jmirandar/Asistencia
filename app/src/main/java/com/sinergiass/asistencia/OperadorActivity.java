@@ -2,6 +2,7 @@ package com.sinergiass.asistencia;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -9,12 +10,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.util.DatabaseHelper;
 import com.sinergiass.asistencia.ws.FaceDetectorWS;
 
 import java.io.ByteArrayOutputStream;
@@ -31,8 +34,9 @@ import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class OperadorActivity extends AppCompatActivity {
     Button btnFace,guardar;
-    TextView nombres, apellidos, cedula, telefono;
+    TextView nombres, apellidos, cedula, telefono,guardando;
     Operador operador;
+    ProgressBar progressBar;
     private RestManager mManager;
     String encodedImage;
 
@@ -47,6 +51,8 @@ public class OperadorActivity extends AppCompatActivity {
         apellidos = (TextView) findViewById(R.id.txt_apellidos);
         cedula = (TextView) findViewById(R.id.txt_cedula);
         telefono = (TextView) findViewById(R.id.txt_telefono);
+        guardando = (TextView) findViewById(R.id.guardando);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar2) ;
 
         mManager = new RestManager();
 
@@ -61,7 +67,9 @@ public class OperadorActivity extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OperadorActivity.this, MainActivity.class);
+                guardando.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                final Intent intent = new Intent(OperadorActivity.this, MainActivity.class);
                 operador = new Operador();
                 HashMap<String, String> parameters = new HashMap<>();
                 operador.setNombre(nombres.getText().toString());
@@ -79,11 +87,42 @@ public class OperadorActivity extends AppCompatActivity {
                 parameters.put("telefono", ""+operador.getTelefono());
                 parameters.put("encodedFaceData", ""+operador.getEncodedFaceData());
 
-                enviarOperador(parameters);
+                //enviarOperador(parameters);
+
+                Call<Operador> listCall = mManager.getOperadorService().guardarOp(parameters);
+                listCall.enqueue(new Callback<Operador>() {
+                    @Override
+                    public void onResponse(Call<Operador> call, Response<Operador> response) {
+
+                        if (response.isSuccess()) {
+                            operador.setEstado(1);
+                            Log.d("El nuevo estado es: ",""+operador.getEstado());
+                            operador.save();
+                            guardando.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
+                            startActivity(intent);
+                            Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
+
+                        } else {
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Operador> call, Throwable t) {
+                        operador.setEstado(0);
+                        operador.save();
+                        guardando.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+                        startActivity(intent);
+                        Toast.makeText(OperadorActivity.this, "Sin Conexión, Guardado Local Exitoso!", Toast.LENGTH_LONG).show();
+
+                    }
+
+                });
 
 
-                startActivity(intent);
-                Toast.makeText(OperadorActivity.this, "Guardado Exitoso!", Toast.LENGTH_LONG).show();
+//                startActivity(intent);
+//                Toast.makeText(OperadorActivity.this, "Guardado Exitoso!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -103,6 +142,25 @@ public class OperadorActivity extends AppCompatActivity {
 
         }
     }
+
+//    class UploadDataTask extends AsyncTask<Void, Void, Void> {
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//
+//
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            layoutP.setVisibility(View.GONE);
+//            layout.setVisibility(View.VISIBLE);
+//
+//        }
+//    }
 
     private void enviarOperador( HashMap<String, String> parameters) {
         Call<Operador> listCall = mManager.getOperadorService().guardarOp(parameters);

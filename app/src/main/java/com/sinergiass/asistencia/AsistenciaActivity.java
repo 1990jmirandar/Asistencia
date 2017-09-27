@@ -66,6 +66,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
         toolbar.setTitle("Registro de Asistencia");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         mRestManager = new RestManager();
 
         Bundle extras = getIntent().getExtras();
@@ -211,7 +212,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
                 if (response.isSuccess()) {
                     asistencia.setEstado(1);
                     asistencia.save();
-                    Toast.makeText(AsistenciaActivity.this, "Registro guardado: " + asistencia.getIdOperador(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AsistenciaActivity.this, "Registro guardado y sincronizado: " + asistencia.getIdOperador(), Toast.LENGTH_LONG).show();
                     onBackPressed();
 
                 } else {
@@ -222,6 +223,8 @@ public class AsistenciaActivity extends  AppCompatActivity {
             public void onFailure(Call<Asistencia> call, Throwable t) {
                 asistencia.setEstado(0);
                 asistencia.save();
+                Toast.makeText(AsistenciaActivity.this, "Sin conexion, registro guardado local: " + asistencia.getIdOperador(), Toast.LENGTH_LONG).show();
+                onBackPressed();
 
             }
 
@@ -238,4 +241,5 @@ public class AsistenciaActivity extends  AppCompatActivity {
                     123);
         }
     }
+
 }

@@ -132,4 +132,13 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BandaAdapter adapter = new BandaAdapter(this,R.layout.listview_item_row,listaOp);
+        lista = (ListView)findViewById(R.id.listaOperador1);
+        lista.setAdapter(adapter);
+
+    }
 }

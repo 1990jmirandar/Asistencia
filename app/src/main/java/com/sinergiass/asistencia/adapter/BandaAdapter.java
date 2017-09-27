@@ -3,6 +3,7 @@ package com.sinergiass.asistencia.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Banda;
 import com.sinergiass.asistencia.model.Operador;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +33,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
     Context context;
     int layoutResourceId;
     List<Operador> listaOperador;
+    private Asistencia asistencia;
 
     public BandaAdapter(Context context, int layoutResourceId, List<Operador> data){
         super(context,layoutResourceId,data);
@@ -48,6 +52,8 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId,parent,false);
 
+
+
             holder = new BandaHolder();
             holder.text1 = (TextView)row.findViewById(R.id.nombres);
             holder.text2 = (TextView)row.findViewById(R.id.apellidos);
@@ -64,7 +70,16 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
 
         final Operador operador = listaOperador.get(position);
 
-        Log.d("idOperador",""+operador.getIdOperador());
+        //Log.d("idOperador",""+operador.getIdOperador());
+
+        List<Asistencia> asistencias = Asistencia.find(Asistencia.class , "id_Operador = ? and fecha = ?", new String[]{""+operador.getIdOperador(),new SimpleDateFormat("yyyy-MM-dd").format(new Date())});
+
+        if(asistencias.size()==0){
+            row.setBackgroundColor(Color.parseColor("#ff6347"));
+        }else{
+            row.setBackgroundColor(Color.parseColor("#bdd4de"));
+        }
+
 
         holder.text1.setText(operador.getNombre());
         holder.text2.setText(operador.getApellido());
