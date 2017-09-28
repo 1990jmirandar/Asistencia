@@ -86,13 +86,13 @@ public class OperadorActivity extends AppCompatActivity {
 
                     operador.setIdOperador(-1);     // TODO - Posible solucion para la sincronizacion con el webservice
 
-                    parameters.put("nombre", "" + operador.getNombre());
-                    parameters.put("apellido", "" + operador.getApellido());
-                    parameters.put("cedula", "" + operador.getCedula());
-                    parameters.put("telefono", "" + operador.getTelefono());
-                    parameters.put("encodedFaceData", "" + operador.getEncodedFaceData());
+//                    parameters.put("nombre", "" + operador.getNombre());
+//                    parameters.put("apellido", "" + operador.getApellido());
+//                    parameters.put("cedula", "" + operador.getCedula());
+//                    parameters.put("telefono", "" + operador.getTelefono());
+//                    parameters.put("encodedFaceData", "" + operador.getEncodedFaceData());
 
-                    Call<Operador> listCall = mManager.getOperadorService().guardarOp(parameters);
+                    Call<Operador> listCall = mManager.getOperadorService().guardarOp(operador);
                     listCall.enqueue(new Callback<Operador>() {
                         @Override
                         public void onResponse(Call<Operador> call, Response<Operador> response) {
@@ -137,50 +137,6 @@ public class OperadorActivity extends AppCompatActivity {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             faceEncoding = data.getStringExtra("faceEncoding");
         }
-    }
-
-//    class UploadDataTask extends AsyncTask<Void, Void, Void> {
-//
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//
-//
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            layoutP.setVisibility(View.GONE);
-//            layout.setVisibility(View.VISIBLE);
-//
-//        }
-//    }
-
-    private void enviarOperador( HashMap<String, String> parameters) {
-        Call<Operador> listCall = mManager.getOperadorService().guardarOp(parameters);
-        listCall.enqueue(new Callback<Operador>() {
-            @Override
-            public void onResponse(Call<Operador> call, Response<Operador> response) {
-
-                if (response.isSuccessful()) {
-                    operador.setEstado(1);
-                    Log.d("El nuevo estado es: ",""+operador.getEstado());
-                    operador.save();
-
-                } else {
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Operador> call, Throwable t) {
-                operador.setEstado(0);
-                operador.save();
-
-            }
-
-        });
     }
 
     private boolean validaciones(){

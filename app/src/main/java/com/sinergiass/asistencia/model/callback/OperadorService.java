@@ -32,13 +32,11 @@ public interface OperadorService {
     @GET("asistencias.json")
     Call<List<Asistencia>> getListaAsistencias();
 
-    @FormUrlEncoded
     @POST("operadores/")
-    Call<Operador> guardarOp(@FieldMap HashMap<String, String> parameters);
+    Call<Operador> guardarOp(@Body Operador operador);
 
-    @FormUrlEncoded
     @POST("asistencias/")
-    Call<Asistencia> guardarAsis(@FieldMap HashMap<String, String> parameters);
+    Call<Asistencia> guardarAsis(@Body Asistencia asistencia);
 
     @POST("enviar_reporte/")
     Call<Reporte> enviarReporte(@Body Reporte reporte);

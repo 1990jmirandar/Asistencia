@@ -51,7 +51,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
     private RadioButton rbtEntrada,rbtSalida;
     private FusedLocationProviderClient mFusedLocationClient;
     private RestManager mRestManager;
-    private Asistencia asistencia;
+    private Asistencia mAsistencia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,23 +145,23 @@ public class AsistenciaActivity extends  AppCompatActivity {
             @Override
             public void onSuccess(final Location location) {
                 if (location != null) {
-                    asistencia = new Asistencia();
-                    asistencia.setLatitud(""+location.getLatitude());
-                    asistencia.setLongitud(""+location.getLongitude());
-                    asistencia.setEntrada(rbtEntrada.isChecked() ? true : false);
-                    asistencia.setFecha(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                    asistencia.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                    asistencia.setIdOperador(operador.getIdOperador());
+                    mAsistencia = new Asistencia();
+                    mAsistencia.setLatitud(""+location.getLatitude());
+                    mAsistencia.setLongitud(""+location.getLongitude());
+                    mAsistencia.setEntrada(rbtEntrada.isChecked() ? true : false);
+                    mAsistencia.setFecha(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                    mAsistencia.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                    mAsistencia.setIdOperador(operador.getIdOperador());
 
                     HashMap<String, String> parameters = new HashMap<>();
-                    parameters.put("idOperador", ""+asistencia.getIdOperador());
-                    parameters.put("latitud", ""+asistencia.getLatitud());
-                    parameters.put("longitud", ""+asistencia.getLongitud());
-                    parameters.put("fecha", ""+asistencia.getFecha());
-                    parameters.put("hora", ""+asistencia.getHora());
-                    parameters.put("isEntrada", ""+asistencia.isEntrada());
+                    parameters.put("idOperador", ""+mAsistencia.getIdOperador());
+                    parameters.put("latitud", ""+mAsistencia.getLatitud());
+                    parameters.put("longitud", ""+mAsistencia.getLongitud());
+                    parameters.put("fecha", ""+mAsistencia.getFecha());
+                    parameters.put("hora", ""+mAsistencia.getHora());
+                    parameters.put("isEntrada", ""+mAsistencia.isEntrada());
 
-                    enviarAsis(parameters);
+                    enviarAsis(mAsistencia);
 
 
                     //asistencia.save();
@@ -203,16 +203,16 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
     }
 
-    private void enviarAsis( HashMap<String, String> parameters) {
-        Call<Asistencia> listCall = mRestManager.getOperadorService().guardarAsis(parameters);
+    private void enviarAsis( Asistencia asistencia) {
+        Call<Asistencia> listCall = mRestManager.getOperadorService().guardarAsis(asistencia);
         listCall.enqueue(new Callback<Asistencia>() {
             @Override
             public void onResponse(Call<Asistencia> call, Response<Asistencia> response) {
 
                 if (response.isSuccessful()) {
-                    asistencia.setEstado(1);
-                    asistencia.save();
-                    Toast.makeText(AsistenciaActivity.this, "Registro guardado y sincronizado: " + asistencia.getIdOperador(), Toast.LENGTH_LONG).show();
+                    mAsistencia.setEstado(1);
+                    mAsistencia.save();
+                    Toast.makeText(AsistenciaActivity.this, "Registro guardado y sincronizado: " + mAsistencia.getIdOperador(), Toast.LENGTH_LONG).show();
                     onBackPressed();
 
                 } else {
@@ -221,9 +221,9 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
             @Override
             public void onFailure(Call<Asistencia> call, Throwable t) {
-                asistencia.setEstado(0);
-                asistencia.save();
-                Toast.makeText(AsistenciaActivity.this, "Sin conexion, registro guardado local: " + asistencia.getIdOperador(), Toast.LENGTH_LONG).show();
+                mAsistencia.setEstado(0);
+                mAsistencia.save();
+                Toast.makeText(AsistenciaActivity.this, "Sin conexion, registro guardado local: " + mAsistencia.getIdOperador(), Toast.LENGTH_LONG).show();
                 onBackPressed();
 
             }
