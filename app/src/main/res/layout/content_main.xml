@@ -22,26 +22,48 @@
     </android.support.design.widget.AppBarLayout>
 
     <include
+        android:id="@+id/header"
         layout="@layout/listview_header_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:id="@+id/lista"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/listaOperador"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-             <!--/>-->
         <ListView
             android:id="@+id/listaOperador1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_progress1"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="invisible"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cargando Datos"
+            android:textSize="30dp"
+            android:textColor="@color/colorPrimaryDark"/>
+        <ProgressBar
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_gravity="center"
+            android:indeterminate="@drawable/progress_circular"
+            android:max="100"
+            android:progress="20"/>
 
     </LinearLayout>
 

@@ -1,6 +1,8 @@
 package com.sinergiass.asistencia;
 
 import android.content.Intent;
+import android.graphics.Path;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,27 +11,39 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.sinergiass.asistencia.adapter.BandaAdapter;
 import com.sinergiass.asistencia.controller.RestManager;
+import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Banda;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.util.DatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ListView lista;
-    private RecyclerView lista1;
-    List<Operador> listaOp;
+    List<Operador> listaOp, operadores;
+    List<Asistencia> asistencias;
+    private LinearLayout header, layoutLista, progress;
     private RestManager mManager;
     private ArrayList<Operador> listaOperadores =  new ArrayList<Operador>();
     private Operador operador;
@@ -43,6 +57,13 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        header = (LinearLayout) findViewById(R.id.header);
+        layoutLista = (LinearLayout) findViewById(R.id.lista);
+        progress = (LinearLayout) findViewById(R.id.layout_progress1);
+
+        mManager = new RestManager();
+
 
 
         //Adquiriendo los datos de un json a una lista
@@ -106,7 +127,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_operador) {
@@ -128,11 +149,25 @@ public class MainActivity extends AppCompatActivity
             */
         } else if (id == R.id.nav_sync) {
 
+            progress.setVisibility(View.VISIBLE);
+            header.setVisibility(View.GONE);
+            layoutLista.setVisibility(View.GONE);
+
+            operadores = Operador.find(Operador.class,"estado = ?", "0");
+            asistencias = Asistencia.find(Asistencia.class,"estado = ?", "0");
+
+
+            new UploadOperadoresTask().execute();
+
+
+
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     @Override
     protected void onResume() {
@@ -142,4 +177,214 @@ public class MainActivity extends AppCompatActivity
         lista.setAdapter(adapter);
 
     }
+
+    class UploadOperadoresTask extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            enviarOperadores(operadores);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Toast.makeText(MainActivity.this, "Datos Subidos de operadores al servidor con exito!", Toast.LENGTH_LONG).show();
+            new UploadAsistenciasTask().execute();
+
+        }
+    }
+
+    class UploadAsistenciasTask extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            enviarAsistencias(asistencias);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Toast.makeText(MainActivity.this, "Datos Subidos de asistencias al servidor con exito!", Toast.LENGTH_LONG).show();
+            new DownloadOperadoresTask().execute();
+
+        }
+    }
+
+    class DownloadOperadoresTask extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+
+            cargarOperadores();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            Toast.makeText(MainActivity.this, "Datos Actualizados de operadores desde servidor con exito!", Toast.LENGTH_LONG).show();
+            new DownloadAsistenciasTask().execute();
+        }
+    }
+
+    class DownloadAsistenciasTask extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            cargarAsistencias();
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progress.setVisibility(View.GONE);
+            header.setVisibility(View.VISIBLE);
+            layoutLista.setVisibility(View.VISIBLE);
+            Toast.makeText(MainActivity.this, "Datos Actualizados desde servidor con exito!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void enviarOperadores(List<Operador> operadores){
+
+        Call<List<Operador>> listCall = mManager.getOperadorService().guardarOp(operadores);
+        listCall.enqueue(new Callback<List<Operador>>() {
+            @Override
+            public void onResponse(Call<List<Operador>> call, Response<List<Operador>> response) {
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(MainActivity.this, "Actualizado de Operadores Exitosa!", Toast.LENGTH_LONG).show();
+
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Operador>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Sin Conexión, intetar luego", Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+
+    }
+
+    public void enviarAsistencias(List<Asistencia> asisList){
+
+        Call<List<Asistencia>> listCall = mManager.getOperadorService().guardarAsis(asisList);
+        listCall.enqueue(new Callback<List<Asistencia>>() {
+            @Override
+            public void onResponse(Call<List<Asistencia>> call, Response<List<Asistencia>> response) {
+
+                if (response.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Registros de asistencias sincronizados" , Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Asistencia>> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "Sin conexion para Actualizar el server", Toast.LENGTH_LONG).show();
+
+
+            }
+
+        });
+
+    }
+
+    public void cargarOperadores(){
+        Call<List<Operador>> listCall = mManager.getOperadorService().getListaOperadores();
+        listCall.enqueue(new Callback<List<Operador>>() {
+            @Override
+            public void onResponse(Call<List<Operador>> call, Response<List<Operador>> response) {
+
+                if(response.isSuccessful()){
+
+                    List<Operador> listaOp = response.body();
+                    if (listaOp.size()==0){
+                        Toast.makeText(MainActivity.this, "No hay registros de Operador y/o problema del server", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Operador.deleteAll(Operador.class);
+                        for(int i=0; i<listaOp.size();i++){
+                            final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
+                                    listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
+                                    listaOp.get(i).getEncodedFaceData());
+                            Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
+                            operador1.save();
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Operador>> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+    public void cargarAsistencias(){
+
+        Call<List<Asistencia>> listCall = mManager.getOperadorService().getListaAsistencias();
+        listCall.enqueue(new Callback<List<Asistencia>>() {
+            @Override
+            public void onResponse(Call<List<Asistencia>> call, Response<List<Asistencia>> response) {
+
+                if(response.isSuccessful()){
+
+                    List<Asistencia> listaAsistencias = response.body();
+                    if(listaAsistencias.size() == 0){
+                        Toast.makeText(MainActivity.this, "No hay registros de Asistencias y/o problema del server", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Asistencia.deleteAll(Asistencia.class);
+                        for(int i=0; i<listaAsistencias.size();i++){
+                            final Asistencia asistencia = new Asistencia(listaAsistencias.get(i).getIdOperador(),
+                                    listaAsistencias.get(i).getLatitud(),listaAsistencias.get(i).getLongitud(),
+                                    listaAsistencias.get(i).getFecha(),listaAsistencias.get(i).getHora(),
+                                    listaAsistencias.get(i).isEntrada());
+                            asistencia.save();
+                        }
+                    }
+
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Asistencia>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Conexion Fallida al cargar asistencias", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+
+
+
 }
