@@ -15,8 +15,10 @@ import com.orm.SugarRecord;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ReporteAsistenciaActivity extends AppCompatActivity {
@@ -52,13 +54,19 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
     }
 
     public void DateDialog(){
-        DatePickerDialog.OnDateSetListener listener=new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
-                // TODO - Usar un mejor formateo de fecha.
-                // En la base se guarda YYYY-MM-DD
-                txtFechaReporte.setText(year + "-0" + (monthOfYear + 1) + "-0" + dayOfMonth );
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    date = simpleDateFormat.parse("" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                txtFechaReporte.setText(simpleDateFormat.format(date));
                 consultaAsistencia();
             }};
         DatePickerDialog dpDialog=new DatePickerDialog(this, listener, anio, mes, dia);

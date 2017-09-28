@@ -1,6 +1,7 @@
 package com.sinergiass.asistencia;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -70,10 +71,15 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
     private SharedPreferences prefs;
     private NativeMethods.TrainFacesTask mTrainFacesTask;
 
+
     private List<Operador> mOperadores;
 
     private static String mPhotoName = "";
     private String mEncoding;
+
+    public static final int FLAG_CAPTURAR_DATOS = 0;
+    public static final int FLAG_RECONOCER = 1;
+    private int flag_value;
 
     /* Metodo usado para sacar la base local del celular afuera del directorio protegido
        para de esta manera traerla al pc y poder examinarla o modificarla */
@@ -110,6 +116,14 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         useEigenfaces = true;
+        flag_value = FLAG_RECONOCER;
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null)
+            flag_value = extras.getInt(("flag_value"), FLAG_RECONOCER);
+
+
 
         /* Estos valores vienen de la configuración por defecto de la librería. Allí pueden ser
            cambiados por el usuario, pero en este caso los quemaremos para simplificar. */
@@ -129,52 +143,78 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
             @Override
             public void onClick(View v) {
 
-                if (mMeasureDistTask != null && mMeasureDistTask.getStatus() != AsyncTask.Status.FINISHED) {
-                    Log.i(TAG, "mMeasureDistTask is still running");
-                    showToast("Still processing old image...", Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (mTrainFacesTask != null && mTrainFacesTask.getStatus() != AsyncTask.Status.FINISHED) {
-                    Log.i(TAG, "mTrainFacesTask is still running");
-                    showToast("Espere un momento... ", Toast.LENGTH_SHORT);
-                    return;
-                }
+                if (flag_value == FLAG_RECONOCER){
 
-                /* --- Procesar la imagen tomada desde la camara --- */
-                Log.i(TAG, "Gray height: " + mGray.height() + " Width: " + mGray.width() + " total: " + mGray.total());
-                if (mGray.total() == 0)
-                    return;
-                Size imageSize = new Size(200, 200.0f / ((float) mGray.width() / (float) mGray.height())); // Scale image in order to decrease computation time
-                Imgproc.resize(mGray, mGray, imageSize);
-                Log.i(TAG, "Small gray height: " + mGray.height() + " Width: " + mGray.width() + " total: " + mGray.total());
-                //SaveImage(mGray);
+                    if (mMeasureDistTask != null && mMeasureDistTask.getStatus() != AsyncTask.Status.FINISHED) {
+                        Log.i(TAG, "mMeasureDistTask is still running");
+                        showToast("Still processing old image...", Toast.LENGTH_SHORT);
+                        return;
+                    }
+                    if (mTrainFacesTask != null && mTrainFacesTask.getStatus() != AsyncTask.Status.FINISHED) {
+                        Log.i(TAG, "mTrainFacesTask is still running");
+                        showToast("Espere un momento... ", Toast.LENGTH_SHORT);
+                        return;
+                    }
 
-                Mat image = mGray.reshape(0, (int) mGray.total()); // Create column vector
-                Log.i(TAG, "Vector height: " + image.height() + " Width: " + image.width() + " total: " + image.total());
-                /* --- END ---*/
+                    /* --- Procesar la imagen tomada desde la camara --- */
+                    Log.i(TAG, "Gray height: " + mGray.height() + " Width: " + mGray.width() + " total: " + mGray.total());
+                    if (mGray.total() == 0)
+                        return;
+                    Size imageSize = new Size(200, 200.0f / ((float) mGray.width() / (float) mGray.height())); // Scale image in order to decrease computation time
+                    Imgproc.resize(mGray, mGray, imageSize);
+                    Log.i(TAG, "Small gray height: " + mGray.height() + " Width: " + mGray.width() + " total: " + mGray.total());
+                    //SaveImage(mGray);
 
-                /* Pruebas de encoding... */
-//                Log.i(TAG, "IMAGENORIGINAL");
-//                Log.i(TAG, image.toString());
-//                Log.i(TAG, image.dump());
+                    Mat image = mGray.reshape(0, (int) mGray.total()); // Create column vector
+                    Log.i(TAG, "Vector height: " + image.height() + " Width: " + image.width() + " total: " + image.total());
+                    /* --- END ---*/
 
-//                byte[] data = new byte[(int)(image.total()*image.channels())];
-//                image.get(0, 0, data);
-//                mEncoding = Base64.encodeToString(data, Base64.DEFAULT);
+                    /* Pruebas de encoding... */
+//                    Log.i(TAG, "IMAGENORIGINAL");
+//                    Log.i(TAG, image.toString());
+//                    Log.i(TAG, image.dump());
 //
-//                Log.i(TAG, "Byte Array encoded to String: ");
-//                Log.i(TAG, mEncoding);
+//                    byte[] data = new byte[(int)(image.total()*image.channels())];
+//                    image.get(0, 0, data);
+//                    mEncoding = Base64.encodeToString(data, Base64.DEFAULT);
+//
+//                    Log.i(TAG, "Byte Array encoded to String: ");
+//                    Log.i(TAG, mEncoding);
 
-                /* Obtener fotos para construir la base */
-                // showEnterLabelDialog();
-                /* END */
+                    /* Obtener fotos para construir la base */
+                        // showEnterLabelDialog();
+                    /* END */
 
-                // Calculate normalized Euclidean distance
-                mMeasureDistTask = new NativeMethods.MeasureDistTask(useEigenfaces, measureDistTaskCallback);
-                mMeasureDistTask.execute(image);
+                    // Calculate normalized Euclidean distance
+                    mMeasureDistTask = new NativeMethods.MeasureDistTask(useEigenfaces, measureDistTaskCallback);
+                    mMeasureDistTask.execute(image);
 
-                //El operador no deberia poder ingresar nuevas caras.
+                    //El operador no deberia poder ingresar nuevas caras.
 //                 showLabelsDialog();
+                }else if (flag_value == FLAG_CAPTURAR_DATOS){
+
+                                    /* --- Procesar la imagen tomada desde la camara --- */
+                    Log.i(TAG, "Gray height: " + mGray.height() + " Width: " + mGray.width() + " total: " + mGray.total());
+                    if (mGray.total() == 0)
+                        return;
+                    Size imageSize = new Size(200, 200.0f / ((float) mGray.width() / (float) mGray.height())); // Scale image in order to decrease computation time
+                    Imgproc.resize(mGray, mGray, imageSize);
+                    Log.i(TAG, "Small gray height: " + mGray.height() + " Width: " + mGray.width() + " total: " + mGray.total());
+                    //SaveImage(mGray);
+
+                    Mat image = mGray.reshape(0, (int) mGray.total()); // Create column vector
+                    Log.i(TAG, "Vector height: " + image.height() + " Width: " + image.width() + " total: " + image.total());
+                    /* --- END ---*/
+
+                    byte[] data = new byte[(int)(image.total()*image.channels())];
+                    image.get(0, 0, data);
+                    String faceEncoding = Base64.encodeToString(data, Base64.DEFAULT);
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("faceEncoding",faceEncoding);
+                    setResult(Activity.RESULT_OK,returnIntent);
+                    finish();
+                }
             }
         });
     }

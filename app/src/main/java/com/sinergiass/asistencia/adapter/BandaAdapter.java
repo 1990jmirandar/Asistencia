@@ -80,6 +80,12 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
             row.setBackgroundColor(Color.parseColor("#bdd4de"));
         }
 
+        if(asistencias.size()==2){
+            holder.registrar.setEnabled(false);
+        }else{
+            holder.registrar.setEnabled(true);
+        }
+
 
         holder.text1.setText(operador.getNombre());
         holder.text2.setText(operador.getApellido());

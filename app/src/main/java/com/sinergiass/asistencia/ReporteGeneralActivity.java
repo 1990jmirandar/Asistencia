@@ -18,8 +18,11 @@ import com.sinergiass.asistencia.model.Reporte;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -92,9 +95,14 @@ public class ReporteGeneralActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
-                // TODO - Usar un mejor formateo de fecha.
-                // En la base se guarda YYYY-MM-DD
-                txtFechaInicio.setText(year + "-0" + (monthOfYear + 1) + "-0" + dayOfMonth );
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    date = simpleDateFormat.parse("" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                txtFechaInicio.setText(simpleDateFormat.format(date));
 
             }};
         DatePickerDialog dpDialog=new DatePickerDialog(this, listener, anio, mes, dia);
@@ -106,10 +114,14 @@ public class ReporteGeneralActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
-                // TODO - Usar un mejor formateo de fecha.
-                // En la base se guarda YYYY-MM-DD
-                txtFechaFin.setText(year + "-0" + (monthOfYear + 1) + "-0" + dayOfMonth );
-
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    date = simpleDateFormat.parse("" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                txtFechaFin.setText(simpleDateFormat.format(date));
             }};
         DatePickerDialog dpDialog=new DatePickerDialog(this, listener, anio, mes, dia);
         dpDialog.show();
