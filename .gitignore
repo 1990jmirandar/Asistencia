@@ -57,3 +57,7 @@ app/\.externalNativeBuild/ndkBuild/debug/armeabi-v7a/
 app/\.externalNativeBuild/ndkBuild/release/arm64-v8a/
 
 app/\.externalNativeBuild/ndkBuild/release/x86/
+
+build/intermediates/dex-cache/cache\.xml
+
+app/build\.gradle

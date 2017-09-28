@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Admin>> call, Response<List<Admin>> response) {
 
-                if(response.isSuccess()){
+                if(response.isSuccessful()){
                     Admin.deleteAll(Admin.class);
                     List<Admin> listaAdmin = response.body();
 
@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Operador>> call, Response<List<Operador>> response) {
 
-                if(response.isSuccess()){
+                if(response.isSuccessful()){
                     Operador.deleteAll(Operador.class,"estado = ?","1");
                     List<Operador> listaOp = response.body();
                     //Log.d("El numero de la lista", ""+ listaOp.size());
@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Asistencia>> call, Response<List<Asistencia>> response) {
 
-                if(response.isSuccess()){
+                if(response.isSuccessful()){
                     Asistencia.deleteAll(Asistencia.class,"estado = ?","1");
                     List<Asistencia> listaAsistencias = response.body();
                     //Log.d("El numero de la lista", ""+ listaAsistencias.size());

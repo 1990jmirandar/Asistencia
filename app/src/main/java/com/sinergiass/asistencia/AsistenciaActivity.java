@@ -209,7 +209,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
             @Override
             public void onResponse(Call<Asistencia> call, Response<Asistencia> response) {
 
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     asistencia.setEstado(1);
                     asistencia.save();
                     Toast.makeText(AsistenciaActivity.this, "Registro guardado y sincronizado: " + asistencia.getIdOperador(), Toast.LENGTH_LONG).show();

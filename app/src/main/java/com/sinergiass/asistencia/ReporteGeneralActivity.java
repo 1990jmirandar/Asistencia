@@ -12,6 +12,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.model.Operador;
 import com.sinergiass.asistencia.model.Reporte;
@@ -82,8 +85,16 @@ public class ReporteGeneralActivity extends AppCompatActivity {
                 String fechaInicio = txtFechaInicio.getText().toString();
                 String fechaFin = txtFechaFin.getText().toString();
 
+                Reporte reporte = new Reporte();
+                reporte.setFechaInicio(fechaInicio);
+                reporte.setFechaFin(fechaFin);
+                reporte.setDestinatarios(correos);
 
-                enviarData(fechaInicio,fechaFin,correos);
+//                JsonObject json = new JsonObject();
+//                JsonArray correos =
+
+//                enviarData(fechaInicio,fechaFin,correos);
+                enviarData(reporte);
             }
         });
 
@@ -127,14 +138,15 @@ public class ReporteGeneralActivity extends AppCompatActivity {
         dpDialog.show();
     }
 
-    public void enviarData(String fechaInicio, String fechaFin, String[] destinatarios){
-        Call<Reporte> listCall = mRestManager.getOperadorService().enviarReporte(fechaInicio,fechaFin,destinatarios);
+//    public void enviarData(String fechaInicio, String fechaFin, String[] destinatarios){
+        public void enviarData(Reporte reporte){
+    Call<Reporte> listCall = mRestManager.getOperadorService().enviarReporte(reporte);
         listCall.enqueue(new Callback<Reporte>() {
             @Override
             public void onResponse(Call<Reporte> call, Response<Reporte> response) {
 
-                if (response.isSuccess()) {
-
+                if (response.isSuccessful()) {
+                    Log.d("SUCCESS RESPONSE: ", response.body().toString());
 
                 } else {
                 }

@@ -97,7 +97,7 @@ public class OperadorActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<Operador> call, Response<Operador> response) {
 
-                            if (response.isSuccess()) {
+                            if (response.isSuccessful()) {
                                 operador.setEstado(1);
                                 Log.d("El nuevo estado es: ", "" + operador.getEstado());
                                 operador.save();
@@ -164,7 +164,7 @@ public class OperadorActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Operador> call, Response<Operador> response) {
 
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     operador.setEstado(1);
                     Log.d("El nuevo estado es: ",""+operador.getEstado());
                     operador.save();

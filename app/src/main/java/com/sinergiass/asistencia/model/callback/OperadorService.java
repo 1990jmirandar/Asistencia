@@ -1,5 +1,6 @@
 package com.sinergiass.asistencia.model.callback;
 
+import com.google.gson.JsonElement;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
@@ -39,9 +40,8 @@ public interface OperadorService {
     @POST("asistencias/")
     Call<Asistencia> guardarAsis(@FieldMap HashMap<String, String> parameters);
 
-    @FormUrlEncoded
     @POST("enviar_reporte/")
-    Call<Reporte> enviarReporte(@Field("fechaInicio") String fechaInicio, @Field("fechaFin") String fechaFin, @Field("destinatarios") String[] destinatarios);
+    Call<Reporte> enviarReporte(@Body Reporte reporte);
 
 
 
