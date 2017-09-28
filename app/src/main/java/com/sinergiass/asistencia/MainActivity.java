@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Operador> listaOperadores =  new ArrayList<Operador>();
     private Operador operador;
 
+//    Call<List<Asistencia>> callQueue;
 
 
     @Override
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         progress = (LinearLayout) findViewById(R.id.layout_progress1);
 
         mManager = new RestManager();
-
+//        Call<List<Asistencia>> callQueue = mManager.getOperadorService();
 
 
         //Adquiriendo los datos de un json a una lista
@@ -142,8 +143,7 @@ public class MainActivity extends AppCompatActivity
             asistencias = Asistencia.find(Asistencia.class,"estado = ?", "0");
 
 
-            new UploadOperadoresTask().execute();
-
+            enviarOperadores(operadores);
 
 
 
@@ -163,84 +163,84 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    class UploadOperadoresTask extends AsyncTask<Void, Void, Void> {
-
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            enviarOperadores(operadores);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            Toast.makeText(MainActivity.this, "Datos Subidos de operadores al servidor con exito!", Toast.LENGTH_LONG).show();
-            new UploadAsistenciasTask().execute();
-
-        }
-    }
-
-    class UploadAsistenciasTask extends AsyncTask<Void, Void, Void> {
-
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            enviarAsistencias(asistencias);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            Toast.makeText(MainActivity.this, "Datos Subidos de asistencias al servidor con exito!", Toast.LENGTH_LONG).show();
-            new DownloadOperadoresTask().execute();
-
-        }
-    }
-
-    class DownloadOperadoresTask extends AsyncTask<Void, Void, Void> {
-
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-
-            cargarOperadores();
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            Toast.makeText(MainActivity.this, "Datos Actualizados de operadores desde servidor con exito!", Toast.LENGTH_LONG).show();
-            new DownloadAsistenciasTask().execute();
-        }
-    }
-
-    class DownloadAsistenciasTask extends AsyncTask<Void, Void, Void> {
-
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            cargarAsistencias();
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            progress.setVisibility(View.GONE);
-            header.setVisibility(View.VISIBLE);
-            layoutLista.setVisibility(View.VISIBLE);
-            Toast.makeText(MainActivity.this, "Datos Actualizados desde servidor con exito!", Toast.LENGTH_LONG).show();
-        }
-    }
+//    class UploadOperadoresTask extends AsyncTask<Void, Void, Void> {
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//
+//            enviarOperadores(operadores);
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            Toast.makeText(MainActivity.this, "Datos Subidos de operadores al servidor con exito!", Toast.LENGTH_LONG).show();
+//            new UploadAsistenciasTask().execute();
+//
+//        }
+//    }
+//
+//    class UploadAsistenciasTask extends AsyncTask<Void, Void, Void> {
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//
+//            enviarAsistencias(asistencias);
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            Toast.makeText(MainActivity.this, "Datos Subidos de asistencias al servidor con exito!", Toast.LENGTH_LONG).show();
+//            new DownloadOperadoresTask().execute();
+//
+//        }
+//    }
+//
+//    class DownloadOperadoresTask extends AsyncTask<Void, Void, Void> {
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//
+//
+//            cargarOperadores();
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//
+//            Toast.makeText(MainActivity.this, "Datos Actualizados de operadores desde servidor con exito!", Toast.LENGTH_LONG).show();
+//            new DownloadAsistenciasTask().execute();
+//        }
+//    }
+//
+//    class DownloadAsistenciasTask extends AsyncTask<Void, Void, Void> {
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//
+//            cargarAsistencias();
+//
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            progress.setVisibility(View.GONE);
+//            header.setVisibility(View.VISIBLE);
+//            layoutLista.setVisibility(View.VISIBLE);
+//            Toast.makeText(MainActivity.this, "Datos Actualizados desde servidor con exito!", Toast.LENGTH_LONG).show();
+//        }
+//    }
 
     public void enviarOperadores(List<Operador> operadores){
 
@@ -252,6 +252,8 @@ public class MainActivity extends AppCompatActivity
                 if (response.isSuccessful()) {
 
                     Toast.makeText(MainActivity.this, "Actualizado de Operadores Exitosa!", Toast.LENGTH_LONG).show();
+
+                    cargarOperadores();
 
                 } else {
                 }
@@ -276,6 +278,8 @@ public class MainActivity extends AppCompatActivity
 
                 if (response.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Registros de asistencias sincronizados" , Toast.LENGTH_LONG).show();
+
+                    cargarAsistencias();
                 }
             }
 
@@ -310,12 +314,20 @@ public class MainActivity extends AppCompatActivity
                                     listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
                                     listaOp.get(i).getEncodedFaceData());
                             Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
+
+                            for (Asistencia a : asistencias){
+                                if (a.getIdOperador() == -1 && a.cedulaOperador.equals(operador1.getCedula())){
+                                    a.setIdOperador(operador1.getIdOperador());
+                                    a.save();
+                                }
+                            }
+
                             operador1.save();
                         }
 
                     }
 
-
+                    enviarAsistencias(asistencias);
                 }
 
 
@@ -355,8 +367,14 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
 
+                progress.setVisibility(View.GONE);
+                header.setVisibility(View.VISIBLE);
+                layoutLista.setVisibility(View.VISIBLE);
+                Toast.makeText(MainActivity.this, "Datos Actualizados desde servidor con exito!", Toast.LENGTH_LONG).show();
 
                 }
+
+
 
             }
 
@@ -364,6 +382,9 @@ public class MainActivity extends AppCompatActivity
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Conexion Fallida al cargar asistencias", Toast.LENGTH_LONG).show();
 
+                progress.setVisibility(View.GONE);
+                header.setVisibility(View.VISIBLE);
+                layoutLista.setVisibility(View.VISIBLE);
             }
         });
 

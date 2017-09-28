@@ -28,6 +28,8 @@ public class Asistencia extends SugarRecord implements Serializable {
     private boolean isEntrada;
     private int estado = 1;
 
+    public String cedulaOperador;
+
     public Asistencia() {
 
     }

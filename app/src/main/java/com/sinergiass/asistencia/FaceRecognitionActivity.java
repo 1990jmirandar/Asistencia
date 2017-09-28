@@ -81,30 +81,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
     public static final int FLAG_RECONOCER = 1;
     private int flag_value;
 
-    /* Metodo usado para sacar la base local del celular afuera del directorio protegido
-       para de esta manera traerla al pc y poder examinarla o modificarla */
-    protected void exportDbExtStorage(){
-        try {
-            File sd = Environment.getExternalStorageDirectory();
 
-            if (sd.canWrite()) {
-                String currentDBPath = "/data/data/" + getPackageName() + "/databases/asistencia.db";
-                String backupDBPath = "asistencia_db.sqlite";
-                File currentDB = new File(currentDBPath);
-                File backupDB = new File(sd, backupDBPath);
-
-                if (currentDB.exists()) {
-                    FileChannel src = new FileInputStream(currentDB).getChannel();
-                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                }
-            }
-        } catch (Exception e) {
-
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -154,18 +154,10 @@ public class AsistenciaActivity extends  AppCompatActivity {
                     mAsistencia.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
                     mAsistencia.setIdOperador(operador.getIdOperador());
 
-                    HashMap<String, String> parameters = new HashMap<>();
-                    parameters.put("idOperador", ""+mAsistencia.getIdOperador());
-                    parameters.put("latitud", ""+mAsistencia.getLatitud());
-                    parameters.put("longitud", ""+mAsistencia.getLongitud());
-                    parameters.put("fecha", ""+mAsistencia.getFecha());
-                    parameters.put("hora", ""+mAsistencia.getHora());
-                    parameters.put("isEntrada", ""+mAsistencia.isEntrada());
+                    mAsistencia.cedulaOperador = operador.getCedula();
 
                     enviarAsis(mAsistencia);
 
-
-                    //asistencia.save();
 
                 } else {
                     Toast.makeText(AsistenciaActivity.this, "GPS DESACTIVADO: No se puede obtener la informacion actual de la localizacion geografica, active el gps y vuelva a intentar", Toast.LENGTH_LONG).show();

@@ -103,6 +103,9 @@ public class OperadorActivity extends AppCompatActivity {
                             if (response.isSuccessful()) {
                                 operador.setEstado(1);
                                 Log.d("El nuevo estado es: ", "" + operador.getEstado());
+
+//                                operador.setIdOperador(response.body().get(0).getIdOperador());
+
                                 operador.save();
                                 guardando.setVisibility(View.GONE);
                                 progressBar.setVisibility(View.GONE);
