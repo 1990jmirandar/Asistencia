@@ -33,10 +33,10 @@ public interface OperadorService {
     Call<List<Asistencia>> getListaAsistencias();
 
     @POST("operadores/")
-    Call<Operador> guardarOp(@Body Operador operador);
+    Call<List<Operador>> guardarOp(@Body List<Operador> operador);
 
     @POST("asistencias/")
-    Call<Asistencia> guardarAsis(@Body Asistencia asistencia);
+    Call<List<Asistencia>> guardarAsis(@Body List<Asistencia> asistencias);
 
     @POST("enviar_reporte/")
     Call<Reporte> enviarReporte(@Body Reporte reporte);

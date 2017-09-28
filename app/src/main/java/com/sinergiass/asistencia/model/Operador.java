@@ -105,7 +105,7 @@ public class Operador extends SugarRecord implements Serializable{
      * Decodifica el String en Base64 que representa la foto del operador
      * @return Una Matriz (Mat) de OpenCV, que contiene los datos de la cara del operador
      */
-    public Mat getFaceMat() {
+    public Mat faceMat() {
 
         // Decodificar el String en Base64 para obtener el Array de Bytes que representa la foto de la cara
         byte[] faceData = Base64.decode(this.encodedFaceData, Base64.DEFAULT);

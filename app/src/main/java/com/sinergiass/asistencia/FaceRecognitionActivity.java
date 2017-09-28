@@ -579,7 +579,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                             Log.i(TAG, "Cargado: " + operador.getNombre());
 //                            Log.i(TAG, operador.getEncodedFaceData());
 
-                            images.add(operador.getFaceMat());        // Agregar esta cara a images. El indice debe corresponder al id del operador -1
+                            images.add(operador.faceMat());        // Agregar esta cara a images. El indice debe corresponder al id del operador -1
                             // Tambien corresponde al indice de la Lista operadores
                             imagesLabels.add(operador.getNombre());
                         }

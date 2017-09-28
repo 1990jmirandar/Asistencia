@@ -33,6 +33,7 @@ import com.sinergiass.asistencia.model.Operador;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -204,10 +205,12 @@ public class AsistenciaActivity extends  AppCompatActivity {
     }
 
     private void enviarAsis( Asistencia asistencia) {
-        Call<Asistencia> listCall = mRestManager.getOperadorService().guardarAsis(asistencia);
-        listCall.enqueue(new Callback<Asistencia>() {
+        List<Asistencia> asisList = new ArrayList<>();
+        asisList.add(asistencia);
+        Call<List<Asistencia>> listCall = mRestManager.getOperadorService().guardarAsis(asisList);
+        listCall.enqueue(new Callback<List<Asistencia>>() {
             @Override
-            public void onResponse(Call<Asistencia> call, Response<Asistencia> response) {
+            public void onResponse(Call<List<Asistencia>> call, Response<List<Asistencia>> response) {
 
                 if (response.isSuccessful()) {
                     mAsistencia.setEstado(1);
@@ -220,7 +223,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Asistencia> call, Throwable t) {
+            public void onFailure(Call<List<Asistencia>> call, Throwable t) {
                 mAsistencia.setEstado(0);
                 mAsistencia.save();
                 Toast.makeText(AsistenciaActivity.this, "Sin conexion, registro guardado local: " + mAsistencia.getIdOperador(), Toast.LENGTH_LONG).show();

@@ -22,6 +22,7 @@ import com.sinergiass.asistencia.util.DatabaseHelper;
 import com.sinergiass.asistencia.ws.FaceDetectorWS;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,7 +77,6 @@ public class OperadorActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE);
                     final Intent intent = new Intent(OperadorActivity.this, MainActivity.class);
                     operador = new Operador();
-                    HashMap<String, String> parameters = new HashMap<>();
                     operador.setNombre(nombres.getText().toString());
                     operador.setApellido(apellidos.getText().toString());
                     operador.setCedula(cedula.getText().toString());
@@ -92,10 +92,13 @@ public class OperadorActivity extends AppCompatActivity {
 //                    parameters.put("telefono", "" + operador.getTelefono());
 //                    parameters.put("encodedFaceData", "" + operador.getEncodedFaceData());
 
-                    Call<Operador> listCall = mManager.getOperadorService().guardarOp(operador);
-                    listCall.enqueue(new Callback<Operador>() {
+                    List<Operador> listOp = new ArrayList<>();
+                    listOp.add(operador);
+
+                    Call<List<Operador>> listCall = mManager.getOperadorService().guardarOp(listOp);
+                    listCall.enqueue(new Callback<List<Operador>>() {
                         @Override
-                        public void onResponse(Call<Operador> call, Response<Operador> response) {
+                        public void onResponse(Call<List<Operador>> call, Response<List<Operador>> response) {
 
                             if (response.isSuccessful()) {
                                 operador.setEstado(1);
@@ -111,7 +114,7 @@ public class OperadorActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<Operador> call, Throwable t) {
+                        public void onFailure(Call<List<Operador>> call, Throwable t) {
                             operador.setEstado(0);
                             operador.save();
                             guardando.setVisibility(View.GONE);
