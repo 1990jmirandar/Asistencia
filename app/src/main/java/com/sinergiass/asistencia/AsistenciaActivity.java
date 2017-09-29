@@ -207,7 +207,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
                 if (response.isSuccessful()) {
                     mAsistencia.setEstado(1);
                     mAsistencia.save();
-                    Toast.makeText(AsistenciaActivity.this, "Registro guardado y sincronizado: " + mAsistencia.getIdOperador(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AsistenciaActivity.this, "Asistencia guardada y sincronizada: ", Toast.LENGTH_LONG).show();
                     onBackPressed();
 
                 } else {
@@ -218,7 +218,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
                 mAsistencia.setEstado(0);
                 mAsistencia.save();
-                Toast.makeText(AsistenciaActivity.this, "Sin conexion, registro guardado local: " + mAsistencia.getIdOperador(), Toast.LENGTH_LONG).show();
+                Toast.makeText(AsistenciaActivity.this, "Sin conexion, registro guardado local", Toast.LENGTH_LONG).show();
                 onBackPressed();
 
             }

@@ -18,6 +18,9 @@ public class RestManager {
     public OperadorService getOperadorService(){
 
         if(mOperadorService ==null){
+
+            
+
             Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.HTTP.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

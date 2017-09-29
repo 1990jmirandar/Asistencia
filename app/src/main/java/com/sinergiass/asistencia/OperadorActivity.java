@@ -102,13 +102,11 @@ public class OperadorActivity extends AppCompatActivity {
                             if (response.isSuccessful()) {
                                 operador.setEstado(1);
                                 Log.d("El nuevo estado es: ", "" + operador.getEstado());
-
                                 operador.setIdOperador(response.body().get(0).getIdOperador());
-
                                 operador.save();
                                 guardando.setVisibility(View.GONE);
                                 progressBar.setVisibility(View.GONE);
-//                                startActivity(intent);
+//                              startActivity(intent);
                                 Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
                                 onBackPressed();
 
@@ -122,7 +120,7 @@ public class OperadorActivity extends AppCompatActivity {
                             operador.save();
                             guardando.setVisibility(View.GONE);
                             progressBar.setVisibility(View.GONE);
-//                            startActivity(intent);
+//                           startActivity(intent);
                             Toast.makeText(OperadorActivity.this, "Sin Conexión, Guardado Local Exitoso!", Toast.LENGTH_LONG).show();
                             onBackPressed();
                         }

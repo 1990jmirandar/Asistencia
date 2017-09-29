@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private RestManager mManager;
     private ArrayList<Operador> listaOperadores =  new ArrayList<Operador>();
     private Operador operador;
+    boolean salir = false;
 
 
     @Override
@@ -96,7 +97,17 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (salir==true){
+                super.onBackPressed();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+            else {
+                Toast.makeText(MainActivity.this, "Vuelva a presionar para salir al menu principal", Toast.LENGTH_LONG).show();
+                salir = true;
+            }
+
+
         }
     }
 
@@ -135,6 +146,8 @@ public class MainActivity extends AppCompatActivity
 
 
 
+        }else if(id == R.id.nav_salir){
+            this.finishAffinity();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

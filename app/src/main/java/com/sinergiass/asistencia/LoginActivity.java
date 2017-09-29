@@ -140,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Admin>> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar admins", Toast.LENGTH_LONG).show();
                 cargarOperadores();
             }
         });
@@ -155,18 +156,13 @@ public class LoginActivity extends AppCompatActivity {
                     Operador.deleteAll(Operador.class,"estado = ?","1");
                     mOperadores = response.body();
                     Log.d("Size Lista Operadores", ""+ mOperadores.size());
-//                    for(int i=0; i<listaOp.size();i++){
-//                        final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
-//                                listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
-//                                listaOp.get(i).getEncodedFaceData());
-//                        Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
-//                        operador1.save();
-//                        mOperadores.add(operador1):
-//                    }
+//
 
                     for (Operador operador : mOperadores){
                         operador.save();
                     }
+
+                    Toast.makeText(LoginActivity.this, "Cargado Operadores Exitosa", Toast.LENGTH_LONG).show();
 
                 }else{
                     int sc = response.code();
@@ -179,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Operador>> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
 
                 cargarAsistencias();
 
@@ -210,6 +207,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         asistencia.save();
                     }
+                    Toast.makeText(LoginActivity.this, "Cargado Asistencias Exitosa", Toast.LENGTH_LONG).show();
 
                 }else{
                     int sc = response.code();
@@ -220,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
-
+                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar Asistencias", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -40,10 +42,11 @@ import retrofit2.Response;
 public class ReporteGeneralActivity extends AppCompatActivity {
 
 
-    TextView txtCorreos;
+    TextView txtCorreos,guardar;
     EditText txtFechaInicio,txtFechaFin;
     Button btnEnviarReporte;
     RestManager mRestManager;
+    ProgressBar progressBar;
     Calendar calendar;
     int dia, mes, anio;
 
@@ -57,6 +60,8 @@ public class ReporteGeneralActivity extends AppCompatActivity {
         txtFechaFin = (EditText) findViewById(R.id.txtFechaFin);
         txtCorreos = (TextView) findViewById(R.id.txtEmails);
         btnEnviarReporte = (Button) findViewById(R.id.enviarReporte);
+        guardar = (TextView) findViewById(R.id.guard);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar4);
         dia=calendar.get(Calendar.DAY_OF_MONTH);
         mes=calendar.get(Calendar.MONTH);
         anio=calendar.get(Calendar.YEAR);
@@ -78,23 +83,35 @@ public class ReporteGeneralActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //DateDialogFin();
-                String cadena = txtCorreos.getText().toString();
-                String[] correos = cadena.split(";");
+
+                if (validaciones()){
+                    guardar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    String cadena = txtCorreos.getText().toString();
+                    String[] correos = cadena.split(";");
 
 
-                String fechaInicio = txtFechaInicio.getText().toString();
-                String fechaFin = txtFechaFin.getText().toString();
+                    String fechaInicio = txtFechaInicio.getText().toString();
+                    String fechaFin = txtFechaFin.getText().toString();
 
-                Reporte reporte = new Reporte();
-                reporte.setFechaInicio(fechaInicio);
-                reporte.setFechaFin(fechaFin);
-                reporte.setDestinatarios(correos);
+                    Reporte reporte = new Reporte();
+                    reporte.setFechaInicio(fechaInicio);
+                    reporte.setFechaFin(fechaFin);
+                    reporte.setDestinatarios(correos);
 
 //                JsonObject json = new JsonObject();
 //                JsonArray correos =
 
 //                enviarData(fechaInicio,fechaFin,correos);
-                enviarData(reporte);
+                    enviarData(reporte);
+
+                }
+
+
+
+
+
+
             }
         });
 
@@ -146,24 +163,56 @@ public class ReporteGeneralActivity extends AppCompatActivity {
             public void onResponse(Call<Reporte> call, Response<Reporte> response) {
 
                 if (response.isSuccessful()) {
-                    Log.d("SUCCESS RESPONSE: ", response.body().toString());
-
-
-                } else {
+                    guardar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(ReporteGeneralActivity.this, "Correo(s) enviado(s) con exito", Toast.LENGTH_LONG).show();
+                    onBackPressed();
                 }
-
-                onBackPressed();
             }
 
             @Override
             public void onFailure(Call<Reporte> call, Throwable t) {
-
-
+                guardar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(ReporteGeneralActivity.this, "Correo(s) no enviado(s) Conexion Fallida ", Toast.LENGTH_LONG).show();
+                onBackPressed();
             }
 
 
         });
     }
 
+    private boolean validaciones(){
 
+        if (txtFechaInicio.getText().toString().isEmpty()){
+            Toast.makeText(ReporteGeneralActivity.this, "Ingrese la Fecha de inicio", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (txtFechaFin.getText().toString().isEmpty()){
+            Toast.makeText(ReporteGeneralActivity.this, "Ingrese la Fecha de Fin", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (!validarFechas()){
+            Toast.makeText(ReporteGeneralActivity.this, "La fecha de inicio debe ser anterior a la de fin", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if (txtCorreos.getText().toString().isEmpty() ){
+            Toast.makeText(ReporteGeneralActivity.this, "Ingrese correos destinatarios", Toast.LENGTH_LONG).show();
+            return false;
+        }  else {
+            return true;
+        }
+    }
+
+    private  boolean validarFechas(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date inicio = new Date();
+        Date fin = new Date();
+        try {
+            inicio = simpleDateFormat.parse(txtFechaInicio.getText().toString());
+            fin = simpleDateFormat.parse(txtFechaFin.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return (inicio.before(fin));
+    }
 }

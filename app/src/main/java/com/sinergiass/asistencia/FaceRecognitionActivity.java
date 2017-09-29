@@ -124,7 +124,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
             flag_value = extras.getInt(("flag_value"), FLAG_RECONOCER);
 
 
-        exportDbExtStorage();
+//        exportDbExtStorage();
 
         /* Estos valores vienen de la configuración por defecto de la librería. Allí pueden ser
            cambiados por el usuario, pero en este caso los quemaremos para simplificar. */

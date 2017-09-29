@@ -13,12 +13,16 @@
 
     </group>
 
-    <item android:title="Conectar">
+    <item android:title="Mas Opciones">
         <menu>
             <item
                 android:id="@+id/nav_sync"
                 android:icon="@drawable/sync"
                 android:title="Sincronizar" />
+            <item
+                android:id="@+id/nav_salir"
+                android:icon="@drawable/ic_directions_walk_black_24dp"
+                android:title="Salir" />
 
         </menu>
     </item>
