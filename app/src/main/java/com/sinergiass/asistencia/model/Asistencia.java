@@ -26,8 +26,10 @@ public class Asistencia extends SugarRecord implements Serializable {
     private String hora;
     @Expose
     private boolean isEntrada;
+
     private int estado = 1;
 
+    @Expose
     public String cedulaOperador;
 
     public Asistencia() {

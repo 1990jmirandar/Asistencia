@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,31 +45,10 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout layout,layoutP;
 
     private static final boolean IMPORT_ASSETS_DB = false; // true para cargar la DB desde assets, false para cargar desde el Servidor
+    private List<Operador> mOperadores;
 
-    /* Metodo usado para sacar la base local del celular afuera del directorio protegido
-   para de esta manera traerla al pc y poder examinarla o modificarla */
-    protected void exportDbExtStorage(){
-        try {
-            File sd = Environment.getExternalStorageDirectory();
 
-            if (sd.canWrite()) {
-                String currentDBPath = "/data/data/" + getPackageName() + "/databases/asistencia.db";
-                String backupDBPath = "asistencia_db.sqlite";
-                File currentDB = new File(currentDBPath);
-                File backupDB = new File(sd, backupDBPath);
 
-                if (currentDB.exists()) {
-                    FileChannel src = new FileInputStream(currentDB).getChannel();
-                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                }
-            }
-        } catch (Exception e) {
-
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         layoutP = (LinearLayout) findViewById(R.id.layout_progress);
 
         mManager = new RestManager();
+
+        mOperadores = new ArrayList<>();
 
         new DownloadDataTask().execute();
 
@@ -115,10 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 cargarAdmins();
-                cargarAsistencias();
-                cargarOperadores();
 
-                exportDbExtStorage();
             }
             return null;
         }
@@ -127,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             layoutP.setVisibility(View.GONE);
             layout.setVisibility(View.VISIBLE);
+
 
         }
     }
@@ -155,11 +135,12 @@ public class LoginActivity extends AppCompatActivity {
                     switch (sc){}
                 }
 
+                cargarOperadores();
             }
 
             @Override
             public void onFailure(Call<List<Admin>> call, Throwable t) {
-
+                cargarOperadores();
             }
         });
     }
@@ -172,14 +153,19 @@ public class LoginActivity extends AppCompatActivity {
 
                 if(response.isSuccessful()){
                     Operador.deleteAll(Operador.class,"estado = ?","1");
-                    List<Operador> listaOp = response.body();
-                    //Log.d("El numero de la lista", ""+ listaOp.size());
-                    for(int i=0; i<listaOp.size();i++){
-                        final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
-                                listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
-                                listaOp.get(i).getEncodedFaceData());
-                        Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
-                        operador1.save();
+                    mOperadores = response.body();
+                    Log.d("Size Lista Operadores", ""+ mOperadores.size());
+//                    for(int i=0; i<listaOp.size();i++){
+//                        final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
+//                                listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
+//                                listaOp.get(i).getEncodedFaceData());
+//                        Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
+//                        operador1.save();
+//                        mOperadores.add(operador1):
+//                    }
+
+                    for (Operador operador : mOperadores){
+                        operador.save();
                     }
 
                 }else{
@@ -187,10 +173,14 @@ public class LoginActivity extends AppCompatActivity {
                     switch (sc){}
                 }
 
+                cargarAsistencias();
+
             }
 
             @Override
             public void onFailure(Call<List<Operador>> call, Throwable t) {
+
+                cargarAsistencias();
 
             }
         });
@@ -205,13 +195,19 @@ public class LoginActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     Asistencia.deleteAll(Asistencia.class,"estado = ?","1");
                     List<Asistencia> listaAsistencias = response.body();
-                    //Log.d("El numero de la lista", ""+ listaAsistencias.size());
-                    for(int i=0; i<listaAsistencias.size();i++){
-                        final Asistencia asistencia = new Asistencia(listaAsistencias.get(i).getIdOperador(),
-                                listaAsistencias.get(i).getLatitud(),listaAsistencias.get(i).getLongitud(),
-                                listaAsistencias.get(i).getFecha(),listaAsistencias.get(i).getHora(),
-                                listaAsistencias.get(i).isEntrada());
-                        //Log.d("asistencia del operador:"+i + ":",""+asistencia.getIdOperador());
+                    Log.d("Size Lista Asist ", ""+ listaAsistencias.size());
+//                    for(int i=0; i<listaAsistencias.size();i++){
+//                        final Asistencia asistencia = new Asistencia(listaAsistencias.get(i).getIdOperador(),
+//                                listaAsistencias.get(i).getLatitud(),listaAsistencias.get(i).getLongitud(),
+//                                listaAsistencias.get(i).getFecha(),listaAsistencias.get(i).getHora(),
+//                                listaAsistencias.get(i).isEntrada());
+//                        //Log.d("asistencia del operador:"+i + ":",""+asistencia.getIdOperador());
+//                        asistencia.save();
+//                    }
+                    for (Asistencia asistencia : listaAsistencias){
+                        for (Operador op : mOperadores){
+                            if (asistencia.getIdOperador() == op.getIdOperador()) asistencia.cedulaOperador = op.getCedula();
+                        }
                         asistencia.save();
                     }
 

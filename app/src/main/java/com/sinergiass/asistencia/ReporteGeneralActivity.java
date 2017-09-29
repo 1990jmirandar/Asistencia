@@ -151,6 +151,8 @@ public class ReporteGeneralActivity extends AppCompatActivity {
 
                 } else {
                 }
+
+                onBackPressed();
             }
 
             @Override
@@ -158,6 +160,7 @@ public class ReporteGeneralActivity extends AppCompatActivity {
 
 
             }
+
 
         });
     }

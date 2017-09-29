@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Operador> listaOperadores =  new ArrayList<Operador>();
     private Operador operador;
 
-//    Call<List<Asistencia>> callQueue;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +62,6 @@ public class MainActivity extends AppCompatActivity
         progress = (LinearLayout) findViewById(R.id.layout_progress1);
 
         mManager = new RestManager();
-//        Call<List<Asistencia>> callQueue = mManager.getOperadorService();
 
 
         //Adquiriendo los datos de un json a una lista
@@ -123,16 +120,7 @@ public class MainActivity extends AppCompatActivity
 
             Intent intent = new Intent(this, ReporteGeneralActivity.class);
             startActivity(intent);
-            /* TODO - Conectar al servicio web: BASE_URL/enviar_reporte/
 
-                Enviar via POST un json con este formato:
-                {
-                    "fechaInicio" : "YYYY-MM-DD",
-                    "fechaFin" : "YYYY-MM-DD",
-                    "destinatarios" : ["correo1@example.com", "correo2@example.com", ...]
-                }
-
-            */
         } else if (id == R.id.nav_sync) {
 
             progress.setVisibility(View.VISIBLE);
@@ -157,90 +145,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        listaOp = Operador.listAll(Operador.class);
         BandaAdapter adapter = new BandaAdapter(this,R.layout.listview_item_row,listaOp);
         lista = (ListView)findViewById(R.id.listaOperador1);
         lista.setAdapter(adapter);
 
     }
-
-//    class UploadOperadoresTask extends AsyncTask<Void, Void, Void> {
-//
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//
-//            enviarOperadores(operadores);
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            Toast.makeText(MainActivity.this, "Datos Subidos de operadores al servidor con exito!", Toast.LENGTH_LONG).show();
-//            new UploadAsistenciasTask().execute();
-//
-//        }
-//    }
-//
-//    class UploadAsistenciasTask extends AsyncTask<Void, Void, Void> {
-//
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//
-//            enviarAsistencias(asistencias);
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            Toast.makeText(MainActivity.this, "Datos Subidos de asistencias al servidor con exito!", Toast.LENGTH_LONG).show();
-//            new DownloadOperadoresTask().execute();
-//
-//        }
-//    }
-//
-//    class DownloadOperadoresTask extends AsyncTask<Void, Void, Void> {
-//
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//
-//
-//            cargarOperadores();
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//
-//            Toast.makeText(MainActivity.this, "Datos Actualizados de operadores desde servidor con exito!", Toast.LENGTH_LONG).show();
-//            new DownloadAsistenciasTask().execute();
-//        }
-//    }
-//
-//    class DownloadAsistenciasTask extends AsyncTask<Void, Void, Void> {
-//
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//
-//            cargarAsistencias();
-//
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            progress.setVisibility(View.GONE);
-//            header.setVisibility(View.VISIBLE);
-//            layoutLista.setVisibility(View.VISIBLE);
-//            Toast.makeText(MainActivity.this, "Datos Actualizados desde servidor con exito!", Toast.LENGTH_LONG).show();
-//        }
-//    }
 
     public void enviarOperadores(List<Operador> operadores){
 
@@ -262,7 +172,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<List<Operador>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Sin Conexión, intetar luego", Toast.LENGTH_LONG).show();
-
+                cargarOperadores();
             }
 
         });
@@ -287,7 +197,7 @@ public class MainActivity extends AppCompatActivity
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
 
                 Toast.makeText(MainActivity.this, "Sin conexion para Actualizar el server", Toast.LENGTH_LONG).show();
-
+                cargarAsistencias();
 
             }
 
@@ -316,7 +226,7 @@ public class MainActivity extends AppCompatActivity
                             Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
 
                             for (Asistencia a : asistencias){
-                                if (a.getIdOperador() == -1 && a.cedulaOperador.equals(operador1.getCedula())){
+                                if (a.getIdOperador() <= 0 && a.cedulaOperador.equals(operador1.getCedula())){
                                     a.setIdOperador(operador1.getIdOperador());
                                     a.save();
                                 }
@@ -337,7 +247,7 @@ public class MainActivity extends AppCompatActivity
             public void onFailure(Call<List<Operador>> call, Throwable t) {
 
                 Toast.makeText(MainActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
-
+                enviarAsistencias(asistencias);
             }
         });
 
@@ -367,11 +277,12 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
 
+
                 progress.setVisibility(View.GONE);
                 header.setVisibility(View.VISIBLE);
                 layoutLista.setVisibility(View.VISIBLE);
                 Toast.makeText(MainActivity.this, "Datos Actualizados desde servidor con exito!", Toast.LENGTH_LONG).show();
-
+                onResume();
                 }
 
 
@@ -385,6 +296,7 @@ public class MainActivity extends AppCompatActivity
                 progress.setVisibility(View.GONE);
                 header.setVisibility(View.VISIBLE);
                 layoutLista.setVisibility(View.VISIBLE);
+                onResume();
             }
         });
 

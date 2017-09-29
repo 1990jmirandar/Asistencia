@@ -74,6 +74,8 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
 
         List<Asistencia> asistencias = Asistencia.find(Asistencia.class , "id_Operador = ? and fecha = ?", new String[]{""+operador.getIdOperador(),new SimpleDateFormat("yyyy-MM-dd").format(new Date())});
 
+
+
         if(asistencias.size()==0){
             row.setBackgroundColor(Color.parseColor("#ff6347"));
         }else{
@@ -85,7 +87,6 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
         }else{
             holder.registrar.setEnabled(true);
         }
-
 
         holder.text1.setText(operador.getNombre());
         holder.text2.setText(operador.getApellido());

@@ -42,6 +42,8 @@ public class OperadorActivity extends AppCompatActivity {
     private RestManager mManager;
     String faceEncoding;
 
+    public int nextLocalId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,8 @@ public class OperadorActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar2) ;
 
         mManager = new RestManager();
+
+        nextLocalId = Operador.listAll(Operador.class, "id_Operador").get(0).getIdOperador() - 1;
 
         btnFace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,13 +88,8 @@ public class OperadorActivity extends AppCompatActivity {
                     operador.setEncodedFaceData(faceEncoding);
                     operador.setEstado(0);
 
-                    operador.setIdOperador(-1);     // TODO - Posible solucion para la sincronizacion con el webservice
-
-//                    parameters.put("nombre", "" + operador.getNombre());
-//                    parameters.put("apellido", "" + operador.getApellido());
-//                    parameters.put("cedula", "" + operador.getCedula());
-//                    parameters.put("telefono", "" + operador.getTelefono());
-//                    parameters.put("encodedFaceData", "" + operador.getEncodedFaceData());
+                    operador.setIdOperador(nextLocalId);
+                    nextLocalId -= 1;
 
                     List<Operador> listOp = new ArrayList<>();
                     listOp.add(operador);
@@ -104,13 +103,14 @@ public class OperadorActivity extends AppCompatActivity {
                                 operador.setEstado(1);
                                 Log.d("El nuevo estado es: ", "" + operador.getEstado());
 
-//                                operador.setIdOperador(response.body().get(0).getIdOperador());
+                                operador.setIdOperador(response.body().get(0).getIdOperador());
 
                                 operador.save();
                                 guardando.setVisibility(View.GONE);
                                 progressBar.setVisibility(View.GONE);
-                                startActivity(intent);
+//                                startActivity(intent);
                                 Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
+                                onBackPressed();
 
                             } else {
                             }
@@ -122,9 +122,9 @@ public class OperadorActivity extends AppCompatActivity {
                             operador.save();
                             guardando.setVisibility(View.GONE);
                             progressBar.setVisibility(View.GONE);
-                            startActivity(intent);
+//                            startActivity(intent);
                             Toast.makeText(OperadorActivity.this, "Sin Conexión, Guardado Local Exitoso!", Toast.LENGTH_LONG).show();
-
+                            onBackPressed();
                         }
 
                     });
