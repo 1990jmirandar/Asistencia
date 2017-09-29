@@ -39,7 +39,7 @@ public interface OperadorService {
     Call<List<Asistencia>> guardarAsis(@Body List<Asistencia> asistencias);
 
     @POST("enviar_reporte/")
-    Call<Reporte> enviarReporte(@Body Reporte reporte);
+    Call<Void> enviarReporte(@Body Reporte reporte);
 
 
 

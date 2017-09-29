@@ -153,7 +153,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                     }
                     if (mTrainFacesTask != null && mTrainFacesTask.getStatus() != AsyncTask.Status.FINISHED) {
                         Log.i(TAG, "mTrainFacesTask is still running");
-                        showToast("Espere un momento... ", Toast.LENGTH_SHORT);
+                        showToast("Cargando las fotos, espere un momento... ", Toast.LENGTH_SHORT);
                         return;
                     }
 
@@ -566,13 +566,11 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                     images = new ArrayList<>();
                     imagesLabels = new ArrayList<>();
 
-                    /* Cargar los operadores de la base local
-                       TODO - No funcionara hasta que se modifique bien la estructura de la base */
+                    /* Cargar los operadores de la base local */
                     mOperadores = Operador.listAll(Operador.class);
 
                     Log.d(TAG, "" + mOperadores.size());
 
-                    // Hasta eso
 
                     /* --- Obtener las fotos de cada operador, para hacer el reconocimiento de la foto que toma la actividad --- */
                     if (mOperadores != null && mOperadores.size() != 0){    // Si existen registros
@@ -584,6 +582,9 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                             // Tambien corresponde al indice de la Lista operadores
                             imagesLabels.add(operador.getNombre());
                         }
+                    }else if(flag_value == FLAG_RECONOCER){
+                        showToast("No existen operadores", Toast.LENGTH_SHORT);
+                        onBackPressed();
                     }
                     /* --- END --- */
 

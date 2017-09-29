@@ -60,7 +60,10 @@ public class OperadorActivity extends AppCompatActivity {
 
         mManager = new RestManager();
 
-        nextLocalId = Operador.listAll(Operador.class, "id_Operador").get(0).getIdOperador() - 1;
+        List<Operador> ops = Operador.listAll(Operador.class, "id_Operador");
+        if (ops.size() != 0){
+            nextLocalId = ops.get(0).getIdOperador() - 1;
+        }else{ nextLocalId = 0;}
 
         btnFace.setOnClickListener(new View.OnClickListener() {
             @Override

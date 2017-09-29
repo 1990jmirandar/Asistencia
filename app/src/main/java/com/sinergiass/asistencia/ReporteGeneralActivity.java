@@ -18,6 +18,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sinergiass.asistencia.controller.RestManager;
+import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
 import com.sinergiass.asistencia.model.Reporte;
 
@@ -87,6 +88,7 @@ public class ReporteGeneralActivity extends AppCompatActivity {
                 if (validaciones()){
                     guardar.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
+                    btnEnviarReporte.setEnabled(false);
                     String cadena = txtCorreos.getText().toString();
                     String[] correos = cadena.split(";");
 
@@ -157,10 +159,10 @@ public class ReporteGeneralActivity extends AppCompatActivity {
 
 //    public void enviarData(String fechaInicio, String fechaFin, String[] destinatarios){
         public void enviarData(Reporte reporte){
-    Call<Reporte> listCall = mRestManager.getOperadorService().enviarReporte(reporte);
-        listCall.enqueue(new Callback<Reporte>() {
+    Call<Void> listCall = mRestManager.getOperadorService().enviarReporte(reporte);
+        listCall.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Reporte> call, Response<Reporte> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
 
                 if (response.isSuccessful()) {
                     guardar.setVisibility(View.GONE);
@@ -171,7 +173,7 @@ public class ReporteGeneralActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Reporte> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 guardar.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(ReporteGeneralActivity.this, "Correo(s) no enviado(s) Conexion Fallida ", Toast.LENGTH_LONG).show();
