@@ -1,80 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="10"
+    android:layout_height="90dp"
+    android:weightSum="16"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="72dp"
-        android:layout_weight="3"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:weightSum="9"
+        android:padding="5dp">
 
-        <TextView
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6">
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/nombres"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
 
-            android:text="Nombres:"
-            android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="17.2sp"
-            android:textStyle="bold" />
+                android:text="Nombres y Apellidos"
+                android:scrollbars="vertical"
+                android:textSize="18sp" />
 
-        <TextView
+        </RelativeLayout>
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            android:text="Apellidos:"
-            android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="17.2sp"
-            android:textStyle="bold" />
 
-        <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:weightSum="4">
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cedula:"
-            android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="17.2sp"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.1"
+                android:text="Cédula:"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cedula"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.9"
+                android:paddingLeft="2dp"
+                android:text="TextView"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="75dp"
+        android:layout_height="match_parent"
         android:layout_weight="6"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/nombres"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="TextView"
-            android:textSize="17.2sp" />
-
-        <TextView
-            android:id="@+id/apellidos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="TextView"
-            android:textSize="17.2sp" />
-
-        <TextView
-            android:id="@+id/cedula"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="17.2sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="69dp"
-        android:layout_weight="3.3"
+        android:weightSum="2"
         android:orientation="vertical">
 
         <Button
@@ -82,7 +74,8 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Registrar"
+            android:padding="0sp"
+            android:text="Marcar"
             android:textSize="12sp" />
 
         <Button
@@ -90,7 +83,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Check"
+            android:padding="0sp"
+            android:text="Ver Asistencias"
             android:textSize="12sp" />
 
     </LinearLayout>

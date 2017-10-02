@@ -17,6 +17,7 @@ import com.sinergiass.asistencia.model.Operador;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,9 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
     Button btnEntrada,btnSalida;
     Calendar calendar;
     int dia, mes, anio;
+
+    SimpleDateFormat simpleDateFormat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +49,20 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
         txtHoraSalida=(TextView) findViewById(R.id.txtHoraSalida);
         btnEntrada=(Button) findViewById(R.id.btnEntrada);
         btnSalida=(Button) findViewById(R.id.btnSalida);
+
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         txtFechaReporte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DateDialog();
             }
         });
+
+        /* Entrar con el dia de hoy seleccionado */
+        txtFechaReporte.setText(simpleDateFormat.format(new Date()));
+        consultaAsistencia();
+
     }
 
     public void DateDialog(){
@@ -59,7 +71,6 @@ public class ReporteAsistenciaActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
                 Date date = new Date();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     date = simpleDateFormat.parse("" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                 } catch (ParseException e) {

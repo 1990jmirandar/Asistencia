@@ -193,7 +193,7 @@ public class ReporteGeneralActivity extends AppCompatActivity {
             Toast.makeText(ReporteGeneralActivity.this, "Ingrese la Fecha de Fin", Toast.LENGTH_LONG).show();
             return false;
         } else if (!validarFechas()){
-            Toast.makeText(ReporteGeneralActivity.this, "La fecha de inicio debe ser anterior a la de fin", Toast.LENGTH_LONG).show();
+            Toast.makeText(ReporteGeneralActivity.this, "La fecha de inicio debe ser antes o igual de la de fin", Toast.LENGTH_LONG).show();
             return false;
         }
         else if (txtCorreos.getText().toString().isEmpty() ){
@@ -215,6 +215,6 @@ public class ReporteGeneralActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return (inicio.before(fin));
+        return (!inicio.after(fin));
     }
 }

@@ -122,13 +122,15 @@ public class LoginActivity extends AppCompatActivity {
                     List<Admin> listaAdmin = response.body();
 
                     //Log.d("El numero de la lista", ""+ listaAdmin.size());
-                    for(int i=0; i<listaAdmin.size();i++){
-                        final Admin admin1 = new Admin(listaAdmin.get(i).getUsuario(),
-                                listaAdmin.get(i).getPassword());
-//
-                        //Log.d("el item", ""+admin1.getUsuario());
-                        admin1.save();
-                    }
+//                    for(int i=0; i<listaAdmin.size();i++){
+//                        final Admin admin1 = new Admin(listaAdmin.get(i).getUsuario(),
+//                                listaAdmin.get(i).getPassword());
+////
+//                        //Log.d("el item", ""+admin1.getUsuario());
+//                        admin1.save();
+//                    }
+
+                    for (Admin admin : listaAdmin){admin.save();}
 
                 }else{
                     int sc = response.code();
@@ -162,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                         operador.save();
                     }
 
-                    Toast.makeText(LoginActivity.this, "Cargado Operadores Exitosa", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(LoginActivity.this, "Cargado Operadores Exitosa", Toast.LENGTH_LONG).show();
 
                 }else{
                     int sc = response.code();
@@ -207,7 +209,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         asistencia.save();
                     }
-                    Toast.makeText(LoginActivity.this, "Cargado Asistencias Exitosa", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(LoginActivity.this, "Cargado Asistencias Exitosa", Toast.LENGTH_LONG).show();
 
                 }else{
                     int sc = response.code();

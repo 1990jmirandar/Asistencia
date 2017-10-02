@@ -1,17 +1,13 @@
 package com.sinergiass.asistencia;
 
 import android.content.Intent;
-import android.graphics.Path;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,12 +20,9 @@ import android.widget.Toast;
 import com.sinergiass.asistencia.adapter.BandaAdapter;
 import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.model.Asistencia;
-import com.sinergiass.asistencia.model.Banda;
 import com.sinergiass.asistencia.model.Operador;
-import com.sinergiass.asistencia.util.DatabaseHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -174,8 +167,7 @@ public class MainActivity extends AppCompatActivity
 
                 if (response.isSuccessful()) {
 
-                    Toast.makeText(MainActivity.this, "Actualizado de Operadores Exitosa!", Toast.LENGTH_LONG).show();
-
+//                    Toast.makeText(MainActivity.this, "Actualizado de Operadores Exitosa!", Toast.LENGTH_LONG).show();
                     cargarOperadores();
 
                 } else {
@@ -184,7 +176,6 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<List<Operador>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Sin Conexión, intetar luego", Toast.LENGTH_LONG).show();
                 cargarOperadores();
             }
 
@@ -200,7 +191,7 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<List<Asistencia>> call, Response<List<Asistencia>> response) {
 
                 if (response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Registros de asistencias sincronizados" , Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "Registros de asistencias sincronizados" , Toast.LENGTH_LONG).show();
 
                     cargarAsistencias();
                 }
@@ -209,7 +200,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
 
-                Toast.makeText(MainActivity.this, "Sin conexion para Actualizar el server", Toast.LENGTH_LONG).show();
                 cargarAsistencias();
 
             }
@@ -259,7 +249,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<List<Operador>> call, Throwable t) {
 
-                Toast.makeText(MainActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
                 enviarAsistencias(asistencias);
             }
         });
@@ -294,7 +283,7 @@ public class MainActivity extends AppCompatActivity
                 progress.setVisibility(View.GONE);
                 header.setVisibility(View.VISIBLE);
                 layoutLista.setVisibility(View.VISIBLE);
-                Toast.makeText(MainActivity.this, "Datos Actualizados desde servidor con exito!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Sincronización Exitosa", Toast.LENGTH_LONG).show();
                 onResume();
                 }
 
@@ -304,7 +293,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Conexion Fallida al cargar asistencias", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Conexion Fallida, Intente más tarde", Toast.LENGTH_LONG).show();
 
                 progress.setVisibility(View.GONE);
                 header.setVisibility(View.VISIBLE);

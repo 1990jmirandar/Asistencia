@@ -6,8 +6,9 @@
     <color name="primary_dark_material_light">#2b3a42</color>
     <color name="primary_material_light">#3f5765</color>
     <color name="accent_material_light">#ff530d</color>
-    <color name="background_material_light">#bdd4de</color>
+    <color name="background_material_light">#e0f2f1</color>
     <color name="background_popup_material_light">#EFEFEF</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="row_alert_background">#ffb74d</color>
 </resources>

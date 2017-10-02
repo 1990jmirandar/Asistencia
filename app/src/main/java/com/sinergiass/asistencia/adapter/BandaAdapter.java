@@ -5,20 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sinergiass.asistencia.AsistenciaActivity;
 import com.sinergiass.asistencia.R;
 import com.sinergiass.asistencia.ReporteAsistenciaActivity;
 import com.sinergiass.asistencia.model.Asistencia;
-import com.sinergiass.asistencia.model.Banda;
 import com.sinergiass.asistencia.model.Operador;
 
 import java.text.SimpleDateFormat;
@@ -56,7 +53,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
 
             holder = new BandaHolder();
             holder.text1 = (TextView)row.findViewById(R.id.nombres);
-            holder.text2 = (TextView)row.findViewById(R.id.apellidos);
+//            holder.text2 = (TextView)row.findViewById(R.id.apellidos);
             holder.text3 = (TextView)row.findViewById(R.id.cedula);
             holder.revisarAsistencia = (Button) row.findViewById(R.id.revisarAsistencia);
             holder.registrar = (Button) row.findViewById(R.id.registrar);
@@ -77,19 +74,25 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
 
 
         if(asistencias.size()==0){
-            row.setBackgroundColor(Color.parseColor("#ff6347"));
+            row.setBackgroundColor(context.getResources().getColor(R.color.row_alert_background));
+            holder.registrar.setText("Marcar Entrada");
         }else{
-            row.setBackgroundColor(Color.parseColor("#bdd4de"));
+            row.setBackgroundColor(context.getResources().getColor(R.color.background_material_light));
         }
 
-        if(asistencias.size()==2){
+        if(asistencias.size()==1){
+            holder.registrar.setText("Marcar Salida");
+        }
+
+        if(asistencias.size()>=2){
             holder.registrar.setEnabled(false);
+            holder.registrar.setText("Marcar");
         }else{
             holder.registrar.setEnabled(true);
         }
 
-        holder.text1.setText(operador.getNombre());
-        holder.text2.setText(operador.getApellido());
+        holder.text1.setText(operador.getNombre() + " " + operador.getApellido());
+//        holder.text2.setText(operador.getApellido());
         holder.text3.setText(operador.getCedula());
         holder.revisarAsistencia.setOnClickListener(new View.OnClickListener() {
             @Override
