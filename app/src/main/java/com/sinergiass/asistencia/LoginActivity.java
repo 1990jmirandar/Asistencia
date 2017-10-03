@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.sinergiass.asistencia.controller.RestManager;
+import com.sinergiass.asistencia.facerecog.RecognitionActivity;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
@@ -32,6 +33,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,12 +77,22 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        operador.setOnClickListener(new View.OnClickListener(){
+//        operador.setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v){
+//                Intent intent = new Intent(LoginActivity.this, FaceRecognitionActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
+        FileHelper fh = new FileHelper();
+
+        if(!((new File(fh.DATA_PATH)).exists())) ;
+        operador.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                Intent intent = new Intent(LoginActivity.this, FaceRecognitionActivity.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), RecognitionActivity.class));
             }
         });
     }

@@ -7,10 +7,8 @@ package com.sinergiass.asistencia.model.helper;
 public class Constants {
 
     public static final class HTTP{
-        public static final String BASE_URL = "http://192.168.0.104:8000/";
+        public static final String BASE_URL = "http://192.168.0.147:8000/";
 
     }
-
-
 
 }

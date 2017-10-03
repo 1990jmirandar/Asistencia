@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sinergiass.asistencia.controller.RestManager;
+import com.sinergiass.asistencia.facerecog.AddPersonPreviewActivity;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Operador;
 import com.sinergiass.asistencia.util.DatabaseHelper;
@@ -40,7 +41,7 @@ public class OperadorActivity extends AppCompatActivity {
     Operador operador;
     ProgressBar progressBar;
     private RestManager mManager;
-    String faceEncoding;
+    boolean fotosCapturadas;
 
     public int nextLocalId;
 
@@ -68,9 +69,17 @@ public class OperadorActivity extends AppCompatActivity {
         btnFace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OperadorActivity.this, FaceRecognitionActivity.class);
-                intent.putExtra("flag_value", FaceRecognitionActivity.FLAG_CAPTURAR_DATOS);
+//                Intent intent = new Intent(OperadorActivity.this, FaceRecognitionActivity.class);
+//                intent.putExtra("flag_value", FaceRecognitionActivity.FLAG_CAPTURAR_DATOS);
+//                startActivityForResult(intent, 0);
+
+                Intent intent = new Intent(OperadorActivity.this, AddPersonPreviewActivity.class);
+                intent.putExtra("Folder", "Training");
+                intent.putExtra("Name", nombres.getText().toString().trim());
+                intent.putExtra("Method", AddPersonPreviewActivity.TIME);
                 startActivityForResult(intent, 0);
+
+
             }
         });
 
@@ -84,11 +93,11 @@ public class OperadorActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE);
                     final Intent intent = new Intent(OperadorActivity.this, MainActivity.class);
                     operador = new Operador();
-                    operador.setNombre(nombres.getText().toString());
-                    operador.setApellido(apellidos.getText().toString());
+                    operador.setNombre(nombres.getText().toString().trim());
+                    operador.setApellido(apellidos.getText().toString().trim());
                     operador.setCedula(cedula.getText().toString());
                     operador.setTelefono(telefono.getText().toString());
-                    operador.setEncodedFaceData(faceEncoding);
+                    operador.setEncodedFaceData("");
                     operador.setEstado(0);
 
                     operador.setIdOperador(nextLocalId);
@@ -132,8 +141,7 @@ public class OperadorActivity extends AppCompatActivity {
 
                 }
 
-//                startActivity(intent);
-//                Toast.makeText(OperadorActivity.this, "Guardado Exitoso!", Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -142,7 +150,7 @@ public class OperadorActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == RESULT_OK) {
-            faceEncoding = data.getStringExtra("faceEncoding");
+            fotosCapturadas = data.getBooleanExtra("fotosCapturadas", false);
         }
     }
 
@@ -160,8 +168,8 @@ public class OperadorActivity extends AppCompatActivity {
         } else if (telefono.getText().toString().isEmpty()){
             Toast.makeText(OperadorActivity.this, "Ingrese el teléfono", Toast.LENGTH_LONG).show();
             return false;
-        } else if (faceEncoding == null || faceEncoding.isEmpty()) {
-            Toast.makeText(OperadorActivity.this, "Tome la foto del operador", Toast.LENGTH_LONG).show();
+        } else if (!fotosCapturadas) {
+            Toast.makeText(OperadorActivity.this, "Tome al menos 10 fotos", Toast.LENGTH_LONG).show();
             return false;
         } else {
             return true;

@@ -100,8 +100,11 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ReporteGeneralActivity"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".FaceRecognitionActivity"
-            android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".facerecog.AddPersonPreviewActivity"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".facerecog.RecognitionActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
