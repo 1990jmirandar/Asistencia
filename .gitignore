@@ -58,6 +58,8 @@ app/\.externalNativeBuild/ndkBuild/release/arm64-v8a/
 
 app/\.externalNativeBuild/ndkBuild/release/x86/
 
+app/*
+
 build/intermediates/dex-cache/cache\.xml
 
 app/build\.gradle
