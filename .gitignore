@@ -111,3 +111,5 @@ app/\.externalNativeBuild/cmake/debug/mips64/
 app/\.externalNativeBuild/cmake/debug/arm64-v8a/
 
 app/\.externalNativeBuild/cmake/release/x86_64/
+
+\.idea/
