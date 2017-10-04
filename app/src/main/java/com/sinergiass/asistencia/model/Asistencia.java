@@ -3,8 +3,12 @@ package com.sinergiass.asistencia.model;
 import com.google.gson.annotations.Expose;
 import com.orm.SugarRecord;
 
+import org.opencv.core.Mat;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import cz.msebera.android.httpclient.entity.SerializableEntity;
 
@@ -32,9 +36,7 @@ public class Asistencia extends SugarRecord implements Serializable {
     @Expose
     public String cedulaOperador;
 
-    public Asistencia() {
-
-    }
+    public Asistencia() {}
 
     public Asistencia(int idOperador, String latitud, String longitud, String fecha, String hora, boolean isEntrada) {
         this.idOperador = idOperador;

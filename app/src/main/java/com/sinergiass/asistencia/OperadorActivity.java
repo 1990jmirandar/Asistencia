@@ -22,6 +22,9 @@ import com.sinergiass.asistencia.model.Operador;
 import com.sinergiass.asistencia.util.DatabaseHelper;
 import com.sinergiass.asistencia.ws.FaceDetectorWS;
 
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,9 +44,12 @@ public class OperadorActivity extends AppCompatActivity {
     Operador operador;
     ProgressBar progressBar;
     private RestManager mManager;
-    boolean fotosCapturadas;
+    boolean fotosCapturadasConExito;
+
+    public static final int NUMBER_OF_PICTURES = 10;
 
     public int nextLocalId;
+    List<Mat> fotosMat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,8 @@ public class OperadorActivity extends AppCompatActivity {
 
         mManager = new RestManager();
 
+        fotosMat = new ArrayList<>();
+
         List<Operador> ops = Operador.listAll(Operador.class, "id_Operador");
         if (ops.size() != 0){
             nextLocalId = ops.get(0).getIdOperador() - 1;
@@ -74,9 +82,8 @@ public class OperadorActivity extends AppCompatActivity {
 //                startActivityForResult(intent, 0);
 
                 Intent intent = new Intent(OperadorActivity.this, AddPersonPreviewActivity.class);
-                intent.putExtra("Folder", "Training");
-                intent.putExtra("Name", nombres.getText().toString().trim());
                 intent.putExtra("Method", AddPersonPreviewActivity.TIME);
+                intent.putExtra("numberOfPictures", NUMBER_OF_PICTURES);
                 startActivityForResult(intent, 0);
 
 
@@ -98,7 +105,11 @@ public class OperadorActivity extends AppCompatActivity {
                     operador.setCedula(cedula.getText().toString());
                     operador.setTelefono(telefono.getText().toString());
                     operador.setEncodedFaceData("");
+
+                    operador.addFotos(fotosMat);
+
                     operador.setEstado(0);
+
 
                     operador.setIdOperador(nextLocalId);
                     nextLocalId -= 1;
@@ -150,7 +161,17 @@ public class OperadorActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == RESULT_OK) {
-            fotosCapturadas = data.getBooleanExtra("fotosCapturadas", false);
+            fotosCapturadasConExito = data.getBooleanExtra("exitoso", false);
+            if (fotosCapturadasConExito){
+                for (int i = 0; i < 10; i++){
+                    byte[] faceBytes = data.getByteArrayExtra("foto"+i);
+
+                    Mat faceMat = new Mat(faceBytes.length, 1, CvType.CV_8UC1);
+                    faceMat.put(0, 0, faceBytes);
+
+                    fotosMat.add(i, faceMat);
+                }
+            }
         }
     }
 
@@ -168,7 +189,7 @@ public class OperadorActivity extends AppCompatActivity {
         } else if (telefono.getText().toString().isEmpty()){
             Toast.makeText(OperadorActivity.this, "Ingrese el teléfono", Toast.LENGTH_LONG).show();
             return false;
-        } else if (!fotosCapturadas) {
+        } else if (!fotosCapturadasConExito) {
             Toast.makeText(OperadorActivity.this, "Tome al menos 10 fotos", Toast.LENGTH_LONG).show();
             return false;
         } else {

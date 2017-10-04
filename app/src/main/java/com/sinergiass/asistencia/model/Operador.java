@@ -12,6 +12,7 @@ import org.opencv.core.Mat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Julio Alfredo on 11/9/2017.
@@ -35,7 +36,11 @@ public class Operador extends SugarRecord implements Serializable{
 
     private int estado = 1;
 
+    // Fotos recortadas centradas en la cara, de tipo OpenCV Mat
+    private List<Mat> fotosMat;
+
     public Operador() {
+        this.fotosMat = new ArrayList<>();
     }
 
     public Operador(int idOperador, String nombre, String apellido, String cedula, String telefono, String encodedFaceData){
@@ -45,6 +50,8 @@ public class Operador extends SugarRecord implements Serializable{
         this.cedula = cedula;
         this.telefono = telefono;
         this.encodedFaceData = encodedFaceData;
+
+        this.fotosMat = new ArrayList<>();
     }
 
     public int getEstado() {
@@ -119,4 +126,10 @@ public class Operador extends SugarRecord implements Serializable{
 
         return faceMat;
     }
+
+    public void addFotos(List<Mat> fotos ){
+        this.fotosMat = fotos;
+    }
+
+    public List<Mat> fotos (){ return this.fotosMat; }
 }

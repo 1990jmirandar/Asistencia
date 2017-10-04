@@ -32,10 +32,13 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.sinergiass.asistencia.R;
+import com.sinergiass.asistencia.model.Operador;
+
 import ch.zhaw.facerecognitionlibrary.Helpers.CustomCameraView;
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import ch.zhaw.facerecognitionlibrary.Helpers.MatName;
@@ -53,7 +56,7 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
     private FileHelper fh;
     private String folder;
     private String subfolder;
-    private String name;
+    private String nombre;
     private int total;
     private int numberOfPictures;
     private int method;
@@ -62,6 +65,10 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
     private boolean front_camera;
     private boolean night_portrait;
     private int exposure_compensation;
+
+    private Operador mOperador;
+
+    private List<byte[]> fotosEnByteArray;
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -74,13 +81,17 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_person_preview);
 
-        Intent intent = getIntent();
-        folder = intent.getStringExtra("Folder");
-        if(folder.equals("Test")){
-            subfolder = intent.getStringExtra("Subfolder");
-        }
-        name = intent.getStringExtra("Name");
-        method = intent.getIntExtra("Method", 0);
+        Bundle extras = getIntent().getExtras();
+
+        fotosEnByteArray = new ArrayList<>();
+
+//        folder = extras.getString("Folder");
+//        if(folder.equals("Test")){
+//            subfolder = intent.getStringExtra("Subfolder");
+//        }
+
+//        method = intent.getIntExtra("Method", 0);
+        method = AddPersonPreviewActivity.TIME;
         capturePressed = false;
         if(method == MANUALLY){
             btn_Capture = (Button)findViewById(R.id.btn_Capture);
@@ -97,18 +108,23 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
         total = 0;
         lastTime = new Date().getTime();
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        timerDiff = Integer.valueOf(sharedPrefs.getString("key_timerDiff", "500"));
+//        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        timerDiff = Integer.valueOf(sharedPrefs.getString("key_timerDiff", "500"));
+        timerDiff = 500;
 
         mAddPersonView = (CustomCameraView) findViewById(R.id.AddPersonPreview);
         // Use camera which is selected in settings
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        front_camera = sharedPref.getBoolean("key_front_camera", true);
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+//        front_camera = sharedPref.getBoolean("key_front_camera", true);
+        front_camera = true;
 
-        numberOfPictures = Integer.valueOf(sharedPref.getString("key_numberOfPictures", "10"));
+//        numberOfPictures = Integer.valueOf(sharedPref.getString("key_numberOfPictures", "10"));
+        numberOfPictures = extras.getInt("numberOfPictures");
 
-        night_portrait = sharedPref.getBoolean("key_night_portrait", false);
-        exposure_compensation = Integer.valueOf(sharedPref.getString("key_exposure_compensation", "50"));
+//        night_portrait = sharedPref.getBoolean("key_night_portrait", false);
+        night_portrait = false;
+//        exposure_compensation = Integer.valueOf(sharedPref.getString("key_exposure_compensation", "50"));
+        exposure_compensation = 50;
 
         if (front_camera){
             mAddPersonView.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_FRONT);
@@ -118,9 +134,20 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
         mAddPersonView.setVisibility(SurfaceView.VISIBLE);
         mAddPersonView.setCvCameraViewListener(this);
 
-        int maxCameraViewWidth = Integer.parseInt(sharedPref.getString("key_maximum_camera_view_width", "640"));
-        int maxCameraViewHeight = Integer.parseInt(sharedPref.getString("key_maximum_camera_view_height", "480"));
+//        int maxCameraViewWidth = Integer.parseInt(sharedPref.getString("key_maximum_camera_view_width", "640"));
+//        int maxCameraViewHeight = Integer.parseInt(sharedPref.getString("key_maximum_camera_view_height", "480"));
+        int maxCameraViewWidth = 640;
+        int maxCameraViewHeight = 480;
         mAddPersonView.setMaxFrameSize(maxCameraViewWidth, maxCameraViewHeight);
+
+//        // Operador a ser creado
+//        nombre = extras.getString("nombre");
+//        mOperador = new Operador(extras.getString("nombre"),
+//                extras.getString("apellido"),
+//                extras.getString());
+//
+//        mOperador.setNombre(extras.getString("nombre"));
+//        mOperador.setApellido();
     }
 
     @Override
@@ -163,16 +190,22 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
                     if((faces != null) && (faces.length == 1)){
                         faces = MatOperation.rotateFaces(imgRgba, faces, ppF.getAngleForRecognition());
                         if(((method == MANUALLY) && capturePressed) || (method == TIME)){
-                            MatName m = new MatName(name + "_" + total, img);
-                            if (folder.equals("Test")) {
-                                String wholeFolderPath = fh.TEST_PATH + name + "/" + subfolder;
-                                new File(wholeFolderPath).mkdirs();
-                                fh.saveMatToImage(m, wholeFolderPath + "/");
-                            } else {
-                                String wholeFolderPath = fh.TRAINING_PATH + name;
-                                new File(wholeFolderPath).mkdirs();
-                                fh.saveMatToImage(m, wholeFolderPath + "/");
-                            }
+
+//                            MatName m = new MatName(nombre + "_" + total, img);
+//                            if (folder.equals("Test")) {
+//                                String wholeFolderPath = fh.TEST_PATH + nombre + "/" + subfolder;
+//                                new File(wholeFolderPath).mkdirs();
+//                                fh.saveMatToImage(m, wholeFolderPath + "/");
+//                            } else {
+//                                String wholeFolderPath = fh.TRAINING_PATH + nombre;
+//                                new File(wholeFolderPath).mkdirs();
+//                                fh.saveMatToImage(m, wholeFolderPath + "/");
+//                            }
+
+                            byte[] data = new byte[(int)(img.total()*img.channels())];
+                            img.get(0, 0, data);
+
+                            fotosEnByteArray.add(data);
 
                             for(int i = 0; i<faces.length; i++){
                                 MatOperation.drawRectangleAndLabelOnPreview(imgRgba, faces[i], String.valueOf(total), front_camera);
@@ -182,13 +215,14 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
 
                             // Stop after numberOfPictures (settings option)
                             if(total >= numberOfPictures){
-//                                Intent intent = new Intent(getApplicationContext(), AddPersonActivity.class);
-//                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                startActivity(intent);
-                                boolean fotosCapturadas = true;
 
                                 Intent returnIntent = new Intent();
-                                returnIntent.putExtra("fotosCapturadas", fotosCapturadas);
+
+                                for (int i = 0; i < fotosEnByteArray.size() /*max 10*/; i++){
+                                    returnIntent.putExtra("foto"+i, fotosEnByteArray.get(i));
+                                }
+
+                                returnIntent.putExtra("exitoso", true);
                                 setResult(Activity.RESULT_OK,returnIntent);
                                 finish();
                             }

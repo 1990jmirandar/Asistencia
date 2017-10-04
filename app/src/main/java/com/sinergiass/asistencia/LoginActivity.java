@@ -21,6 +21,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.facerecog.RecognitionActivity;
+import com.sinergiass.asistencia.facerecog.Training;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
@@ -68,6 +69,10 @@ public class LoginActivity extends AppCompatActivity {
 
         new DownloadDataTask().execute();
 
+        Training.TrainTask trainTask = new Training.TrainTask(getApplicationContext());
+        trainTask.execute();
+
+
         admin.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -76,15 +81,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-//        operador.setOnClickListener(new View.OnClickListener(){
-//
-//            @Override
-//            public void onClick(View v){
-//                Intent intent = new Intent(LoginActivity.this, FaceRecognitionActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
         FileHelper fh = new FileHelper();
 
@@ -134,13 +130,6 @@ public class LoginActivity extends AppCompatActivity {
                     List<Admin> listaAdmin = response.body();
 
                     //Log.d("El numero de la lista", ""+ listaAdmin.size());
-//                    for(int i=0; i<listaAdmin.size();i++){
-//                        final Admin admin1 = new Admin(listaAdmin.get(i).getUsuario(),
-//                                listaAdmin.get(i).getPassword());
-////
-//                        //Log.d("el item", ""+admin1.getUsuario());
-//                        admin1.save();
-//                    }
 
                     for (Admin admin : listaAdmin){admin.save();}
 
