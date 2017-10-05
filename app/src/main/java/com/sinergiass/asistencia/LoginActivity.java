@@ -27,6 +27,8 @@ import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
 import com.sinergiass.asistencia.util.DatabaseHelper;
 
+import org.opencv.android.OpenCVLoader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -50,8 +52,14 @@ public class LoginActivity extends AppCompatActivity {
     private static final boolean IMPORT_ASSETS_DB = false; // true para cargar la DB desde assets, false para cargar desde el Servidor
     private List<Operador> mOperadores;
 
+    private Training.TrainTask trainTask;
 
 
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            // Handle initialization error
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +75,12 @@ public class LoginActivity extends AppCompatActivity {
 
         mOperadores = new ArrayList<>();
 
+        operador.setEnabled(false);
+
         new DownloadDataTask().execute();
 
-        Training.TrainTask trainTask = new Training.TrainTask(getApplicationContext());
-        trainTask.execute();
+        trainTask = new Training.TrainTask(getApplicationContext(), trainTaskCallback);
+
 
 
         admin.setOnClickListener(new View.OnClickListener(){
@@ -115,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             layoutP.setVisibility(View.GONE);
             layout.setVisibility(View.VISIBLE);
 
-
+            trainTask.execute();
         }
     }
 
@@ -143,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Admin>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar admins", Toast.LENGTH_LONG).show();
+//                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar admins", Toast.LENGTH_LONG).show();
                 cargarOperadores();
             }
         });
@@ -178,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Operador>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
+//                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
 
                 cargarAsistencias();
 
@@ -221,7 +231,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar Asistencias", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "No se pudo sincronizar con el Servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -231,4 +241,11 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, AsistenciaActivity.class);
         startActivity(intent);
     }
+
+    private Training.TrainTask.Callback trainTaskCallback = new Training.TrainTask.Callback() {
+        @Override
+        public void onTrainTaskComplete(boolean result) {
+            if (result) operador.setEnabled(true);
+        }
+    };
 }

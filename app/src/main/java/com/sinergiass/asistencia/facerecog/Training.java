@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.sinergiass.asistencia.model.Operador;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -27,33 +28,37 @@ import ch.zhaw.facerecognitionlibrary.Recognition.RecognitionFactory;
 public class Training {
     private static final String TAG = "Training";
 
-
-
-    public static class TrainTask extends AsyncTask<Void, Boo, Boolean>{
+    public static class TrainTask extends AsyncTask<Void, Void, Boolean>{
 
         private Context context;
+        private final Callback callback;
 
-        public TrainTask(Context context) {
-            this.context = context;
-        }
+        public TrainTask(Context context, Callback callback){
+                this.context = context;
+                this.callback = callback;
+            }
 
-        @Override
+            public interface Callback {
+                void onTrainTaskComplete(boolean result);
+            }
+
+            @Override
             protected Boolean doInBackground(Void... voids) {
 
             List<Operador> operadores = Operador.listAll(Operador.class);
-            Context appContext = context;
 
-            PreProcessorFactory ppF = new PreProcessorFactory(appContext);
-            PreferencesHelper preferencesHelper = new PreferencesHelper(appContext);
+            PreProcessorFactory ppF = new PreProcessorFactory(context);
+            PreferencesHelper preferencesHelper = new PreferencesHelper(context);
+            preferencesHelper.getTensorFlowModelFile();
 //            String algorithm = preferencesHelper.getClassificationMethod();
-            String algorithm = appContext.getResources().getString(ch.zhaw.facerecognitionlibrary.R.string.tensorflow);
+            String algorithm = context.getResources().getString(ch.zhaw.facerecognitionlibrary.R.string.imageReshaping);
 
             FileHelper fileHelper = new FileHelper();
             fileHelper.createDataFolderIfNotExsiting();
 //            final File[] persons = fileHelper.getTrainingList();
 //            if (persons.length > 0) {
             if (operadores.size() > 0) {
-                Recognition rec = RecognitionFactory.getRecognitionAlgorithm(appContext, Recognition.TRAINING, algorithm);
+                Recognition rec = RecognitionFactory.getRecognitionAlgorithm(context, Recognition.TRAINING, algorithm);
                 for (Operador op : operadores) {
 //                    if (person.isDirectory()){
                     if (op.fotos().size() > 0){
@@ -63,8 +68,8 @@ public class Training {
                         for (Mat imgRgb : op.fotos()) {
 //                            if (FileHelper.isFileAnImage(file)){
 //                                Mat imgRgb = Imgcodecs.imread(file.getAbsolutePath());
-                                Imgproc.cvtColor(imgRgb, imgRgb, Imgproc.COLOR_BGRA2RGBA);
-                                Mat processedImage = new Mat();
+//                                Imgproc.cvtColor(imgRgb, imgRgb, Imgproc.COLOR_BGRA2RGBA);
+                                Mat processedImage = new Mat(160, 160, CvType.CV_8UC4);
                                 imgRgb.copyTo(processedImage);
                                 List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
                                 if (images == null || images.size() > 1) {
@@ -83,7 +88,8 @@ public class Training {
 //                                MatName m = new MatName("processedImage", processedImage);
 //                                fileHelper.saveMatToImage(m, FileHelper.DATA_PATH);
 
-                                rec.addImage(processedImage, op.getNombre(), false);
+//                                rec.addImage(processedImage, op.getNombre(), false);
+                                rec.addImage(imgRgb, op.getNombre(), false);
 
 //                                      fileHelper.saveCroppedImage(imgRgb, ppF, file, name, counter);
 
@@ -102,7 +108,7 @@ public class Training {
                         }
                     }
                 }
-//                final Intent intent = new Intent(appContext, MainActivity.class);
+//                final Intent intent = new Intent(context, MainActivity.class);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 if (rec.train()) {
 //                    intent.putExtra("training", "Training successful");
@@ -127,10 +133,11 @@ public class Training {
 
         @Override
         protected void onPostExecute(Boolean result) {
+            callback.onTrainTaskComplete(result);
             if (result){
-                Toast.makeText(context, "Modulo de Reconocimiento entrenado con Exito!", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Modulo de Reconocimiento entrenado con Exito!", Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(context, "Error al entrenar el Modulo de Reconocimiento", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Error al entrenar el Modulo de Reconocimiento", Toast.LENGTH_SHORT).show();
             }
 
         }

@@ -9,6 +9,7 @@ import com.sinergiass.asistencia.model.Asistencia;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,11 +38,14 @@ public class Operador extends SugarRecord implements Serializable{
     private int estado = 1;
 
     // Fotos recortadas centradas en la cara, de tipo OpenCV Mat
-    private List<Mat> fotosMat;
 
-    public Operador() {
-        this.fotosMat = new ArrayList<>();
-    }
+    private String foto1;
+    private String foto2;
+    private String foto3;
+    private String foto4;
+    private String foto5;
+
+    public Operador() {}
 
     public Operador(int idOperador, String nombre, String apellido, String cedula, String telefono, String encodedFaceData){
         this.idOperador = idOperador;
@@ -50,8 +54,6 @@ public class Operador extends SugarRecord implements Serializable{
         this.cedula = cedula;
         this.telefono = telefono;
         this.encodedFaceData = encodedFaceData;
-
-        this.fotosMat = new ArrayList<>();
     }
 
     public int getEstado() {
@@ -127,9 +129,46 @@ public class Operador extends SugarRecord implements Serializable{
         return faceMat;
     }
 
-    public void addFotos(List<Mat> fotos ){
-        this.fotosMat = fotos;
+    public void addFotos(List<String> encodings ){
+        foto1 = encodings.get(0);
+        foto2 = encodings.get(1);
+        foto3 = encodings.get(2);
+        foto4 = encodings.get(3);
+        foto5 = encodings.get(4);
     }
 
-    public List<Mat> fotos (){ return this.fotosMat; }
+    public List<Mat> fotos (){
+
+        List<Mat> l = new ArrayList<>();
+
+        // Decodificar el String en Base64 para obtener el Array de Bytes que representa la foto de la cara
+        byte[] fotoBytes1 = Base64.decode(this.foto1, Base64.DEFAULT);
+        byte[] fotoBytes2 = Base64.decode(this.foto2, Base64.DEFAULT);
+        byte[] fotoBytes3 = Base64.decode(this.foto3, Base64.DEFAULT);
+        byte[] fotoBytes4 = Base64.decode(this.foto4, Base64.DEFAULT);
+        byte[] fotoBytes5 = Base64.decode(this.foto5, Base64.DEFAULT);
+
+        // Instanciar una nueva Mat (matriz) del tamanio y tipo correcto
+        Mat mat1 = new Mat(160, 160, CvType.CV_8UC4);
+        Mat mat2 = new Mat(160, 160, CvType.CV_8UC4);
+        Mat mat3 = new Mat(160, 160, CvType.CV_8UC4);
+        Mat mat4 = new Mat(160, 160, CvType.CV_8UC4);
+        Mat mat5 = new Mat(160, 160, CvType.CV_8UC4);
+
+        // Llenar la Mat con los datos del Byte Array
+        mat1.put(0, 0, fotoBytes1);
+        mat2.put(0, 0, fotoBytes2);
+        mat3.put(0, 0, fotoBytes3);
+        mat4.put(0, 0, fotoBytes4);
+        mat5.put(0, 0, fotoBytes5);
+
+        l.add(mat1);
+        l.add(mat2);
+        l.add(mat3);
+        l.add(mat4);
+        l.add(mat5);
+
+        return l;
+
+    }
 }

@@ -46,10 +46,10 @@ public class OperadorActivity extends AppCompatActivity {
     private RestManager mManager;
     boolean fotosCapturadasConExito;
 
-    public static final int NUMBER_OF_PICTURES = 10;
+    public static final int NUMBER_OF_PICTURES = 5;
 
     public int nextLocalId;
-    List<Mat> fotosMat;
+    List<String> fotosEncondings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class OperadorActivity extends AppCompatActivity {
 
         mManager = new RestManager();
 
-        fotosMat = new ArrayList<>();
+        fotosEncondings = new ArrayList<>();
 
         List<Operador> ops = Operador.listAll(Operador.class, "id_Operador");
         if (ops.size() != 0){
@@ -106,7 +106,7 @@ public class OperadorActivity extends AppCompatActivity {
                     operador.setTelefono(telefono.getText().toString());
                     operador.setEncodedFaceData("");
 
-                    operador.addFotos(fotosMat);
+                    operador.addFotos(fotosEncondings);
 
                     operador.setEstado(0);
 
@@ -163,13 +163,15 @@ public class OperadorActivity extends AppCompatActivity {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             fotosCapturadasConExito = data.getBooleanExtra("exitoso", false);
             if (fotosCapturadasConExito){
-                for (int i = 0; i < 10; i++){
+                for (int i = 0; i < NUMBER_OF_PICTURES; i++){
                     byte[] faceBytes = data.getByteArrayExtra("foto"+i);
 
-                    Mat faceMat = new Mat(faceBytes.length, 1, CvType.CV_8UC1);
-                    faceMat.put(0, 0, faceBytes);
+                    fotosEncondings.add(Base64.encodeToString(faceBytes, Base64.DEFAULT));
 
-                    fotosMat.add(i, faceMat);
+//                    Mat faceMat = new Mat(faceBytes.length, 1, CvType.CV_8UC1);
+//                    faceMat.put(0, 0, faceBytes);
+//
+//                    fotosMat.add(i, faceMat);
                 }
             }
         }
