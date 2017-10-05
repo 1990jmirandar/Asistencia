@@ -61,3 +61,5 @@ app/\.externalNativeBuild/ndkBuild/release/x86/
 build/intermediates/dex-cache/cache\.xml
 
 app/build\.gradle
+
+\.idea/

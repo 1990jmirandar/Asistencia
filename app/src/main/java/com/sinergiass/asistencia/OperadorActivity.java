@@ -65,6 +65,8 @@ public class OperadorActivity extends AppCompatActivity {
             nextLocalId = ops.get(0).getIdOperador() - 1;
         }else{ nextLocalId = 0;}
 
+        if (nextLocalId > 0) nextLocalId = 0;
+
         btnFace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
