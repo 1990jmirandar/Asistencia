@@ -17,7 +17,7 @@ import com.sinergiass.asistencia.model.Operador;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
+//import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

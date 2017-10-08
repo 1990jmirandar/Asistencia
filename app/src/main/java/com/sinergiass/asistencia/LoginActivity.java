@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -71,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         layout = (LinearLayout) findViewById(R.id.layout_login) ;
         layoutP = (LinearLayout) findViewById(R.id.layout_progress);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         mManager = new RestManager();
 
         mOperadores = new ArrayList<>();

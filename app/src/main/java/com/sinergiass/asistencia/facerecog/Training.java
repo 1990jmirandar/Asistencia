@@ -51,7 +51,7 @@ public class Training {
             PreferencesHelper preferencesHelper = new PreferencesHelper(context);
             preferencesHelper.getTensorFlowModelFile();
 //            String algorithm = preferencesHelper.getClassificationMethod();
-            String algorithm = context.getResources().getString(ch.zhaw.facerecognitionlibrary.R.string.imageReshaping);
+            String algorithm = context.getResources().getString(ch.zhaw.facerecognitionlibrary.R.string.tensorflow);
 
             FileHelper fileHelper = new FileHelper();
             fileHelper.createDataFolderIfNotExsiting();
