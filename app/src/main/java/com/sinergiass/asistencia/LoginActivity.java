@@ -171,7 +171,6 @@ public class LoginActivity extends AppCompatActivity {
                     Operador.deleteAll(Operador.class,"estado = ?","1");
                     mOperadores = response.body();
                     Log.d("Size Lista Operadores", ""+ mOperadores.size());
-//
 
                     for (Operador operador : mOperadores){
                         operador.save();
@@ -183,9 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                     int sc = response.code();
                     switch (sc){}
                 }
-
                 cargarAsistencias();
-
             }
 
             @Override

@@ -89,7 +89,7 @@ public class Training {
 //                                fileHelper.saveMatToImage(m, FileHelper.DATA_PATH);
 
 //                                rec.addImage(processedImage, op.getNombre(), false);
-                                rec.addImage(imgRgb, op.getNombre(), false);
+                                rec.addImage(imgRgb, Integer.toString(op.getIdOperador()), false);
 
 //                                      fileHelper.saveCroppedImage(imgRgb, ppF, file, name, counter);
 

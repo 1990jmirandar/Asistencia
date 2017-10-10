@@ -222,20 +222,19 @@ public class MainActivity extends AppCompatActivity
                     }
                     else{
                         Operador.deleteAll(Operador.class);
-                        for(int i=0; i<listaOp.size();i++){
-                            final Operador operador1 = new Operador(listaOp.get(i).getIdOperador(),listaOp.get(i).getNombre(),
-                                    listaOp.get(i).getApellido(),listaOp.get(i).getCedula(),listaOp.get(i).getTelefono(),
-                                    listaOp.get(i).getEncodedFaceData());
-                            Log.d("operador "+i + ":",""+operador1.getNombre()+","+operador1.getIdOperador());
+
+                        for (Operador op : listaOp){
 
                             for (Asistencia a : asistencias){
-                                if (a.getIdOperador() <= 0 && a.cedulaOperador.equals(operador1.getCedula())){
-                                    a.setIdOperador(operador1.getIdOperador());
+                                if (a.getIdOperador() <= 0 && a.cedulaOperador.equals(op.getCedula())){
+                                    a.setIdOperador(op.getIdOperador());
                                     a.save();
                                 }
                             }
 
-                            operador1.save();
+                            op.save();
+
+                            Log.d("Registrado: ",""+op.getNombre()+","+op.getIdOperador());
                         }
 
                     }

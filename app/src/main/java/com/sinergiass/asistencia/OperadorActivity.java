@@ -104,7 +104,6 @@ public class OperadorActivity extends AppCompatActivity {
                     operador.setApellido(apellidos.getText().toString().trim());
                     operador.setCedula(cedula.getText().toString());
                     operador.setTelefono(telefono.getText().toString());
-                    operador.setEncodedFaceData("");
 
                     operador.addFotos(fotosEncondings);
 

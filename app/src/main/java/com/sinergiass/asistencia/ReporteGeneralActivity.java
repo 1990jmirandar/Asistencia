@@ -90,7 +90,7 @@ public class ReporteGeneralActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE);
                     btnEnviarReporte.setEnabled(false);
                     String cadena = txtCorreos.getText().toString();
-                    String[] correos = cadena.split(";");
+                    String[] correos = cadena.trim().split(";");
 
 
                     String fechaInicio = txtFechaInicio.getText().toString();
@@ -159,7 +159,7 @@ public class ReporteGeneralActivity extends AppCompatActivity {
 
 //    public void enviarData(String fechaInicio, String fechaFin, String[] destinatarios){
         public void enviarData(Reporte reporte){
-    Call<Void> listCall = mRestManager.getOperadorService().enviarReporte(reporte);
+    Call<Void> listCall = mRestManager.getReporteService().enviarReporte(reporte);
         listCall.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

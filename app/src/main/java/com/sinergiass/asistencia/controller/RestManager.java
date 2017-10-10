@@ -1,6 +1,7 @@
 package com.sinergiass.asistencia.controller;
 
 import com.sinergiass.asistencia.model.callback.OperadorService;
+import com.sinergiass.asistencia.model.callback.ReporteService;
 import com.sinergiass.asistencia.model.helper.Constants;
 import com.sinergiass.asistencia.util.HttpUtils;
 
@@ -17,10 +18,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestManager {
 
     private OperadorService mOperadorService;
+    private ReporteService mReporteService;
 
     public OperadorService getOperadorService(){
 
         if(mOperadorService ==null){
+
+             Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.HTTP.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            mOperadorService = retrofit.create(OperadorService.class);
+        }
+
+        return mOperadorService;
+
+    }
+
+    public ReporteService getReporteService(){
+
+
+        if(mReporteService ==null){
 
             OkHttpClient client = (new OkHttpClient()).newBuilder()
                     .connectTimeout(10, TimeUnit.SECONDS)
@@ -32,25 +50,10 @@ public class RestManager {
                     .client(client)
                     .build();
 
-            mOperadorService = retrofit.create(OperadorService.class);
+            mReporteService = retrofit.create(ReporteService.class);
         }
 
-        return mOperadorService;
-
-    }
-
-    public OperadorService postOperadorService(){
-
-        if(mOperadorService ==null){
-            Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.HTTP.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-
-            mOperadorService = retrofit.create(OperadorService.class);
-        }
-
-        return mOperadorService;
+        return mReporteService;
 
     }
 

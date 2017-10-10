@@ -33,27 +33,35 @@ public class Operador extends SugarRecord implements Serializable{
     @Expose
     private String telefono;
     @Expose
-    private String encodedFaceData;
+    private String foto1;
+    @Expose
+    private String foto2;
+    @Expose
+    private String foto3;
+    @Expose
+    private String foto4;
+    @Expose
+    private String foto5;
 
     private int estado = 1;
 
     // Fotos recortadas centradas en la cara, de tipo OpenCV Mat
 
-    private String foto1;
-    private String foto2;
-    private String foto3;
-    private String foto4;
-    private String foto5;
 
     public Operador() {}
 
-    public Operador(int idOperador, String nombre, String apellido, String cedula, String telefono, String encodedFaceData){
+    public Operador(int idOperador, String nombre, String apellido, String cedula, String telefono,
+                    String foto1, String foto2, String foto3, String foto4, String foto5){
         this.idOperador = idOperador;
         this.nombre = nombre;
         this.apellido = apellido;
         this.cedula = cedula;
         this.telefono = telefono;
-        this.encodedFaceData = encodedFaceData;
+        this.foto1 = foto1;
+        this.foto2 = foto2;
+        this.foto3 = foto3;
+        this.foto4 = foto4;
+        this.foto5 = foto5;
     }
 
     public int getEstado() {
@@ -96,12 +104,6 @@ public class Operador extends SugarRecord implements Serializable{
         this.telefono = telefono;
     }
 
-    public String getEncodedFaceData () {return this.encodedFaceData;}
-
-    public void setEncodedFaceData(String encodedFaceData) {
-        this.encodedFaceData = encodedFaceData;
-    }
-
     public int getIdOperador() {
         return idOperador;
     }
@@ -109,25 +111,64 @@ public class Operador extends SugarRecord implements Serializable{
         this.idOperador = idOperador;
     }
 
+    public String getFoto1() {
+        return foto1;
+    }
+
+    public void setFoto1(String foto1) {
+        this.foto1 = foto1;
+    }
+
+    public String getFoto2() {
+        return foto2;
+    }
+
+    public void setFoto2(String foto2) {
+        this.foto2 = foto2;
+    }
+
+    public String getFoto3() {
+        return foto3;
+    }
+
+    public void setFoto3(String foto3) {
+        this.foto3 = foto3;
+    }
+
+    public String getFoto4() {
+        return foto4;
+    }
+
+    public void setFoto4(String foto4) {
+        this.foto4 = foto4;
+    }
+
+    public String getFoto5() {
+        return foto5;
+    }
+
+    public void setFoto5(String foto5) {
+        this.foto5 = foto5;
+    }
 
     /**
      * Decodifica el String en Base64 que representa la foto del operador
      * @return Una Matriz (Mat) de OpenCV, que contiene los datos de la cara del operador
      */
-    public Mat faceMat() {
-
-        // Decodificar el String en Base64 para obtener el Array de Bytes que representa la foto de la cara
-        byte[] faceData = Base64.decode(this.encodedFaceData, Base64.DEFAULT);
-
-        // Instanciar una nueva Mat (matriz) del tamanio y tipo correcto
-        // CvType.CV_8UC1 : 8 bits - Unsigned - One Channel
-        Mat faceMat = new Mat(faceData.length, 1, CvType.CV_8UC1);
-
-        // Llenar la Mat con los datos del Byte Array
-        faceMat.put(0, 0, faceData);
-
-        return faceMat;
-    }
+//    public Mat faceMat() {
+//
+//        // Decodificar el String en Base64 para obtener el Array de Bytes que representa la foto de la cara
+//        byte[] faceData = Base64.decode(this.encodedFaceData, Base64.DEFAULT);
+//
+//        // Instanciar una nueva Mat (matriz) del tamanio y tipo correcto
+//        // CvType.CV_8UC1 : 8 bits - Unsigned - One Channel
+//        Mat faceMat = new Mat(faceData.length, 1, CvType.CV_8UC1);
+//
+//        // Llenar la Mat con los datos del Byte Array
+//        faceMat.put(0, 0, faceData);
+//
+//        return faceMat;
+//    }
 
     public void addFotos(List<String> encodings ){
         foto1 = encodings.get(0);

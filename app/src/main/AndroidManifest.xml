@@ -47,7 +47,7 @@
             android:value="asistencia.db" />
         <meta-data
             android:name="VERSION"
-            android:value="8" />
+            android:value="1" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />

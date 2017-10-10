@@ -16,6 +16,7 @@ limitations under the License.
 package com.sinergiass.asistencia.facerecog;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
@@ -35,6 +36,7 @@ import org.opencv.core.Rect;
 import java.io.File;
 import java.util.List;
 
+import com.sinergiass.asistencia.AsistenciaActivity;
 import com.sinergiass.asistencia.R;
 import ch.zhaw.facerecognitionlibrary.Helpers.CustomCameraView;
 import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
@@ -138,7 +140,11 @@ public class RecognitionActivity extends Activity implements CameraBridgeViewBas
         } else {
             faces = MatOperation.rotateFaces(imgRgba, faces, ppF.getAngleForRecognition());
             for(int i = 0; i<faces.length; i++){
-                MatOperation.drawRectangleAndLabelOnPreview(imgRgba, faces[i], rec.recognize(images.get(i), ""), front_camera);
+//                MatOperation.drawRectangleAndLabelOnPreview(imgRgba, faces[i], rec.recognize(images.get(i), ""), front_camera);
+                Intent intent = new Intent(RecognitionActivity.this, AsistenciaActivity.class);
+                intent.putExtra("idOperador", Integer.parseInt(rec.recognize(images.get(i), "")));
+
+                startActivity(intent);
             }
             return imgRgba;
         }
