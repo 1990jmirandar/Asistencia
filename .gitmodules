@@ -1,3 +1,0 @@
-[submodule "app/src/main/cpp/FaceRecognitionLib"]
-	path = app/src/main/cpp/FaceRecognitionLib
-	url = https://github.com/Lauszus/FaceRecognitionLib.git

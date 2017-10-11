@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,10 +21,14 @@ import android.widget.Toast;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.sinergiass.asistencia.controller.RestManager;
+import com.sinergiass.asistencia.facerecog.RecognitionActivity;
+import com.sinergiass.asistencia.facerecog.Training;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
 import com.sinergiass.asistencia.util.DatabaseHelper;
+
+import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +37,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.facerecognitionlibrary.Helpers.FileHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,8 +53,14 @@ public class LoginActivity extends AppCompatActivity {
     private static final boolean IMPORT_ASSETS_DB = false; // true para cargar la DB desde assets, false para cargar desde el Servidor
     private List<Operador> mOperadores;
 
+    private Training.TrainTask trainTask;
 
 
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            // Handle initialization error
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +72,18 @@ public class LoginActivity extends AppCompatActivity {
         layout = (LinearLayout) findViewById(R.id.layout_login) ;
         layoutP = (LinearLayout) findViewById(R.id.layout_progress);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         mManager = new RestManager();
 
         mOperadores = new ArrayList<>();
 
+        operador.setEnabled(false);
+
         new DownloadDataTask().execute();
+
+        trainTask = new Training.TrainTask(getApplicationContext(), trainTaskCallback);
+
+
 
         admin.setOnClickListener(new View.OnClickListener(){
 
@@ -75,12 +94,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        operador.setOnClickListener(new View.OnClickListener(){
+        FileHelper fh = new FileHelper();
 
+        if(!((new File(fh.DATA_PATH)).exists())) ;
+        operador.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                Intent intent = new Intent(LoginActivity.this, FaceRecognitionActivity.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), RecognitionActivity.class));
             }
         });
     }
@@ -107,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
             layoutP.setVisibility(View.GONE);
             layout.setVisibility(View.VISIBLE);
 
-
+            trainTask.execute();
         }
     }
 
@@ -122,13 +142,6 @@ public class LoginActivity extends AppCompatActivity {
                     List<Admin> listaAdmin = response.body();
 
                     //Log.d("El numero de la lista", ""+ listaAdmin.size());
-//                    for(int i=0; i<listaAdmin.size();i++){
-//                        final Admin admin1 = new Admin(listaAdmin.get(i).getUsuario(),
-//                                listaAdmin.get(i).getPassword());
-////
-//                        //Log.d("el item", ""+admin1.getUsuario());
-//                        admin1.save();
-//                    }
 
                     for (Admin admin : listaAdmin){admin.save();}
 
@@ -142,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Admin>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar admins", Toast.LENGTH_LONG).show();
+//                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar admins", Toast.LENGTH_LONG).show();
                 cargarOperadores();
             }
         });
@@ -158,7 +171,6 @@ public class LoginActivity extends AppCompatActivity {
                     Operador.deleteAll(Operador.class,"estado = ?","1");
                     mOperadores = response.body();
                     Log.d("Size Lista Operadores", ""+ mOperadores.size());
-//
 
                     for (Operador operador : mOperadores){
                         operador.save();
@@ -170,14 +182,12 @@ public class LoginActivity extends AppCompatActivity {
                     int sc = response.code();
                     switch (sc){}
                 }
-
                 cargarAsistencias();
-
             }
 
             @Override
             public void onFailure(Call<List<Operador>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
+//                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
 
                 cargarAsistencias();
 
@@ -220,7 +230,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar Asistencias", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "No se pudo sincronizar con el Servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -230,4 +240,11 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, AsistenciaActivity.class);
         startActivity(intent);
     }
+
+    private Training.TrainTask.Callback trainTaskCallback = new Training.TrainTask.Callback() {
+        @Override
+        public void onTrainTaskComplete(boolean result) {
+            if (result) operador.setEnabled(true);
+        }
+    };
 }

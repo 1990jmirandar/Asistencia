@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="Lista de Operadores"
         android:textSize="20dp"
-        android:background="#234562"
+        android:background="@color/colorPrimaryDark"
         android:textColor="#ffffff"
         />
 

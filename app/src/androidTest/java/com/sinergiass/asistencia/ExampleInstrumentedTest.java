@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.sinergiass.asistencia", appContext.getPackageName());
+        assertEquals("com.sinergiass.asistenciav2", appContext.getPackageName());
     }
 }

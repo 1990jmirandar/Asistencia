@@ -29,11 +29,12 @@ public class LoginAdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(LoginAdminActivity.this, MainActivity.class);
-                if (Admin.find(Admin.class, "username = ? and password = ?", ""+username.getText(), ""+password.getText())
-                               .isEmpty()) {
-                    Toast.makeText(LoginAdminActivity.this, "Usuario y/o Contraseña incorrectas", Toast.LENGTH_LONG).show();
-                }
-                else
+                // TODO: Activar la validacion en el release
+//                if (Admin.find(Admin.class, "username = ? and password = ?", ""+username.getText(), ""+password.getText())
+//                               .isEmpty()) {
+//                    Toast.makeText(LoginAdminActivity.this, "Usuario y/o Contraseña incorrectas", Toast.LENGTH_LONG).show();
+//                }
+//                else
                     startActivity(intent);
 
             }
