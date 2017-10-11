@@ -53,10 +53,6 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
     private long timerDiff;
     private long lastTime;
     private PreProcessorFactory ppF;
-    private FileHelper fh;
-    private String folder;
-    private String subfolder;
-    private String nombre;
     private int total;
     private int numberOfPictures;
     private int method;
@@ -66,7 +62,7 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
     private boolean night_portrait;
     private int exposure_compensation;
 
-    private Operador mOperador;
+//    private Operador mOperador;
 
     private List<byte[]> fotosEnByteArray;
 
@@ -81,16 +77,15 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_person_preview);
 
+        // Esconder la barra de Estado
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
         Bundle extras = getIntent().getExtras();
 
         fotosEnByteArray = new ArrayList<>();
 
-//        folder = extras.getString("Folder");
-//        if(folder.equals("Test")){
-//            subfolder = intent.getStringExtra("Subfolder");
-//        }
-
-//        method = intent.getIntExtra("Method", 0);
         method = AddPersonPreviewActivity.TIME;
         capturePressed = false;
         if(method == MANUALLY){
@@ -104,26 +99,20 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
             });
         }
 
-        fh = new FileHelper();
         total = 0;
         lastTime = new Date().getTime();
 
-//        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        timerDiff = Integer.valueOf(sharedPrefs.getString("key_timerDiff", "500"));
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         timerDiff = 500;
 
         mAddPersonView = (CustomCameraView) findViewById(R.id.AddPersonPreview);
-        // Use camera which is selected in settings
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-//        front_camera = sharedPref.getBoolean("key_front_camera", true);
+//         Use camera which is selected in settings
         front_camera = true;
 
-//        numberOfPictures = Integer.valueOf(sharedPref.getString("key_numberOfPictures", "10"));
         numberOfPictures = extras.getInt("numberOfPictures");
 
-//        night_portrait = sharedPref.getBoolean("key_night_portrait", false);
         night_portrait = false;
-//        exposure_compensation = Integer.valueOf(sharedPref.getString("key_exposure_compensation", "50"));
         exposure_compensation = 50;
 
         if (front_camera){
@@ -140,14 +129,6 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
         int maxCameraViewHeight = 480;
         mAddPersonView.setMaxFrameSize(maxCameraViewWidth, maxCameraViewHeight);
 
-//        // Operador a ser creado
-//        nombre = extras.getString("nombre");
-//        mOperador = new Operador(extras.getString("nombre"),
-//                extras.getString("apellido"),
-//                extras.getString());
-//
-//        mOperador.setNombre(extras.getString("nombre"));
-//        mOperador.setApellido();
     }
 
     @Override
@@ -190,17 +171,6 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
                     if((faces != null) && (faces.length == 1)){
                         faces = MatOperation.rotateFaces(imgRgba, faces, ppF.getAngleForRecognition());
                         if(((method == MANUALLY) && capturePressed) || (method == TIME)){
-
-//                            MatName m = new MatName(nombre + "_" + total, img);
-//                            if (folder.equals("Test")) {
-//                                String wholeFolderPath = fh.TEST_PATH + nombre + "/" + subfolder;
-//                                new File(wholeFolderPath).mkdirs();
-//                                fh.saveMatToImage(m, wholeFolderPath + "/");
-//                            } else {
-//                                String wholeFolderPath = fh.TRAINING_PATH + nombre;
-//                                new File(wholeFolderPath).mkdirs();
-//                                fh.saveMatToImage(m, wholeFolderPath + "/");
-//                            }
 
                             byte[] data = new byte[(int)(img.total()*img.channels())];
                             img.get(0, 0, data);

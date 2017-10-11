@@ -68,6 +68,12 @@ public class RecognitionActivity extends Activity implements CameraBridgeViewBas
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.recognition_layout);
+
+        // Esconder la barra de Estado
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         fh = new FileHelper();
         File folder = new File(fh.getFolderPath());
