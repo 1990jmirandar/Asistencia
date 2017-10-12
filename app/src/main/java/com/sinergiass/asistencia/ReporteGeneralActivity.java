@@ -83,7 +83,6 @@ public class ReporteGeneralActivity extends AppCompatActivity {
         btnEnviarReporte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //DateDialogFin();
 
                 if (validaciones()){
                     guardar.setVisibility(View.VISIBLE);
@@ -101,23 +100,11 @@ public class ReporteGeneralActivity extends AppCompatActivity {
                     reporte.setFechaFin(fechaFin);
                     reporte.setDestinatarios(correos);
 
-//                JsonObject json = new JsonObject();
-//                JsonArray correos =
-
-//                enviarData(fechaInicio,fechaFin,correos);
                     enviarData(reporte);
 
                 }
-
-
-
-
-
-
             }
         });
-
-
     }
 
     public void DateDialogInicio(){

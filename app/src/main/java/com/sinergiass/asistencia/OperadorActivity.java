@@ -168,11 +168,6 @@ public class OperadorActivity extends AppCompatActivity {
                     byte[] faceBytes = data.getByteArrayExtra("foto"+i);
 
                     fotosEncondings.add(Base64.encodeToString(faceBytes, Base64.DEFAULT));
-
-//                    Mat faceMat = new Mat(faceBytes.length, 1, CvType.CV_8UC1);
-//                    faceMat.put(0, 0, faceBytes);
-//
-//                    fotosMat.add(i, faceMat);
                 }
             }
         }
@@ -193,7 +188,7 @@ public class OperadorActivity extends AppCompatActivity {
             Toast.makeText(OperadorActivity.this, "Ingrese el teléfono", Toast.LENGTH_LONG).show();
             return false;
         } else if (!fotosCapturadasConExito) {
-            Toast.makeText(OperadorActivity.this, "Tome al menos 10 fotos", Toast.LENGTH_LONG).show();
+            Toast.makeText(OperadorActivity.this, "Tome las fotos", Toast.LENGTH_LONG).show();
             return false;
         } else {
             return true;

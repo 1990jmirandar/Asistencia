@@ -100,7 +100,8 @@ public class LoginActivity extends AppCompatActivity {
         operador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), RecognitionActivity.class));
+                Intent intent = new Intent(LoginActivity.this, RecognitionActivity.class);
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -205,14 +206,6 @@ public class LoginActivity extends AppCompatActivity {
                     Asistencia.deleteAll(Asistencia.class,"estado = ?","1");
                     List<Asistencia> listaAsistencias = response.body();
                     Log.d("Size Lista Asist ", ""+ listaAsistencias.size());
-//                    for(int i=0; i<listaAsistencias.size();i++){
-//                        final Asistencia asistencia = new Asistencia(listaAsistencias.get(i).getIdOperador(),
-//                                listaAsistencias.get(i).getLatitud(),listaAsistencias.get(i).getLongitud(),
-//                                listaAsistencias.get(i).getFecha(),listaAsistencias.get(i).getHora(),
-//                                listaAsistencias.get(i).isEntrada());
-//                        //Log.d("asistencia del operador:"+i + ":",""+asistencia.getIdOperador());
-//                        asistencia.save();
-//                    }
                     for (Asistencia asistencia : listaAsistencias){
                         for (Operador op : mOperadores){
                             if (asistencia.getIdOperador() == op.getIdOperador()) asistencia.cedulaOperador = op.getCedula();
@@ -237,8 +230,14 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Intent intent = new Intent(LoginActivity.this, AsistenciaActivity.class);
-        startActivity(intent);
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            int idOperador = data.getIntExtra("idOperador", 0);
+
+            Intent intent = new Intent(LoginActivity.this, AsistenciaActivity.class);
+            intent.putExtra("idOperador", idOperador);
+
+            startActivity(intent);
+        }
     }
 
     private Training.TrainTask.Callback trainTaskCallback = new Training.TrainTask.Callback() {

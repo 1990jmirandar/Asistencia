@@ -147,10 +147,10 @@ public class RecognitionActivity extends Activity implements CameraBridgeViewBas
             faces = MatOperation.rotateFaces(imgRgba, faces, ppF.getAngleForRecognition());
             for(int i = 0; i<faces.length; i++){
 //                MatOperation.drawRectangleAndLabelOnPreview(imgRgba, faces[i], rec.recognize(images.get(i), ""), front_camera);
-                Intent intent = new Intent(RecognitionActivity.this, AsistenciaActivity.class);
-                intent.putExtra("idOperador", Integer.parseInt(rec.recognize(images.get(i), "")));
-
-                startActivity(intent);
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("idOperador", Integer.parseInt(rec.recognize(images.get(i), "")));
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
             }
             return imgRgba;
         }
