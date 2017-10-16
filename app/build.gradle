@@ -62,6 +62,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.satyan:sugar:1.5'
 
+    compile 'org.tensorflow:tensorflow-android:1.4.0-rc0'
     compile 'ch.zhaw:facerecognitionlibrary:1.5.3'
 
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'

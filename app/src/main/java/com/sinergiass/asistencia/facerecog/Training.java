@@ -45,21 +45,24 @@ public class Training {
             @Override
             protected Boolean doInBackground(Void... voids) {
 
-            List<Operador> operadores = Operador.listAll(Operador.class);
+                List<Operador> operadores = Operador.listAll(Operador.class);
 
-            PreProcessorFactory ppF = new PreProcessorFactory(context);
-            PreferencesHelper preferencesHelper = new PreferencesHelper(context);
-            preferencesHelper.getTensorFlowModelFile();
-//            String algorithm = preferencesHelper.getClassificationMethod();
-            String algorithm = context.getResources().getString(ch.zhaw.facerecognitionlibrary.R.string.tensorflow);
+                PreProcessorFactory ppF = new PreProcessorFactory(context);
+                PreferencesHelper preferencesHelper = new PreferencesHelper(context);
+                preferencesHelper.getTensorFlowModelFile();
+    //            String algorithm = preferencesHelper.getClassificationMethod();
+                String algorithm = context.getResources().getString(ch.zhaw.facerecognitionlibrary.R.string.tensorflow);
 
-            FileHelper fileHelper = new FileHelper();
-            fileHelper.createDataFolderIfNotExsiting();
-//            final File[] persons = fileHelper.getTrainingList();
-//            if (persons.length > 0) {
-            if (operadores.size() > 0) {
-                Recognition rec = RecognitionFactory.getRecognitionAlgorithm(context, Recognition.TRAINING, algorithm);
-                for (Operador op : operadores) {
+                File folder = new File(FileHelper.getFolderPath());
+                if (!folder.exists()) folder.mkdir();
+
+                FileHelper fileHelper = new FileHelper();
+                fileHelper.createDataFolderIfNotExsiting();
+    //            final File[] persons = fileHelper.getTrainingList();
+    //            if (persons.length > 0) {
+                if (operadores.size() > 0) {
+                    Recognition rec = RecognitionFactory.getRecognitionAlgorithm(context, Recognition.TRAINING, algorithm);
+                    for (Operador op : operadores) {
 //                    if (person.isDirectory()){
                     if (op.fotos().size() > 0){
 //                        File[] files = person.listFiles();
