@@ -1,6 +1,8 @@
 package com.sinergiass.asistencia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -130,6 +132,12 @@ public class LoginActivity extends AppCompatActivity {
 
             trainTask.execute();
         }
+    }
+
+    public void sharedPreference(View view){
+        SharedPreferences preferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+
+        Boolean trainingDone = preferences.getBoolean("TrainingDone", false);
     }
 
     private void cargarAdmins(){
