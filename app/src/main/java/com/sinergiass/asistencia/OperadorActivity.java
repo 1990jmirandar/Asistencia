@@ -1,9 +1,12 @@
 package com.sinergiass.asistencia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.hardware.camera2.params.Face;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -118,6 +121,9 @@ public class OperadorActivity extends AppCompatActivity {
                     List<Operador> listOp = new ArrayList<>();
                     listOp.add(operador);
 
+
+                    int numOperadores = Operador.listAll(Operador.class).size();
+
                     Call<List<Operador>> listCall = mManager.getOperadorService().guardarOp(listOp);
                     listCall.enqueue(new Callback<List<Operador>>() {
                         @Override
@@ -132,6 +138,12 @@ public class OperadorActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
 //                              startActivity(intent);
                                 Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
+
+                                int numOperadores = Operador.listAll(Operador.class).size();
+                                SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+                                editor.putInt("cant_operadores", numOperadores);
+                                editor.commit();
+
                                 onBackPressed();
 
                             } else {
@@ -147,7 +159,10 @@ public class OperadorActivity extends AppCompatActivity {
 //                           startActivity(intent);
                             Toast.makeText(OperadorActivity.this, "Sin Conexión, Guardado Local Exitoso!", Toast.LENGTH_LONG).show();
                             onBackPressed();
+
                         }
+
+
 
                     });
 

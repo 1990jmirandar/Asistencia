@@ -1,6 +1,8 @@
 package com.sinergiass.asistencia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,6 +57,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private Training.TrainTask trainTask;
 
+    private SharedPreferences mSharedPreferences;
+
+    private int mNumOperadores;
+    private int mNumOperadoresEnPreferences;
+
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -73,11 +80,24 @@ public class LoginActivity extends AppCompatActivity {
         layoutP = (LinearLayout) findViewById(R.id.layout_progress);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        mSharedPreferences = getPreferences(Context.MODE_PRIVATE);
+//        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         mManager = new RestManager();
 
         mOperadores = new ArrayList<>();
 
+
+        mNumOperadores = Operador.listAll(Operador.class).size();
+        mNumOperadoresEnPreferences = mSharedPreferences.getInt("cant_operadores", 0);
+
+        Log.d("Cant Op DB: ", Integer.toString(mNumOperadores));
+        Log.d("Cant Op Pref: ", Integer.toString(mNumOperadoresEnPreferences));
+
         operador.setEnabled(false);
+
+
 
         new DownloadDataTask().execute();
 
@@ -128,7 +148,18 @@ public class LoginActivity extends AppCompatActivity {
             layoutP.setVisibility(View.GONE);
             layout.setVisibility(View.VISIBLE);
 
-            trainTask.execute();
+
+
+            if (mNumOperadores != mNumOperadoresEnPreferences){
+                trainTask.execute();
+
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putInt("cant_operadores", mNumOperadores);
+                editor.commit();
+            } else if (mNumOperadoresEnPreferences > 0){
+                operador.setEnabled(true);
+            }
+
         }
     }
 
@@ -231,10 +262,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == RESULT_OK) {
-            int idOperador = data.getIntExtra("idOperador", 0);
+            String cedula = data.getStringExtra("cedula");
 
             Intent intent = new Intent(LoginActivity.this, AsistenciaActivity.class);
-            intent.putExtra("idOperador", idOperador);
+            intent.putExtra("metodo_query", AsistenciaActivity.FROM_CEDULA);
+            intent.putExtra("cedula", cedula);
 
             startActivity(intent);
         }

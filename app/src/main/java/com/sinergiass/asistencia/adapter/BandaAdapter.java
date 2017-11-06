@@ -99,6 +99,7 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
             public void onClick(View view) {
                 Intent intent = new Intent(context, ReporteAsistenciaActivity.class);
                 Bundle extras = new Bundle();
+                extras.putInt("metodo_query", AsistenciaActivity.FROM_ID);
                 extras.putInt("idOperador",operador.getIdOperador());
                 intent.putExtras(extras);
                 context.startActivity(intent);

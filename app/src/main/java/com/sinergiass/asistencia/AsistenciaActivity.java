@@ -54,6 +54,11 @@ public class AsistenciaActivity extends  AppCompatActivity {
     private RestManager mRestManager;
     private Asistencia mAsistencia;
 
+    private int metodo_query;
+
+    public static final int FROM_CEDULA = 1;
+    public static final int FROM_ID = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +76,15 @@ public class AsistenciaActivity extends  AppCompatActivity {
         mRestManager = new RestManager();
 
         Bundle extras = getIntent().getExtras();
-        operador = Operador.find(Operador.class, "id_Operador = ?", "" + extras.getInt("idOperador")).get(0);
+
+        metodo_query = extras.getInt("metodo_query", FROM_ID);
+
+        if (metodo_query == FROM_ID){
+            operador = Operador.find(Operador.class, "id_Operador = ?", "" + extras.getInt("idOperador")).get(0);
+        }else if (metodo_query == FROM_CEDULA){
+            operador = Operador.find(Operador.class, "cedula = ?", "" + extras.getString("cedula")).get(0);
+        }
+
 
         ubicarme = (Button)findViewById(R.id.ubicacion);
         nombre = (TextView)findViewById(R.id.nombres);

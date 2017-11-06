@@ -1,7 +1,10 @@
 package com.sinergiass.asistencia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -279,11 +282,12 @@ public class MainActivity extends AppCompatActivity
                     }
 
 
-                progress.setVisibility(View.GONE);
-                header.setVisibility(View.VISIBLE);
-                layoutLista.setVisibility(View.VISIBLE);
-                Toast.makeText(MainActivity.this, "Sincronización Exitosa", Toast.LENGTH_LONG).show();
-                onResume();
+                    progress.setVisibility(View.GONE);
+                    header.setVisibility(View.VISIBLE);
+                    layoutLista.setVisibility(View.VISIBLE);
+                    Toast.makeText(MainActivity.this, "Sincronización Exitosa", Toast.LENGTH_LONG).show();
+
+                    onResume();
                 }
 
 
@@ -297,6 +301,12 @@ public class MainActivity extends AppCompatActivity
                 progress.setVisibility(View.GONE);
                 header.setVisibility(View.VISIBLE);
                 layoutLista.setVisibility(View.VISIBLE);
+
+                int numOperadores = Operador.listAll(Operador.class).size();
+                SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+                editor.putInt("cant_operadores", numOperadores);
+                editor.commit();
+
                 onResume();
             }
         });
