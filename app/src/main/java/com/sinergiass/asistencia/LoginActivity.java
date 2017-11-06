@@ -163,6 +163,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public void sharedPreference(View view){
+        SharedPreferences preferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+
+        Boolean trainingDone = preferences.getBoolean("TrainingDone", false);
+    }
+
     private void cargarAdmins(){
         Call<List<Admin>> listCall = mManager.getOperadorService().getListaAdmins();
         listCall.enqueue(new Callback<List<Admin>>() {
