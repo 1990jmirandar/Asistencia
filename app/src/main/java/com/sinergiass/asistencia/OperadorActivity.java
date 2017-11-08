@@ -140,7 +140,8 @@ public class OperadorActivity extends AppCompatActivity {
                                 Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
 
                                 int numOperadores = Operador.listAll(Operador.class).size();
-                                SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+                                SharedPreferences preferences = getSharedPreferences("preferencia",Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
                                 editor.putInt("cant_operadores", numOperadores);
                                 editor.commit();
 

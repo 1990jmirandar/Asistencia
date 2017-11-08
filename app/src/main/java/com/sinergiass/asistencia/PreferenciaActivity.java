@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,8 +34,9 @@ public class PreferenciaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(PreferenciaActivity.this, LoginActivity.class);
-                SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
-                editor.putString("IP", ip.getText().toString());
+                SharedPreferences preferences = getSharedPreferences("preferencia",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("IP", ""+ip.getText());
                 editor.commit();
 
                 startActivity(intent);

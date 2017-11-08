@@ -46,6 +46,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.sinergiass.asistencia.R.xml.preferences;
+
 public class LoginActivity extends AppCompatActivity {
 
     private Button operador,cambiar;
@@ -82,10 +84,9 @@ public class LoginActivity extends AppCompatActivity {
         layout = (LinearLayout) findViewById(R.id.layout_login) ;
         layoutP = (LinearLayout) findViewById(R.id.layout_progress);
 
-        //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(this, preferences, false);
 
-        mSharedPreferences = getPreferences(Context.MODE_PRIVATE);
-//        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mSharedPreferences = getSharedPreferences("preferencia",Context.MODE_PRIVATE);
 
         mManager = new RestManager();
 
@@ -97,6 +98,11 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.d("Cant Op DB: ", Integer.toString(mNumOperadores));
         Log.d("Cant Op Pref: ", Integer.toString(mNumOperadoresEnPreferences));
+
+        String ip = mSharedPreferences.getString("IP",Constants.HTTP.BASE_URL);
+        Log.d("la ip nueva: ", ip);
+
+        Constants.HTTP.BASE_URL = ip;
 
         operador.setEnabled(false);
 
@@ -178,11 +184,9 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
         Boolean trainingDone = preferences.getBoolean("TrainingDone", false);
-        int cant_op = preferences.getInt("cant_operadores", 125);
-        Log.d("operadores: ", ""+cant_op);
-        String ip = preferences.getString("IP",""+ Constants.HTTP.BASE_URL);
-        Log.d("la ip nueva: ", ip);
-        Constants.HTTP.BASE_URL = ip;
+//        int cant_op = preferences.getInt("cant_operadores", 125);
+//        Log.d("operadores: ", ""+cant_op);
+
     }
 
     private void cargarAdmins(){
