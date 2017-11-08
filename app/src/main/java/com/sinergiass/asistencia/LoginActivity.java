@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +29,7 @@ import com.sinergiass.asistencia.facerecog.Training;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.model.helper.Constants;
 import com.sinergiass.asistencia.util.DatabaseHelper;
 
 import org.opencv.android.OpenCVLoader;
@@ -46,7 +48,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button operador;
+    private Button operador,cambiar;
     private Button admin;
     private RestManager mManager;
     private ProgressBar progressBar;
@@ -75,11 +77,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         operador = (Button)findViewById(R.id.operador);
         admin = (Button)findViewById(R.id.admin);
+        cambiar = (Button)findViewById(R.id.preference);
         progressBar = (ProgressBar)findViewById(R.id.progressBar1);
         layout = (LinearLayout) findViewById(R.id.layout_login) ;
         layoutP = (LinearLayout) findViewById(R.id.layout_progress);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         mSharedPreferences = getPreferences(Context.MODE_PRIVATE);
 //        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -121,6 +124,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RecognitionActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        cambiar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, PreferenciaActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
@@ -167,6 +178,11 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
         Boolean trainingDone = preferences.getBoolean("TrainingDone", false);
+        int cant_op = preferences.getInt("cant_operadores", 125);
+        Log.d("operadores: ", ""+cant_op);
+        String ip = preferences.getString("IP",""+ Constants.HTTP.BASE_URL);
+        Log.d("la ip nueva: ", ip);
+        Constants.HTTP.BASE_URL = ip;
     }
 
     private void cargarAdmins(){

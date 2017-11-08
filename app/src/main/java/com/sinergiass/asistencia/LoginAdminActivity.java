@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sinergiass.asistencia.model.Admin;
+import com.sinergiass.asistencia.model.helper.Constants;
 
 public class LoginAdminActivity extends AppCompatActivity {
 
@@ -23,6 +24,8 @@ public class LoginAdminActivity extends AppCompatActivity {
         username = (TextView)findViewById(R.id.txt_usuario);
         password = (TextView)findViewById(R.id.txt_contrasena);
         btn_entrar = (Button)findViewById(R.id.btn_entrar);
+
+        Log.d("La IP es: ",""+ Constants.HTTP.BASE_URL);
 
         btn_entrar.setOnClickListener(new View.OnClickListener(){
 
