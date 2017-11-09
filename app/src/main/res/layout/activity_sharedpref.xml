@@ -4,30 +4,26 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="5"
         android:padding="10dp"
-        android:layout_marginTop="210dp"
+        android:layout_marginTop="130dp"
         >
 
         <TextView
             android:id="@+id/lbl_texto"
-            android:layout_weight="3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:text="Ingrese la IP:"
             android:textSize="24sp"/>
 
         <EditText
             android:id="@+id/txt_ip"
-            android:layout_weight="2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:layout_weight="5" />
 
     </LinearLayout>
 
@@ -41,6 +37,13 @@
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="30dp"
     android:layout_marginBottom="10dp"/>
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recuerda: Debes ingresar la IP LAN que le fue asignada al servidor web"
+        android:textSize="15sp"/>
 
 
 
