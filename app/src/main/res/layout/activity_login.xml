@@ -15,7 +15,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:visibility="visible">
 
 
             <Button
@@ -26,7 +26,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="180dp"
                 android:text="Operador"
                 android:textStyle="bold" />
 
@@ -38,20 +38,19 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp"
                 android:text="Admin"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/preference"
-                android:layout_width="match_parent"
+                android:layout_width="58dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp"
-                android:text="Cambiar IP"
+                android:layout_marginTop="150dp"
+                android:text="IP"
                 android:textStyle="bold" />
 
 
@@ -62,6 +61,7 @@
             android:orientation="vertical" android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:visibility="invisible"
 
             >
             <TextView

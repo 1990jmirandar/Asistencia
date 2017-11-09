@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,8 @@ import static com.sinergiass.asistencia.R.xml.preferences;
 
 public class LoginActivity extends AppCompatActivity {
 
+
+
     private Button operador,cambiar;
     private Button admin;
     private RestManager mManager;
@@ -77,6 +80,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+
         operador = (Button)findViewById(R.id.operador);
         admin = (Button)findViewById(R.id.admin);
         cambiar = (Button)findViewById(R.id.preference);
