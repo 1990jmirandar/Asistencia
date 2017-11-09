@@ -67,11 +67,11 @@ public class AsistenciaActivity extends  AppCompatActivity {
             checkPermission();
         }
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Registro de Asistencia");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setTitle("Registro de Asistencia");*/
+
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mRestManager = new RestManager();
 

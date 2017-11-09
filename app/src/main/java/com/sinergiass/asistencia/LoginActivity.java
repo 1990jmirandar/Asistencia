@@ -106,7 +106,8 @@ public class LoginActivity extends AppCompatActivity {
 
         operador.setEnabled(false);
 
-
+        layoutP.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.GONE);
 
         new DownloadDataTask().execute();
 
@@ -148,6 +149,11 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (IMPORT_ASSETS_DB) {
                 // CARGAR LA DB ubicada en assets/databases
                 DatabaseHelper dbHelper = new DatabaseHelper(LoginActivity.this);
