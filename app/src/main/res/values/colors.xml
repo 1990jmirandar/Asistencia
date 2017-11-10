@@ -11,5 +11,8 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="row_alert_background">#ffb74d</color>
+    <color name="FFFF530D">#000000</color>
+    <color name="primary_dark">#090300</color>
+    <color name="primary_material_dark">#ff530d</color>
 
 </resources>
