@@ -50,7 +50,6 @@ public class Training {
                 PreProcessorFactory ppF = new PreProcessorFactory(context);
                 PreferencesHelper preferencesHelper = new PreferencesHelper(context);
                 preferencesHelper.getTensorFlowModelFile();
-    //            String algorithm = preferencesHelper.getClassificationMethod();
                 String algorithm = context.getResources().getString(ch.zhaw.facerecognitionlibrary.R.string.tensorflow);
 
                 File folder = new File(FileHelper.getFolderPath());
@@ -58,20 +57,11 @@ public class Training {
 
                 FileHelper fileHelper = new FileHelper();
                 fileHelper.createDataFolderIfNotExsiting();
-    //            final File[] persons = fileHelper.getTrainingList();
-    //            if (persons.length > 0) {
                 if (operadores.size() > 0) {
                     Recognition rec = RecognitionFactory.getRecognitionAlgorithm(context, Recognition.TRAINING, algorithm);
                     for (Operador op : operadores) {
-//                    if (person.isDirectory()){
                     if (op.fotos().size() > 0){
-//                        File[] files = person.listFiles();
-//                        int counter = 1;
-//                        for (File file : files) {
                         for (Mat imgRgb : op.fotos()) {
-//                            if (FileHelper.isFileAnImage(file)){
-//                                Mat imgRgb = Imgcodecs.imread(file.getAbsolutePath());
-//                                Imgproc.cvtColor(imgRgb, imgRgb, Imgproc.COLOR_BGRA2RGBA);
                                 Mat processedImage = new Mat(160, 160, CvType.CV_8UC4);
                                 imgRgb.copyTo(processedImage);
                                 List<Mat> images = ppF.getProcessedImage(processedImage, PreProcessorFactory.PreprocessingMode.RECOGNITION);
@@ -85,52 +75,19 @@ public class Training {
                                     continue;
                                 }
                                 // The last token is the name --> Folder name = Person name
-//                                String[] tokens = file.getParent().split("/");
-//                                final String name = tokens[tokens.length - 1];
-
-//                                MatName m = new MatName("processedImage", processedImage);
-//                                fileHelper.saveMatToImage(m, FileHelper.DATA_PATH);
-
-//                                rec.addImage(processedImage, op.getNombre(), false);
                                 rec.addImage(imgRgb, op.getCedula(), false);
 
-//                                      fileHelper.saveCroppedImage(imgRgb, ppF, file, name, counter);
-
-                                // Update screen to show the progress
-//                                final int counterPost = counter;
-//                                final int filesLength = files.length;
-//                                progress.post(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        progress.append("Image " + counterPost + " of " + filesLength + " from " + name + " imported.\n");
-//                                    }
-//                                });
-
-//                                counter++;
-//                            }
                         }
                     }
                 }
-//                final Intent intent = new Intent(context, MainActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 if (rec.train()) {
-//                    intent.putExtra("training", "Training successful");
                     Log.d(TAG, "Entranamiento Exitoso");
                     return true;
                 } else {
                     Log.d(TAG, "Entranamiento Fallido");
                     return false;
                 }
-//                handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        startActivity(intent);
-//                    }
-//                });
             }
-//            else {
-//                Thread.currentThread().interrupt();
-//            }
             return false;
         }
 

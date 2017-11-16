@@ -62,7 +62,6 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
     private boolean night_portrait;
     private int exposure_compensation;
 
-//    private Operador mOperador;
 
     private List<byte[]> fotosEnByteArray;
 
@@ -123,8 +122,6 @@ public class AddPersonPreviewActivity extends Activity implements CameraBridgeVi
         mAddPersonView.setVisibility(SurfaceView.VISIBLE);
         mAddPersonView.setCvCameraViewListener(this);
 
-//        int maxCameraViewWidth = Integer.parseInt(sharedPref.getString("key_maximum_camera_view_width", "640"));
-//        int maxCameraViewHeight = Integer.parseInt(sharedPref.getString("key_maximum_camera_view_height", "480"));
         int maxCameraViewWidth = 640;
         int maxCameraViewHeight = 480;
         mAddPersonView.setMaxFrameSize(maxCameraViewWidth, maxCameraViewHeight);

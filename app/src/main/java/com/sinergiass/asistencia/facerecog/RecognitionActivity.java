@@ -146,7 +146,6 @@ public class RecognitionActivity extends Activity implements CameraBridgeViewBas
         } else {
             faces = MatOperation.rotateFaces(imgRgba, faces, ppF.getAngleForRecognition());
             for(int i = 0; i<faces.length; i++){
-//                MatOperation.drawRectangleAndLabelOnPreview(imgRgba, faces[i], rec.recognize(images.get(i), ""), front_camera);
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("cedula", rec.recognize(images.get(i), ""));
                 setResult(Activity.RESULT_OK,returnIntent);

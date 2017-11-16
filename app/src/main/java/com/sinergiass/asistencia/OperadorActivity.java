@@ -82,9 +82,6 @@ public class OperadorActivity extends AppCompatActivity {
         btnFace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(OperadorActivity.this, FaceRecognitionActivity.class);
-//                intent.putExtra("flag_value", FaceRecognitionActivity.FLAG_CAPTURAR_DATOS);
-//                startActivityForResult(intent, 0);
 
                 Intent intent = new Intent(OperadorActivity.this, AddPersonPreviewActivity.class);
                 intent.putExtra("Method", AddPersonPreviewActivity.TIME);
