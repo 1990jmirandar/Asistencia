@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.helper.Constants;
 
+import java.util.List;
+
 public class LoginAdminActivity extends AppCompatActivity {
 
     private Button btn_entrar;
@@ -31,15 +33,14 @@ public class LoginAdminActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(LoginAdminActivity.this, MainActivity.class);
-                // TODO: Activar la validacion en el release
-//                if (Admin.find(Admin.class, "username = ? and password = ?", ""+username.getText(), ""+password.getText())
-//                               .isEmpty()) {
-//                    Toast.makeText(LoginAdminActivity.this, "Usuario y/o Contraseña incorrectas", Toast.LENGTH_LONG).show();
-//                }
-//                else {
+                List<Admin> lista= Admin.find(Admin.class,"username=? and password=?",new String[]{username.getText().toString(),password.getText().toString()});
+                if (lista.isEmpty()){
+                    Toast.makeText(LoginAdminActivity.this,"Usuario o clave incorrectas",Toast.LENGTH_LONG).show();
+                }else{
+                    Intent intent = new Intent(LoginAdminActivity.this, MainActivity.class);
                     startActivity(intent);
-//                }
+                }
+
             }
         });
     }

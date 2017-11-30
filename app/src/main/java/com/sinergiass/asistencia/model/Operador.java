@@ -42,8 +42,15 @@ public class Operador extends SugarRecord implements Serializable{
     private String foto4;
     @Expose
     private String foto5;
+    @Expose
+    private String estado;
 
-    private int estado = 1;
+
+
+    private int actualiza=1;
+
+
+    private int sync = 1;
 
     // Fotos recortadas centradas en la cara, de tipo OpenCV Mat
 
@@ -64,12 +71,20 @@ public class Operador extends SugarRecord implements Serializable{
         this.foto5 = foto5;
     }
 
-    public int getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public int getSync() {
+        return sync;
+    }
+
+    public void setSync(int sync) {
+        this.sync = sync;
     }
 
     public String getCedula() {
@@ -149,6 +164,14 @@ public class Operador extends SugarRecord implements Serializable{
 
     public void setFoto5(String foto5) {
         this.foto5 = foto5;
+    }
+
+    public int getActualiza() {
+        return actualiza;
+    }
+
+    public void setActualiza(int actualiza) {
+        this.actualiza = actualiza;
     }
 
     /**

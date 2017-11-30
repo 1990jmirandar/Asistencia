@@ -5,6 +5,7 @@ import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
 import com.sinergiass.asistencia.model.Reporte;
+import com.sinergiass.asistencia.model.TipoUsuario;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +17,17 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 /**
  * Created by Julio Alfredo on 19/9/2017.
  */
 
 public interface OperadorService {
+
+    @GET("tipousuario.json")
+    Call<List<TipoUsuario>> getListaTipoUsuario();
 
     @GET("operadores.json")
     Call<List<Operador>> getListaOperadores();
@@ -37,6 +43,13 @@ public interface OperadorService {
 
     @POST("asistencias/")
     Call<List<Asistencia>> guardarAsis(@Body List<Asistencia> asistencias);
+
+    @POST("tipousuario/")
+    Call<List<TipoUsuario>> guardarTipoUsuario(@Body List<TipoUsuario> tipoUsuarios);
+
+    @PUT("tipousuario/{id}/")
+    Call<TipoUsuario> actualizaTipoUsuario(@Path("id") int tipoUsuarioId , @Body TipoUsuario tipoUsuario);
+
 
 }
 

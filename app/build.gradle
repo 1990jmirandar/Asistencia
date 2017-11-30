@@ -26,7 +26,7 @@ android {
 }
 
 cobertura {
-    coverageFormats = [ 'html', 'xml' ]
+    coverageFormats = ['html', 'xml']
 }
 
 buildscript {
@@ -48,6 +48,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.android.support:design:26.+'
@@ -61,10 +63,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.satyan:sugar:1.5'
-
     compile 'org.tensorflow:tensorflow-android:1.4.0-rc0'
     compile 'ch.zhaw:facerecognitionlibrary:1.5.3'
-
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     testCompile 'junit:junit:4.12'
 }

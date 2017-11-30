@@ -11,6 +11,11 @@
             android:icon="@drawable/report"
             android:title="Reportes de asistencia" />
 
+        <item
+            android:id="@+id/nav_tipousuario"
+            android:icon="@drawable/ic_tipo_usuario"
+            android:title="Tipos de Usuario" />
+
     </group>
 
     <item android:title="Mas Opciones">

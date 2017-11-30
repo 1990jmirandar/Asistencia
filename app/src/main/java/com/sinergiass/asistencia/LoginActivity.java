@@ -30,6 +30,7 @@ import com.sinergiass.asistencia.facerecog.Training;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.model.TipoUsuario;
 import com.sinergiass.asistencia.model.helper.Constants;
 import com.sinergiass.asistencia.util.DatabaseHelper;
 
@@ -155,18 +156,13 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             if (IMPORT_ASSETS_DB) {
                 // CARGAR LA DB ubicada en assets/databases
                 DatabaseHelper dbHelper = new DatabaseHelper(LoginActivity.this);
                 dbHelper.getWritableDatabase();
             }
             else {
-                cargarAdmins();
+                cargarTipoUsuario();
 
             }
             return null;
@@ -174,31 +170,42 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            layoutP.setVisibility(View.GONE);
-            layout.setVisibility(View.VISIBLE);
 
-
-
-            if (mNumOperadores != mNumOperadoresEnPreferences){
-                trainTask.execute();
-
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putInt("cant_operadores", mNumOperadores);
-                editor.commit();
-            } else if (mNumOperadoresEnPreferences > 0){
-                operador.setEnabled(true);
-            }
 
         }
     }
 
-    public void sharedPreference(View view){
-        SharedPreferences preferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
-        Boolean trainingDone = preferences.getBoolean("TrainingDone", false);
-//        int cant_op = preferences.getInt("cant_operadores", 125);
-//        Log.d("operadores: ", ""+cant_op);
+    private void cargarTipoUsuario(){
+        Call<List<TipoUsuario>> listCall = mManager.getOperadorService().getListaTipoUsuario();
+        listCall.enqueue(new Callback<List<TipoUsuario>>() {
+            @Override
+            public void onResponse(Call<List<TipoUsuario>> call, Response<List<TipoUsuario>> response) {
 
+                if(response.isSuccessful()){
+                    TipoUsuario.deleteAll(TipoUsuario.class);
+                    List<TipoUsuario> listaAdmin = response.body();
+
+                    //Log.d("El numero de la lista", ""+ listaAdmin.size());
+
+                    for (TipoUsuario tipoUsuario : listaAdmin){tipoUsuario.save();}
+
+                }else{
+                    int sc = response.code();
+                    switch (sc){}
+                }
+
+                cargarAdmins();
+            }
+
+            @Override
+            public void onFailure(Call<List<TipoUsuario>> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar Tipos de usuario: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                layoutP.setVisibility(View.GONE);
+                layout.setVisibility(View.VISIBLE);
+
+            }
+        });
     }
 
     private void cargarAdmins(){
@@ -225,8 +232,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Admin>> call, Throwable t) {
-//                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar admins", Toast.LENGTH_LONG).show();
-                cargarOperadores();
+                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar admins: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                layoutP.setVisibility(View.GONE);
+                layout.setVisibility(View.VISIBLE);
+
             }
         });
     }
@@ -257,10 +266,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Operador>> call, Throwable t) {
-//                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar operadores", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar operadores: " + t.getMessage(), Toast.LENGTH_LONG).show();
 
-                cargarAsistencias();
-
+                layoutP.setVisibility(View.GONE);
+                layout.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -270,6 +279,21 @@ public class LoginActivity extends AppCompatActivity {
         listCall.enqueue(new Callback<List<Asistencia>>() {
             @Override
             public void onResponse(Call<List<Asistencia>> call, Response<List<Asistencia>> response) {
+
+                layoutP.setVisibility(View.GONE);
+                layout.setVisibility(View.VISIBLE);
+
+
+
+                if (mNumOperadores != mNumOperadoresEnPreferences){
+                    trainTask.execute();
+
+                    SharedPreferences.Editor editor = mSharedPreferences.edit();
+                    editor.putInt("cant_operadores", mNumOperadores);
+                    editor.commit();
+                } else if (mNumOperadoresEnPreferences > 0){
+                    operador.setEnabled(true);
+                }
 
                 if(response.isSuccessful()){
                     Asistencia.deleteAll(Asistencia.class,"estado = ?","1");
@@ -292,7 +316,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Asistencia>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "No se pudo sincronizar con el Servidor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "No se pudo sincronizar con el Servidor: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                layoutP.setVisibility(View.GONE);
+                layout.setVisibility(View.VISIBLE);
             }
         });
     }

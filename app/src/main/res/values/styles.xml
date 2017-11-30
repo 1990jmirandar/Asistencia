@@ -19,9 +19,18 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Asistencia" parent="AppTheme" >
+    <style name="Asistencia" parent="AppTheme">
 
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="Asistencia.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Asistencia.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Asistencia.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

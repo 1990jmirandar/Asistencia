@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,12 +47,13 @@ public class OperadorActivity extends AppCompatActivity {
     TextView nombres, apellidos, cedula, telefono,guardando;
     Operador operador;
     ProgressBar progressBar;
+    Switch swtActivo;
     private RestManager mManager;
     boolean fotosCapturadasConExito;
 
     public static final int NUMBER_OF_PICTURES = 5;
 
-    public int nextLocalId;
+
     List<String> fotosEncondings;
 
     @Override
@@ -67,17 +69,13 @@ public class OperadorActivity extends AppCompatActivity {
         telefono = (TextView) findViewById(R.id.txt_telefono);
         guardando = (TextView) findViewById(R.id.guardando);
         progressBar = (ProgressBar) findViewById(R.id.progressBar2) ;
+        swtActivo = (Switch) findViewById(R.id.swtActivo);
 
         mManager = new RestManager();
 
         fotosEncondings = new ArrayList<>();
 
         List<Operador> ops = Operador.listAll(Operador.class, "id_Operador");
-        if (ops.size() != 0){
-            nextLocalId = ops.get(0).getIdOperador() - 1;
-        }else{ nextLocalId = 0;}
-
-        if (nextLocalId > 0) nextLocalId = 0;
 
         btnFace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,20 +98,18 @@ public class OperadorActivity extends AppCompatActivity {
 
                     guardando.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
-                    final Intent intent = new Intent(OperadorActivity.this, MainActivity.class);
                     operador = new Operador();
                     operador.setNombre(nombres.getText().toString().trim());
                     operador.setApellido(apellidos.getText().toString().trim());
                     operador.setCedula(cedula.getText().toString());
                     operador.setTelefono(telefono.getText().toString());
+                    operador.setEstado(swtActivo.isChecked() ? "ACT":"INA");
 
                     operador.addFotos(fotosEncondings);
 
-                    operador.setEstado(0);
+                    operador.setSync(0);
 
 
-                    operador.setIdOperador(nextLocalId);
-                    nextLocalId -= 1;
 
                     List<Operador> listOp = new ArrayList<>();
                     listOp.add(operador);
@@ -127,13 +123,12 @@ public class OperadorActivity extends AppCompatActivity {
                         public void onResponse(Call<List<Operador>> call, Response<List<Operador>> response) {
 
                             if (response.isSuccessful()) {
-                                operador.setEstado(1);
+                                operador.setSync(1);
                                 Log.d("El nuevo estado es: ", "" + operador.getEstado());
                                 operador.setIdOperador(response.body().get(0).getIdOperador());
                                 operador.save();
                                 guardando.setVisibility(View.GONE);
                                 progressBar.setVisibility(View.GONE);
-//                              startActivity(intent);
                                 Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
 
                                 int numOperadores = Operador.listAll(Operador.class).size();
@@ -144,17 +139,15 @@ public class OperadorActivity extends AppCompatActivity {
 
                                 onBackPressed();
 
-                            } else {
                             }
                         }
 
                         @Override
                         public void onFailure(Call<List<Operador>> call, Throwable t) {
-                            operador.setEstado(0);
+                            operador.setSync(0);
                             operador.save();
                             guardando.setVisibility(View.GONE);
                             progressBar.setVisibility(View.GONE);
-//                           startActivity(intent);
                             Toast.makeText(OperadorActivity.this, "Sin Conexión, Guardado Local Exitoso!", Toast.LENGTH_LONG).show();
                             onBackPressed();
 
