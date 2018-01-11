@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hsntime</string>
+    <string name="app_name">HardSofNet</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -10,4 +10,6 @@
     <string name="training">Training</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="title_activity_tipo_usuario">TipoUsuarioActivity</string>
+    <string name="title_activity_operador_main">OperadorMainActivity</string>
+    <string name="title_activity_proyecto_main">ProyectoMainActivity</string>
 </resources>

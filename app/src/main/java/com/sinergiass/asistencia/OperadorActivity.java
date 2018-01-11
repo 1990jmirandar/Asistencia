@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +24,9 @@ import android.widget.Toast;
 import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.facerecog.AddPersonPreviewActivity;
 import com.sinergiass.asistencia.model.Admin;
+import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.model.TipoUsuario;
 import com.sinergiass.asistencia.util.DatabaseHelper;
 import com.sinergiass.asistencia.ws.FaceDetectorWS;
 
@@ -43,6 +47,8 @@ import retrofit2.Response;
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class OperadorActivity extends AppCompatActivity {
+    long operadorId;
+    List<TipoUsuario> listTipoUsuario;
     Button btnFace,guardar;
     TextView nombres, apellidos, cedula, telefono,guardando;
     Operador operador;
@@ -50,6 +56,7 @@ public class OperadorActivity extends AppCompatActivity {
     Switch swtActivo;
     private RestManager mManager;
     boolean fotosCapturadasConExito;
+    Spinner spnTipoUsuario;
 
     public static final int NUMBER_OF_PICTURES = 5;
 
@@ -63,6 +70,7 @@ public class OperadorActivity extends AppCompatActivity {
 
         btnFace = (Button) findViewById(R.id.btnFace);
         guardar = (Button) findViewById(R.id.guardar);
+
         nombres = (TextView) findViewById(R.id.txt_nombres);
         apellidos = (TextView) findViewById(R.id.txt_apellidos);
         cedula = (TextView) findViewById(R.id.txt_cedula);
@@ -70,6 +78,7 @@ public class OperadorActivity extends AppCompatActivity {
         guardando = (TextView) findViewById(R.id.guardando);
         progressBar = (ProgressBar) findViewById(R.id.progressBar2) ;
         swtActivo = (Switch) findViewById(R.id.swtActivo);
+        spnTipoUsuario = (Spinner) findViewById(R.id.spnTipoUsuario);
 
         mManager = new RestManager();
 
@@ -90,6 +99,8 @@ public class OperadorActivity extends AppCompatActivity {
             }
         });
 
+
+
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,63 +110,27 @@ public class OperadorActivity extends AppCompatActivity {
                     guardando.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
                     operador = new Operador();
+                    if (operadorId>0){
+                        operador = Operador.findById(Operador.class,operadorId);
+                        operador.setId(operadorId);
+                        operador.setActualiza(0);
+                    }else{
+                        operador.setSync(0);
+                    }
                     operador.setNombre(nombres.getText().toString().trim());
                     operador.setApellido(apellidos.getText().toString().trim());
                     operador.setCedula(cedula.getText().toString());
                     operador.setTelefono(telefono.getText().toString());
                     operador.setEstado(swtActivo.isChecked() ? "ACT":"INA");
-
-                    operador.addFotos(fotosEncondings);
-
-                    operador.setSync(0);
-
-
-
+                    operador.setIdTipoUsuario(listTipoUsuario.get(Integer.parseInt(""+spnTipoUsuario.getSelectedItemId())).getIdTipoUsuario());
+                    if (!fotosEncondings.isEmpty())
+                        operador.addFotos(fotosEncondings);
+                    operador.save();
                     List<Operador> listOp = new ArrayList<>();
                     listOp.add(operador);
 
+                    enviaOperadores(listOp);
 
-                    int numOperadores = Operador.listAll(Operador.class).size();
-
-                    Call<List<Operador>> listCall = mManager.getOperadorService().guardarOp(listOp);
-                    listCall.enqueue(new Callback<List<Operador>>() {
-                        @Override
-                        public void onResponse(Call<List<Operador>> call, Response<List<Operador>> response) {
-
-                            if (response.isSuccessful()) {
-                                operador.setSync(1);
-                                Log.d("El nuevo estado es: ", "" + operador.getEstado());
-                                operador.setIdOperador(response.body().get(0).getIdOperador());
-                                operador.save();
-                                guardando.setVisibility(View.GONE);
-                                progressBar.setVisibility(View.GONE);
-                                Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
-
-                                int numOperadores = Operador.listAll(Operador.class).size();
-                                SharedPreferences preferences = getSharedPreferences("preferencia",Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putInt("cant_operadores", numOperadores);
-                                editor.commit();
-
-                                onBackPressed();
-
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Operador>> call, Throwable t) {
-                            operador.setSync(0);
-                            operador.save();
-                            guardando.setVisibility(View.GONE);
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(OperadorActivity.this, "Sin Conexión, Guardado Local Exitoso!", Toast.LENGTH_LONG).show();
-                            onBackPressed();
-
-                        }
-
-
-
-                    });
 
                 }
 
@@ -164,7 +139,119 @@ public class OperadorActivity extends AppCompatActivity {
         });
 
 
+        cargaTipoOperador();
+        operadorId=getIntent().getLongExtra("operadorId",0);
+        if (operadorId>0)
+            cargaOperador(operadorId);
+
+
+
     }
+    public void cargaTipoOperador(){
+        listTipoUsuario = TipoUsuario.find(TipoUsuario.class,"sync=1");
+        String[] tipoUsuario= new String[listTipoUsuario.size()];
+        for (int i=0;i<listTipoUsuario.size();i++){
+            tipoUsuario[i]=listTipoUsuario.get(i).getNombre();
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,tipoUsuario);
+        spnTipoUsuario.setAdapter(adapter);
+
+    }
+
+    public void enviaOperadores(List<Operador> listOp){
+        if (listOp.get(0).getActualiza()==1){
+            Call<List<Operador>> listCall = mManager.getOperadorService().guardarOp(listOp);
+            listCall.enqueue(new Callback<List<Operador>>() {
+                @Override
+                public void onResponse(Call<List<Operador>> call, Response<List<Operador>> response) {
+
+                    if (response.isSuccessful()) {
+                        operador.setSync(1);
+                        operador.setIdOperador(response.body().get(0).getIdOperador());
+                        operador.save();
+                        guardando.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
+
+                        int numOperadores = Operador.listAll(Operador.class).size();
+                        SharedPreferences preferences = getSharedPreferences("preferencia",Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt("cant_operadores", numOperadores);
+                        editor.commit();
+
+                        onBackPressed();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Operador>> call, Throwable t) {
+                    guardando.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(OperadorActivity.this, "Sin Conexión, Guardado Local Exitoso!", Toast.LENGTH_LONG).show();
+                    onBackPressed();
+
+                }
+
+
+
+            });
+        }else{
+
+            Call<Operador> listCall = mManager.getOperadorService().actualizarOp(listOp.get(0).getIdOperador(),listOp.get(0));
+            listCall.enqueue(new Callback<Operador>() {
+                @Override
+                public void onResponse(Call<Operador> call, Response<Operador> response) {
+
+                    if (response.isSuccessful()) {
+                        operador.setActualiza(1);
+                        operador.save();
+                        guardando.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(OperadorActivity.this, "Guardado y Sincronización Exitosos!", Toast.LENGTH_LONG).show();
+
+                        int numOperadores = Operador.listAll(Operador.class).size();
+                        SharedPreferences preferences = getSharedPreferences("preferencia",Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt("cant_operadores", numOperadores);
+                        editor.commit();
+
+                        onBackPressed();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Operador> call, Throwable t) {
+                    guardando.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(OperadorActivity.this, "Sin Conexión, Guardado Local Exitoso!", Toast.LENGTH_LONG).show();
+                    onBackPressed();
+
+                }
+
+
+
+            });
+
+        }
+
+
+    }
+
+    public void cargaOperador(long operador){
+        Operador operador1 = Operador.findById(Operador.class,operador);
+        nombres.setText(operador1.getNombre());
+        apellidos.setText(operador1.getApellido());
+        cedula.setText(operador1.getCedula());
+        telefono.setText(operador1.getTelefono());
+        swtActivo.setChecked(operador1.getEstado().equals("ACT")? true : false);
+        for (int i=0;i< listTipoUsuario .size();i++){
+            if(operador1.getIdTipoUsuario()==listTipoUsuario.get(i).getIdTipoUsuario())
+                spnTipoUsuario.setSelection(i);
+        }
+    }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == RESULT_OK) {
@@ -193,7 +280,7 @@ public class OperadorActivity extends AppCompatActivity {
         } else if (telefono.getText().toString().isEmpty()){
             Toast.makeText(OperadorActivity.this, "Ingrese el teléfono", Toast.LENGTH_LONG).show();
             return false;
-        } else if (!fotosCapturadasConExito) {
+        } else if (!fotosCapturadasConExito && operadorId==0) {
             Toast.makeText(OperadorActivity.this, "Tome las fotos", Toast.LENGTH_LONG).show();
             return false;
         } else {

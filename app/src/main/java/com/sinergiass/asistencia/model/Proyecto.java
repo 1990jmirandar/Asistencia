@@ -3,38 +3,29 @@ package com.sinergiass.asistencia.model;
 import com.google.gson.annotations.Expose;
 import com.orm.SugarRecord;
 
-import java.io.Serializable;
-
 /**
- * Created by avera on 30/11/17.
+ * Created by avera on 05/12/17.
  */
 
-public class TipoUsuario extends SugarRecord implements Serializable {
+public class Proyecto extends SugarRecord {
     @Expose
-    private int idTipoUsuario;
+    private int idProyecto;
     @Expose
     private String nombre;
     @Expose
     private String estado;
-
     private int sync=1;
     private int actualiza=1;
 
-    public TipoUsuario(int idTipoUsuario, String nombre, String estado) {
-        this.idTipoUsuario = idTipoUsuario;
-        this.nombre = nombre;
-        this.estado = estado;
+    public Proyecto() {
     }
 
-    public TipoUsuario() {
+    public int getIdProyecto() {
+        return idProyecto;
     }
 
-    public int getIdTipoUsuario() {
-        return idTipoUsuario;
-    }
-
-    public void setIdTipoUsuario(int idTipoUsuario) {
-        this.idTipoUsuario = idTipoUsuario;
+    public void setIdProyecto(int idProyecto) {
+        this.idProyecto = idProyecto;
     }
 
     public String getNombre() {
@@ -60,7 +51,6 @@ public class TipoUsuario extends SugarRecord implements Serializable {
     public void setSync(int sync) {
         this.sync = sync;
     }
-
 
     public int getActualiza() {
         return actualiza;

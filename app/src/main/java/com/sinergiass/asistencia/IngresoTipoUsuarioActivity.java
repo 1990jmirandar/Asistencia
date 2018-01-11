@@ -41,7 +41,7 @@ public class IngresoTipoUsuarioActivity extends AppCompatActivity {
                         tusuario = TipoUsuario.findById(TipoUsuario.class,tipoUsuarioId);
                         tusuario.setEstado(swtActivo.isChecked() ? "ACT":"INA");
                         tusuario.setNombre(txtTipoUsuario.getText().toString());
-                        tusuario.setUpdate(0);
+                        tusuario.setActualiza(0);
                         tusuario.save();
                     }else{
                         tusuario =new TipoUsuario(0,txtTipoUsuario.getText().toString(),swtActivo.isChecked() ? "ACT":"INA");
@@ -100,18 +100,14 @@ public class IngresoTipoUsuarioActivity extends AppCompatActivity {
         }
 
 
-        for (TipoUsuario tipoUsuario: asisList){
+        for (final TipoUsuario tipoUsuario: asisList){
             Call<TipoUsuario> listCall = mManager.getOperadorService().actualizaTipoUsuario(tipoUsuario.getIdTipoUsuario(),tipoUsuario);
             listCall.enqueue(new Callback<TipoUsuario>() {
                 @Override
                 public void onResponse(Call<TipoUsuario> call, Response<TipoUsuario> response) {
                     if (response.isSuccessful()) {
-                        for (TipoUsuario usuario : asisList){
-                            usuario.setUpdate(1);
-                            usuario.update();
-                        }
-                        Toast.makeText(IngresoTipoUsuarioActivity.this, "Registros de tipos de usuarios sincronizados" , Toast.LENGTH_LONG).show();
-                        cargarTipoUsuario();
+                        tipoUsuario.setActualiza(1);
+                        tipoUsuario.save();
                     }
                 }
 
@@ -123,7 +119,12 @@ public class IngresoTipoUsuarioActivity extends AppCompatActivity {
 
             });
         }
-
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        cargarTipoUsuario();
 
     }
 

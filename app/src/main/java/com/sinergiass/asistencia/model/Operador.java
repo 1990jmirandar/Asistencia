@@ -5,6 +5,7 @@ import android.util.Base64;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 import com.sinergiass.asistencia.model.Asistencia;
 
 import org.opencv.core.CvType;
@@ -44,6 +45,10 @@ public class Operador extends SugarRecord implements Serializable{
     private String foto5;
     @Expose
     private String estado;
+    @Expose
+    private int idTipoUsuario;
+    @Ignore
+    private int checked=0;
 
 
 
@@ -172,6 +177,22 @@ public class Operador extends SugarRecord implements Serializable{
 
     public void setActualiza(int actualiza) {
         this.actualiza = actualiza;
+    }
+
+    public int getIdTipoUsuario() {
+        return idTipoUsuario;
+    }
+
+    public void setIdTipoUsuario(int idTipoUsuario) {
+        this.idTipoUsuario = idTipoUsuario;
+    }
+
+    public int getChecked() {
+        return checked;
+    }
+
+    public void setChecked(int checked) {
+        this.checked = checked;
     }
 
     /**

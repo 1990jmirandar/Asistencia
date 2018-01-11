@@ -24,6 +24,7 @@ import com.sinergiass.asistencia.adapter.BandaAdapter;
 import com.sinergiass.asistencia.controller.RestManager;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.model.Proyecto;
 import com.sinergiass.asistencia.model.TipoUsuario;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     List<Operador> listaOp, operadores;
     List<Asistencia> asistencias;
     List<TipoUsuario> listaTipoUsuario;
+    List<Proyecto> listaProyecto;
     private LinearLayout header, layoutLista, progress;
     private RestManager mManager;
     private ArrayList<Operador> listaOperadores =  new ArrayList<Operador>();
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 
 
         //Adquiriendo los datos de un json a una lista
-        listaOp = Operador.listAll(Operador.class);
+        listaOp = Operador.find(Operador.class,"estado='ACT'");
         Log.d("el numero es",""+listaOp.size());
 
 
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.nav_operador:
-                intent= new Intent(this, OperadorActivity.class);
+                intent= new Intent(this, OperadorMainActivity.class);
                 startActivity(intent);
                 break;
             case R.id.nav_reporte:
@@ -137,16 +139,30 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
 
+            case R.id.nav_proyectos:
+                intent = new Intent(this, ProyectoMainActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.nav_out:
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+
+
+
             case R.id.nav_sync:
                 progress.setVisibility(View.VISIBLE);
                 header.setVisibility(View.GONE);
                 layoutLista.setVisibility(View.GONE);
 
-                operadores = Operador.find(Operador.class,"estado = ?", "0");
+                operadores = Operador.find(Operador.class,"sync = ?", "0");
                 asistencias = Asistencia.find(Asistencia.class,"estado = ?", "0");
-                listaTipoUsuario = TipoUsuario.find(TipoUsuario.class,"estado=?","0");
+                listaTipoUsuario = TipoUsuario.find(TipoUsuario.class,"sync=?","0");
+                listaProyecto = Proyecto.find(Proyecto.class,"sync=?","0");
 
-                enviarOperadores(operadores);
+                enviaProyectos(listaProyecto);
                 break;
 
             case R.id.nav_salir:
@@ -163,8 +179,209 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void enviarOperadores(List<Operador> operadores){
+    public void enviaProyectos(final List<Proyecto> listOp){
+        if (listOp.isEmpty()) {
+            actualizaProyectos(Proyecto.find(Proyecto.class,"actualiza=0"));
+        }else{
+            Call<List<Proyecto>> listCall = mManager.getOperadorService().guardarProyecto(listOp);
+            listCall.enqueue(new Callback<List<Proyecto>>() {
+                @Override
+                public void onResponse(Call<List<Proyecto>> call, retrofit2.Response<List<Proyecto>> response) {
+                    actualizaProyectos(Proyecto.find(Proyecto.class,"actualiza=0"));
+                }
 
+                @Override
+                public void onFailure(Call<List<Proyecto>> call, Throwable t) {
+                    progress.setVisibility(View.GONE);
+                    header.setVisibility(View.VISIBLE);
+                    layoutLista.setVisibility(View.VISIBLE);
+                    Toast.makeText(MainActivity.this, "Error al enviar los proyectos" , Toast.LENGTH_LONG).show();
+
+                }
+            });
+        }
+    }
+
+
+
+
+    public void actualizaProyectos(final List<Proyecto> listOp){
+        if (listOp.isEmpty()){
+            cargarProyecto();
+        }else{
+            for (Proyecto proyecto: listOp){
+                Call<Proyecto> listCall = mManager.getOperadorService().actualizaProyecto(proyecto.getIdProyecto(),proyecto);
+                listCall.enqueue(new Callback<Proyecto>() {
+                    @Override
+                    public void onResponse(Call<Proyecto> call, retrofit2.Response<Proyecto> response) {
+
+                        if (response.isSuccessful()) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Proyecto> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                        header.setVisibility(View.VISIBLE);
+                        layoutLista.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "Error al enviar los proyectos" , Toast.LENGTH_LONG).show();
+                        return;
+
+                    }
+
+
+
+                });
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            cargarProyecto();
+        }
+
+
+    }
+
+    private void cargarProyecto(){
+        Call<List<Proyecto>> listCall = mManager.getOperadorService().getListProyectos();
+        listCall.enqueue(new Callback<List<Proyecto>>() {
+            @Override
+            public void onResponse(Call<List<Proyecto>> call, Response<List<Proyecto>> response) {
+
+                if(response.isSuccessful()){
+                    Proyecto.deleteAll(Proyecto.class);
+                    List<Proyecto> listaAdmin = response.body();
+
+
+                    for (Proyecto proyecto : listaAdmin){
+                        proyecto.save();
+                    }
+
+                }else{
+                    int sc = response.code();
+                    switch (sc){}
+                }
+                enviarTipoUsuario(listaTipoUsuario);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Proyecto>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Conexion Fallida al cargar los proyectos: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                progress.setVisibility(View.GONE);
+                header.setVisibility(View.VISIBLE);
+                layoutLista.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public void enviarTipoUsuario(List<TipoUsuario> asisList){
+        if (asisList.isEmpty())  actualizaTipoUsuario(TipoUsuario.find(TipoUsuario.class,"actualiza=?","0"));
+        Call<List<TipoUsuario>> listCall = mManager.getOperadorService().guardarTipoUsuario(asisList);
+        listCall.enqueue(new Callback<List<TipoUsuario>>() {
+            @Override
+            public void onResponse(Call<List<TipoUsuario>> call, Response<List<TipoUsuario>> response) {
+
+                if (response.isSuccessful()) {
+                    actualizaTipoUsuario(TipoUsuario.find(TipoUsuario.class,"actualiza=?","0"));
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TipoUsuario>> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+                header.setVisibility(View.VISIBLE);
+                layoutLista.setVisibility(View.VISIBLE);
+                Toast.makeText(MainActivity.this, "Error al enviar los tipos de usuarios" , Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+
+    }
+
+    public void actualizaTipoUsuario(final List<TipoUsuario> asisList){
+        if (asisList.isEmpty()){
+            cargarTipoUsuario();
+        }else{
+            for (int i=0;i<asisList.size();i++){
+                Call<TipoUsuario> listCall = mManager.getOperadorService().actualizaTipoUsuario(asisList.get(i).getIdTipoUsuario(),asisList.get(i));
+                listCall.enqueue(new Callback<TipoUsuario>() {
+                    @Override
+                    public void onResponse(Call<TipoUsuario> call, Response<TipoUsuario> response) {
+                        if (response.isSuccessful()) {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<TipoUsuario> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                        header.setVisibility(View.VISIBLE);
+                        layoutLista.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "Error al enviar los tipos de usuarios" , Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                });
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            cargarTipoUsuario();
+
+        }
+
+
+
+    }
+
+    private void cargarTipoUsuario(){
+        Call<List<TipoUsuario>> listCall = mManager.getOperadorService().getListaTipoUsuario();
+        listCall.enqueue(new Callback<List<TipoUsuario>>() {
+            @Override
+            public void onResponse(Call<List<TipoUsuario>> call, Response<List<TipoUsuario>> response) {
+
+                if(response.isSuccessful()){
+                    TipoUsuario.deleteAll(TipoUsuario.class);
+                    List<TipoUsuario> listaAdmin = response.body();
+
+
+                    for (TipoUsuario tipoUsuario : listaAdmin){tipoUsuario.save();}
+                    enviarOperadores(listaOperadores);
+
+                }else{
+                    int sc = response.code();
+                    switch (sc){}
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<TipoUsuario>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Conexion Fallida al cargar Tipos de usuario: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                progress.setVisibility(View.GONE);
+                header.setVisibility(View.VISIBLE);
+                layoutLista.setVisibility(View.VISIBLE);
+
+
+
+            }
+        });
+    }
+
+    public void enviarOperadores(List<Operador> operadores){
+        if (operadores.isEmpty()) actualizaOperadores(Operador.find(Operador.class,"actualiza=0"));
         Call<List<Operador>> listCall = mManager.getOperadorService().guardarOp(operadores);
         listCall.enqueue(new Callback<List<Operador>>() {
             @Override
@@ -173,7 +390,7 @@ public class MainActivity extends AppCompatActivity
                 if (response.isSuccessful()) {
 
 
-                    cargarOperadores();
+                    actualizaOperadores(Operador.find(Operador.class,"actualiza=0"));
 
                 }
             }
@@ -190,31 +407,32 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void enviarAsistencias(List<Asistencia> asisList){
+    public void actualizaOperadores(final List<Operador> asisList){
+        if (asisList.isEmpty()){
+            cargarOperadores();
+        }else{
+            for (Operador Operador: asisList){
+                Call<Operador> listCall = mManager.getOperadorService().actualizarOp(Operador.getIdOperador(),Operador);
+                listCall.enqueue(new Callback<Operador>() {
+                    @Override
+                    public void onResponse(Call<Operador> call, Response<Operador> response) {
+                        if (response.isSuccessful()) {
+                        }
+                    }
 
-        Call<List<Asistencia>> listCall = mManager.getOperadorService().guardarAsis(asisList);
-        listCall.enqueue(new Callback<List<Asistencia>>() {
-            @Override
-            public void onResponse(Call<List<Asistencia>> call, Response<List<Asistencia>> response) {
+                    @Override
+                    public void onFailure(Call<Operador> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                        header.setVisibility(View.VISIBLE);
+                        layoutLista.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "Error al enviar los Operadores" , Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
-                if (response.isSuccessful()) {
-
-
-                    cargarAsistencias();
-                }
+                });
+                cargarOperadores();
             }
-
-            @Override
-            public void onFailure(Call<List<Asistencia>> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-                header.setVisibility(View.VISIBLE);
-                layoutLista.setVisibility(View.VISIBLE);
-                Toast.makeText(MainActivity.this, "Error al enviar las asistencias: " + t.getMessage() , Toast.LENGTH_LONG).show();
-
-            }
-
-        });
-
+        }
     }
 
     public void cargarOperadores(){
@@ -227,10 +445,10 @@ public class MainActivity extends AppCompatActivity
 
                     List<Operador> listaOp = response.body();
                     if (listaOp.size()==0){
-                        Toast.makeText(MainActivity.this, "No hay registros de Operador y/o problema del server", Toast.LENGTH_LONG).show();
+
                     }
                     else{
-                        Operador.deleteAll(Operador.class,"estado=1");
+                        Operador.deleteAll(Operador.class);
 
                         for (Operador op : listaOp){
 
@@ -264,6 +482,35 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void enviarAsistencias(List<Asistencia> asisList){
+
+        Call<List<Asistencia>> listCall = mManager.getOperadorService().guardarAsis(asisList);
+        listCall.enqueue(new Callback<List<Asistencia>>() {
+            @Override
+            public void onResponse(Call<List<Asistencia>> call, Response<List<Asistencia>> response) {
+
+                if (response.isSuccessful()) {
+
+
+                    cargarAsistencias();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Asistencia>> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+                header.setVisibility(View.VISIBLE);
+                layoutLista.setVisibility(View.VISIBLE);
+                Toast.makeText(MainActivity.this, "Error al enviar las asistencias: " + t.getMessage() , Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+
+    }
+
+
+
     public void cargarAsistencias(){
 
         Call<List<Asistencia>> listCall = mManager.getOperadorService().getListaAsistencias();
@@ -275,7 +522,7 @@ public class MainActivity extends AppCompatActivity
 
                     List<Asistencia> listaAsistencias = response.body();
                     if(listaAsistencias.size() == 0){
-                        Toast.makeText(MainActivity.this, "No hay registros de Asistencias y/o problema del server", Toast.LENGTH_LONG).show();
+
                     }
                     else{
                         Asistencia.deleteAll(Asistencia.class,"estado=1");
@@ -286,9 +533,17 @@ public class MainActivity extends AppCompatActivity
                                     listaAsistencias.get(i).isEntrada());
                             asistencia.save();
                         }
+                        progress.setVisibility(View.GONE);
+                        header.setVisibility(View.VISIBLE);
+                        layoutLista.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "Sincronización Exitosa", Toast.LENGTH_LONG).show();
+
+
+                        onResume();
+
                     }
 
-                    enviarTipoUsuario(listaTipoUsuario);
+
                 }
 
 
@@ -301,124 +556,30 @@ public class MainActivity extends AppCompatActivity
                 header.setVisibility(View.VISIBLE);
                 layoutLista.setVisibility(View.VISIBLE);
                 Toast.makeText(MainActivity.this, "Error al cargar las asistencias: " + t.getMessage() , Toast.LENGTH_LONG).show();
-
-
-            }
-        });
-
-    }
-
-    public void enviarTipoUsuario(List<TipoUsuario> asisList){
-        if (asisList.isEmpty())  actualizaTipoUsuario(TipoUsuario.find(TipoUsuario.class,"actualiza=?","0"));
-        Call<List<TipoUsuario>> listCall = mManager.getOperadorService().guardarTipoUsuario(asisList);
-        listCall.enqueue(new Callback<List<TipoUsuario>>() {
-            @Override
-            public void onResponse(Call<List<TipoUsuario>> call, Response<List<TipoUsuario>> response) {
-
-                if (response.isSuccessful()) {
-                    actualizaTipoUsuario(TipoUsuario.find(TipoUsuario.class,"actualiza=?","0"));
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<TipoUsuario>> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-                header.setVisibility(View.VISIBLE);
-                layoutLista.setVisibility(View.VISIBLE);
-                Toast.makeText(MainActivity.this, "Error al enviar los tipos de usuarios" , Toast.LENGTH_LONG).show();
-
-            }
-
-        });
-
-    }
-
-    public void actualizaTipoUsuario(final List<TipoUsuario> asisList){
-        if (asisList.isEmpty()){
-            cargarTipoUsuario();
-        }
-
-
-        for (TipoUsuario tipoUsuario: asisList){
-            Call<TipoUsuario> listCall = mManager.getOperadorService().actualizaTipoUsuario(tipoUsuario.getIdTipoUsuario(),tipoUsuario);
-            listCall.enqueue(new Callback<TipoUsuario>() {
-                @Override
-                public void onResponse(Call<TipoUsuario> call, Response<TipoUsuario> response) {
-                    if (response.isSuccessful()) {
-                        cargarTipoUsuario();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<TipoUsuario> call, Throwable t) {
-                    progress.setVisibility(View.GONE);
-                    header.setVisibility(View.VISIBLE);
-                    layoutLista.setVisibility(View.VISIBLE);
-                    Toast.makeText(MainActivity.this, "Error al enviar los tipos de usuarios" , Toast.LENGTH_LONG).show();
-                }
-
-            });
-        }
-
-
-    }
-
-    private void cargarTipoUsuario(){
-        Call<List<TipoUsuario>> listCall = mManager.getOperadorService().getListaTipoUsuario();
-        listCall.enqueue(new Callback<List<TipoUsuario>>() {
-            @Override
-            public void onResponse(Call<List<TipoUsuario>> call, Response<List<TipoUsuario>> response) {
-
-                if(response.isSuccessful()){
-                    TipoUsuario.deleteAll(TipoUsuario.class);
-                    List<TipoUsuario> listaAdmin = response.body();
-
-
-                    for (TipoUsuario tipoUsuario : listaAdmin){tipoUsuario.save();}
-
-                }else{
-                    int sc = response.code();
-                    switch (sc){}
-                }
-                progress.setVisibility(View.GONE);
-                header.setVisibility(View.VISIBLE);
-                layoutLista.setVisibility(View.VISIBLE);
-                Toast.makeText(MainActivity.this, "Sincronización Exitosa", Toast.LENGTH_LONG).show();
-
-                onResume();
-
-            }
-
-            @Override
-            public void onFailure(Call<List<TipoUsuario>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Conexion Fallida al cargar Tipos de usuario: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                progress.setVisibility(View.GONE);
-                header.setVisibility(View.VISIBLE);
-                layoutLista.setVisibility(View.VISIBLE);
-
-                int numOperadores = Operador.listAll(Operador.class).size();
-                SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
-                editor.putInt("cant_operadores", numOperadores);
-                editor.commit();
-
                 onResume();
 
             }
         });
+
     }
+
+
+
+
 
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        listaOp = Operador.listAll(Operador.class);
+        listaOp = Operador.find(Operador.class,"estado='ACT'");
+        int numOperadores = Operador.listAll(Operador.class).size();
+        SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+        editor.putInt("cant_operadores", numOperadores);
+        editor.commit();
         BandaAdapter adapter = new BandaAdapter(this,R.layout.listview_item_row,listaOp);
         lista = (ListView)findViewById(R.id.listaOperador1);
         lista.setAdapter(adapter);
 
     }
-
 }

@@ -46,18 +46,20 @@ import retrofit2.Response;
 
 public class AsistenciaActivity extends  AppCompatActivity {
 
-    private Button ubicarme;
+    private Button ubicarme,reporte;
     private Operador operador;
     private TextView nombre,apellido,cedula;
     private RadioButton rbtEntrada,rbtSalida;
     private FusedLocationProviderClient mFusedLocationClient;
     private RestManager mRestManager;
     private Asistencia mAsistencia;
+    long operadorId;
 
     private int metodo_query;
 
     public static final int FROM_CEDULA = 1;
     public static final int FROM_ID = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +79,11 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        metodo_query = extras.getInt("metodo_query", FROM_ID);
+        metodo_query = extras.getInt("idOperador", 0);
 
-        if (metodo_query == FROM_ID){
-            operador = Operador.find(Operador.class, "id_Operador = ?", "" + extras.getInt("idOperador")).get(0);
-        }else if (metodo_query == FROM_CEDULA){
+        if (metodo_query != 0){
+            operador = Operador.find(Operador.class, "id_Operador = ?", "" + metodo_query).get(0);
+        }else {
             operador = Operador.find(Operador.class, "cedula = ?", "" + extras.getString("cedula")).get(0);
         }
 
@@ -95,6 +97,7 @@ public class AsistenciaActivity extends  AppCompatActivity {
         nombre.setText(operador.getNombre());
         apellido.setText(operador.getApellido());
         cedula.setText(operador.getCedula());
+        reporte = (Button) findViewById(R.id.reporte);
 
 
         ubicarme.setOnClickListener(new View.OnClickListener(){
@@ -120,6 +123,17 @@ public class AsistenciaActivity extends  AppCompatActivity {
 
             }
 
+        });
+
+        reporte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (operador.getIdOperador()==0) {
+                    Toast.makeText(AsistenciaActivity.this, "El operador debe de estar sincronizado para usar esta opcion", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                startActivity(new Intent(AsistenciaActivity.this,ListadoActivity.class).putExtra("idOperador",operador.getIdOperador()));
+            }
         });
 
         validaCampos();
@@ -186,24 +200,24 @@ public class AsistenciaActivity extends  AppCompatActivity {
         List<Asistencia> asistencia = Asistencia.find(Asistencia.class , "id_Operador = ? and fecha = ?", new String[]{""+operador.getIdOperador(),new SimpleDateFormat("yyyy-MM-dd").format(new Date())});
         if (!asistencia.isEmpty()){
             if (asistencia.size()==2){
-                rbtEntrada.setEnabled(false);
-                rbtSalida.setEnabled(false);
+                /*rbtEntrada.setEnabled(false);
+                rbtSalida.setEnabled(false);*/
                 rbtSalida.setChecked(true);
 
             }else{
                 if (asistencia.get(0).isEntrada()){
                     rbtSalida.setChecked(true);
-                    rbtSalida.setEnabled(true);
+                    //rbtSalida.setEnabled(true);
                 }
 
-                rbtEntrada.setEnabled(false);
+                //rbtEntrada.setEnabled(false);
             }
 
 
 
         }else{
             rbtEntrada.setChecked(true);
-            rbtSalida.setEnabled(false);
+            //rbtSalida.setEnabled(false);
         }
 
 

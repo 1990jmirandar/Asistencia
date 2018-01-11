@@ -66,7 +66,7 @@
             android:text="Cédula" />
 
         <EditText
-            android:id="@+id/txt_telefono"
+            android:id="@+id/txt_cedula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLength="10"
@@ -85,21 +85,40 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="Teléfono"
-             />
+            />
 
         <EditText
-            android:id="@+id/txt_cedula"
+            android:id="@+id/txt_telefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           />
+            android:inputType="number"
+            />
 
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Tipo de Operador"/>
+        <Spinner
+            android:id="@+id/spnTipoUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Spinner>
 
     </LinearLayout>
     <Switch
         android:id="@+id/swtActivo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Estado"
         />
+
 
 
 
@@ -121,6 +140,8 @@
         android:layout_height="wrap_content"
         android:text="Guardar Operador" />
 
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -141,7 +162,7 @@
         android:progress="20"
 
         android:visibility="invisible"
-         />
+        />
 
 
 

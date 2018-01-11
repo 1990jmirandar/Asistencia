@@ -16,6 +16,11 @@
             android:icon="@drawable/ic_tipo_usuario"
             android:title="Tipos de Usuario" />
 
+        <item
+            android:id="@+id/nav_proyectos"
+            android:icon="@drawable/ic_proyecto"
+            android:title="Ingreso de Proyectos" />
+
     </group>
 
     <item android:title="Mas Opciones">
@@ -28,6 +33,11 @@
                 android:id="@+id/nav_salir"
                 android:icon="@drawable/ic_directions_walk_black_24dp"
                 android:title="Salir" />
+
+            <item
+                android:id="@+id/nav_out"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                android:title="Cerrar Sesion" />
 
         </menu>
     </item>

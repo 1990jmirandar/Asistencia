@@ -72,21 +72,16 @@ public class BandaAdapter extends ArrayAdapter<Operador>{
         List<Asistencia> asistencias = Asistencia.find(Asistencia.class , "id_Operador = ? and fecha = ?", new String[]{""+operador.getIdOperador(),new SimpleDateFormat("yyyy-MM-dd").format(new Date())});
 
 
-
+        holder.registrar.setText("Marcar Asistencia");
         if(asistencias.size()==0){
             row.setBackgroundColor(context.getResources().getColor(R.color.row_alert_background));
-            holder.registrar.setText("Marcar Entrada");
         }else{
             row.setBackgroundColor(context.getResources().getColor(R.color.background_material_light));
         }
 
-        if(asistencias.size()==1){
-            holder.registrar.setText("Marcar Salida");
-        }
 
         if(asistencias.size()>=2){
             holder.registrar.setEnabled(false);
-            holder.registrar.setText("Marcar");
         }else{
             holder.registrar.setEnabled(true);
         }

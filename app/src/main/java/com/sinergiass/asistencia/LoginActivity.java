@@ -30,6 +30,8 @@ import com.sinergiass.asistencia.facerecog.Training;
 import com.sinergiass.asistencia.model.Admin;
 import com.sinergiass.asistencia.model.Asistencia;
 import com.sinergiass.asistencia.model.Operador;
+import com.sinergiass.asistencia.model.Proyecto;
+import com.sinergiass.asistencia.model.ProyectoOperador;
 import com.sinergiass.asistencia.model.TipoUsuario;
 import com.sinergiass.asistencia.model.helper.Constants;
 import com.sinergiass.asistencia.util.DatabaseHelper;
@@ -175,7 +177,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
     private void cargarTipoUsuario(){
         Call<List<TipoUsuario>> listCall = mManager.getOperadorService().getListaTipoUsuario();
         listCall.enqueue(new Callback<List<TipoUsuario>>() {
@@ -183,19 +184,18 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<List<TipoUsuario>> call, Response<List<TipoUsuario>> response) {
 
                 if(response.isSuccessful()){
-                    TipoUsuario.deleteAll(TipoUsuario.class);
+                    TipoUsuario.deleteAll(TipoUsuario.class,"sync = 1 or actualiza=1");
                     List<TipoUsuario> listaAdmin = response.body();
 
                     //Log.d("El numero de la lista", ""+ listaAdmin.size());
 
-                    for (TipoUsuario tipoUsuario : listaAdmin){tipoUsuario.save();}
+                    for (TipoUsuario tipoUsuario : listaAdmin){
+                        tipoUsuario.save();
+                    }
 
-                }else{
-                    int sc = response.code();
-                    switch (sc){}
                 }
 
-                cargarAdmins();
+                cargarProyecto();
             }
 
             @Override
@@ -207,6 +207,72 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void cargarProyecto(){
+        Call<List<Proyecto>> listCall = mManager.getOperadorService().getListProyectos();
+        listCall.enqueue(new Callback<List<Proyecto>>() {
+            @Override
+            public void onResponse(Call<List<Proyecto>> call, Response<List<Proyecto>> response) {
+
+                if(response.isSuccessful()){
+                    Proyecto.deleteAll(Proyecto.class);
+                    List<Proyecto> listaAdmin = response.body();
+
+
+                    for (Proyecto proyecto : listaAdmin){
+                        proyecto.save();
+                    }
+
+                }
+                cargarProyectoOperador();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Proyecto>> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar los proyectos: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                layoutP.setVisibility(View.GONE);
+                layout.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void cargarProyectoOperador(){
+        Call<List<ProyectoOperador>> listCall = mManager.getOperadorService().getListaProyectoOperador();
+        listCall.enqueue(new Callback<List<ProyectoOperador>>() {
+            @Override
+            public void onResponse(Call<List<ProyectoOperador>> call, Response<List<ProyectoOperador>> response) {
+
+                if(response.isSuccessful()){
+                    ProyectoOperador.deleteAll(ProyectoOperador.class);
+                    List<ProyectoOperador> listaAdmin = response.body();
+
+
+                    for (ProyectoOperador proyectoOperador : listaAdmin){
+                        proyectoOperador.save();
+                    }
+
+                }else{
+                    int sc = response.code();
+                    switch (sc){}
+                }
+                cargarAdmins();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<ProyectoOperador>> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Conexion Fallida al cargar los Proyecto Operador: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                layoutP.setVisibility(View.GONE);
+                layout.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+
+
 
     private void cargarAdmins(){
         Call<List<Admin>> listCall = mManager.getOperadorService().getListaAdmins();
@@ -247,7 +313,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<List<Operador>> call, Response<List<Operador>> response) {
 
                 if(response.isSuccessful()){
-                    Operador.deleteAll(Operador.class,"estado = ?","1");
+                    Operador.deleteAll(Operador.class,"sync = 1 or actualiza=1");
                     mOperadores = response.body();
                     Log.d("Size Lista Operadores", ""+ mOperadores.size());
 
@@ -323,13 +389,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             String cedula = data.getStringExtra("cedula");
 
             Intent intent = new Intent(LoginActivity.this, AsistenciaActivity.class);
-            intent.putExtra("metodo_query", AsistenciaActivity.FROM_CEDULA);
+            intent.putExtra("idOperador", 0);
             intent.putExtra("cedula", cedula);
 
             startActivity(intent);
